@@ -1,13 +1,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:geo_diagnostique_app/CreationREF.dart';
+import 'package:geo_diagnostique_app/Size.dart';
 
 class MenuAffaire extends StatelessWidget{
   final List<ListTile> listNumeroAffaire = new List(5);
   
   Widget build(BuildContext context){
     listGenerator(context);
-
+    SizeConfig().init(context);
     return new Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white70,
@@ -19,7 +21,9 @@ class MenuAffaire extends StatelessWidget{
         children: listNumeroAffaire,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => CreationREF()),);
+        },
         backgroundColor: Colors.orangeAccent,
         tooltip: 'Image',
         child: Icon(Icons.add_box),

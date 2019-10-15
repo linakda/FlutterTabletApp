@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geo_diagnostique_app/MenuAffaire.dart';
+import 'package:geo_diagnostique_app/Size.dart';
 
 
 List listNumeroAffaire = new List();
@@ -12,9 +13,7 @@ main() {
 class App extends StatelessWidget {
 
   @override
-  build(BuildContext ctxt) {
-
-    
+  build(BuildContext context){
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
       home: MenuAffaire(),
