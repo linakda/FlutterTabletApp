@@ -9,7 +9,7 @@ class CreationREF extends StatefulWidget {
 
 class CreationREFState extends State<CreationREF> {
   final TextStyle textSize = new TextStyle(fontSize: SizeConfig.fontSize);
-  final Color color = Colors.teal[700];
+  final Color color = Colors.green;
   final EdgeInsetsGeometry textPadding =
       EdgeInsets.all(SizeConfig.screenPadding);
   //Le controller avec le text
@@ -103,10 +103,10 @@ class CreationREFState extends State<CreationREF> {
               Padding(
                 padding: textPadding,
                 child: RaisedButton(
-                  splashColor: Colors.teal[500],
+                  splashColor: Colors.greenAccent,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0)),
-                  color: Colors.teal[700],
+                  color: color,
                   textColor: Colors.white,
                   onPressed: () {
                     if (testREFvalidate(formKeylist)) {
