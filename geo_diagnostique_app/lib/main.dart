@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:geo_diagnostique_app/MenuAffaire.dart';
-import 'package:geo_diagnostique_app/Size.dart';
 
 
 List listNumeroAffaire = new List();
