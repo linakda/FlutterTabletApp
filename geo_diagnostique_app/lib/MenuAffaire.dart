@@ -12,7 +12,7 @@ class MenuAffaire extends StatefulWidget{
  MenuAffaireState createState() => MenuAffaireState(); 
 }
 class MenuAffaireState extends State<MenuAffaire>{
-  
+
   List<NumeroAffaire> _listNumeroAffaire= new List<NumeroAffaire>();
 
   @override
@@ -66,20 +66,19 @@ class MenuAffaireState extends State<MenuAffaire>{
        _listCardCommune.add(
         new Card(
            elevation: 10,
+           color: Colors.white,
            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0),),
            margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
            child: new ListTile(
                 contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                 leading: Container(
                   padding: EdgeInsets.only(right: 12.0),
-                  child: Icon(Icons.account_circle, color: Colors.grey[700],size: SizeConfig.fontSize,),
+                  child: Icon(Icons.location_city, color: Colors.grey[600],size: SizeConfig.fontSize,),
                 ),
                 title: Text(
                   list[index].nomCommune,
-                  style: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.bold,fontSize: SizeConfig.fontSize),
+                  style: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.bold,fontSize: SizeConfig.fontSize),
                 ),
-                subtitle: Text("Nombre de commune",style: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.bold,fontSize: SizeConfig.fontSize/3),),
-                trailing:Icon(Icons.keyboard_arrow_right, color: Colors.grey[700], size: SizeConfig.fontSize)
               ),
         )
       ); 
@@ -104,16 +103,17 @@ class MenuAffaireState extends State<MenuAffaire>{
         itemBuilder: (BuildContext context, int index){
           return new Card(
            elevation: 10,
+           color: Colors.grey[600],
            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0),),
            margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
            child: new ExpansionTile(
                 leading: Container(
                   padding: EdgeInsets.only(right: 12.0),
-                  child: Icon(Icons.account_circle, color: Colors.grey[700],size: SizeConfig.fontSize*1.5,),
+                  child: Icon(Icons.account_circle, color: Colors.white,size: SizeConfig.fontSize*1.5,),
                 ),
                 title: Text(
                   _listNumeroAffaire[index].numeroAffaire,
-                  style: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.bold,fontSize: SizeConfig.fontSize*1.5),
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: SizeConfig.fontSize*1.5),
                 ),
                 children: listCommuneGenerator(_listNumeroAffaire[index].listCommune),
             ),
