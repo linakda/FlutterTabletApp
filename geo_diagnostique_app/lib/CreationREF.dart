@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:geo_diagnostique_app/Affaire.dart';
+import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Size.dart';
 
 class CreationREF extends StatefulWidget {
@@ -43,6 +44,7 @@ class _CreationREFState extends State<CreationREF> {
     super.initState();
   }
 
+  //Méthode pour créer les TextForms
   Padding textformREF(String label, int index) {
     return Padding(
         padding: textPadding,
@@ -73,10 +75,34 @@ class _CreationREFState extends State<CreationREF> {
                 ),
               ),
             ),
+            suggestionsCallback: (pattern){
+              switch(index){
+              case 0:
+                return numAffaires(widget.numAffaireList);
+                break;
+              case 1:
+                return communeList(actuelNumAffaire(widget.numAffaireList));
+                break;
+              default :
+              return null;
+              }
+            },
+            itemBuilder: (context, suggestion) {
+              return ListTile(
+                title: Text(suggestion),
+              );
+            },
+            transitionBuilder: (context, suggestionsBox, controller) {
+            return suggestionsBox;
+            },
+            onSuggestionSelected: (suggestion) {
+            this.controllerList[index].text = suggestion;
+          },
           ),
         ));
   }
 
+  //Méthode pour valider tous les champs
   bool testREFvalidate(List<GlobalKey<FormState>> formKeylist) {
     bool validate = true;
     for (var i = 0; i < formKeylist.length; i++) {
@@ -89,6 +115,36 @@ class _CreationREFState extends State<CreationREF> {
     } else {
       return true;
     }
+  }
+
+  //Méthode qui à partir de la liste des numéros d'affaires, nous donnes une liste des noms des numéros d'affaires
+  List<String> numAffaires(List<NumeroAffaire> list){
+    List<String> listString=new List<String>();
+    for(var i=0;i<list.length;i++){
+      listString.add(list[i].numeroAffaire);
+    }
+    return listString;
+  }
+  
+  //Méthode qui à partir d'un numéro d'affaire, nous donnes une liste des noms des communes
+  List<String> communeList(NumeroAffaire affaire){
+    List<Commune> communes=affaire.listCommune;
+    List<String> listString=new List<String>();
+    for(var i=0;i<communes.length;i++){
+      listString.add(communes[i].nomCommune);
+    }
+    return listString;
+  }
+
+  //Méthode qui à partir de la liste des numéros d'affaire, nous donne le numéro d'affaire taper précédemment
+  NumeroAffaire actuelNumAffaire(List<NumeroAffaire> affaire){
+    int index;
+    for(index=0;index<affaire.length;index++){
+      if(affaire[index].numeroAffaire==controllerList[0].text){
+        break;
+      }
+    }
+    return affaire[index];
   }
 
   @override
@@ -117,7 +173,7 @@ class _CreationREFState extends State<CreationREF> {
                   textColor: Colors.white,
                   onPressed: () {
                     if (testREFvalidate(formKeylist)) {
-                      widget.updateNumAffaireList(controllerList[0].text);
+                      widget.updateNumAffaireList(controllerList[0].text,controllerList[1].text);
                       Scaffold.of(context).showSnackBar(SnackBar(
                         duration: new Duration(seconds: 3),
                         backgroundColor: color,
