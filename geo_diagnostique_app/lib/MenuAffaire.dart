@@ -123,7 +123,7 @@ class MenuAffaireState extends State<MenuAffaire>{
       floatingActionButton: FloatingActionButton.extended(
         
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => CreationREF(_addNumAffaire)),);
+          Navigator.push(context, MaterialPageRoute(builder: (context) => CreationREF(_addNumAffaire,_listNumeroAffaire)),);
         },
         backgroundColor: Colors.orangeAccent,
         tooltip: 'Image',

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Size.dart';
 
 class CreationREF extends StatefulWidget {
   final Function updateNumAffaireList;
+  final List<NumeroAffaire> numAffaireList;
 
-  CreationREF(this.updateNumAffaireList);
+  CreationREF(this.updateNumAffaireList, this.numAffaireList);
   @override
   _CreationREFState createState() => _CreationREFState();
 }
@@ -45,27 +48,29 @@ class _CreationREFState extends State<CreationREF> {
         padding: textPadding,
         child: Form(
           key: formKeylist[index],
-          child: TextFormField(
+          child: TypeAheadFormField(
             validator: (value) {
               if (value.isEmpty) {
                 return 'Veuillez entrez un champ';
               }
               return null;
             },
-            controller: controllerList[index],
-            cursorColor: color,
-            style: textSize,
-            decoration: InputDecoration(
-              labelText: label,
-              labelStyle: TextStyle(color: Colors.grey[700]),
-              focusColor: color,
-              fillColor: Colors.white,
-              focusedBorder: new OutlineInputBorder(
-                borderRadius: new BorderRadius.circular(25.0),
-                borderSide: new BorderSide(color: color),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25.0),
+            textFieldConfiguration: TextFieldConfiguration(
+              controller: controllerList[index],
+              cursorColor: color,
+              style: textSize,
+              decoration: InputDecoration(
+                labelText: label,
+                labelStyle: TextStyle(color: Colors.grey[700]),
+                focusColor: color,
+                fillColor: Colors.white,
+                focusedBorder: new OutlineInputBorder(
+                  borderRadius: new BorderRadius.circular(25.0),
+                  borderSide: new BorderSide(color: color),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                ),
               ),
             ),
           ),
@@ -76,13 +81,12 @@ class _CreationREFState extends State<CreationREF> {
     bool validate = true;
     for (var i = 0; i < formKeylist.length; i++) {
       if (!formKeylist[i].currentState.validate()) {
-        validate=false;
+        validate = false;
       }
     }
-    if(validate==false){
+    if (validate == false) {
       return false;
-    }
-    else{
+    } else {
       return true;
     }
   }
@@ -113,7 +117,6 @@ class _CreationREFState extends State<CreationREF> {
                   textColor: Colors.white,
                   onPressed: () {
                     if (testREFvalidate(formKeylist)) {
-
                       widget.updateNumAffaireList(controllerList[0].text);
                       Scaffold.of(context).showSnackBar(SnackBar(
                         duration: new Duration(seconds: 3),
