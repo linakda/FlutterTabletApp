@@ -3,11 +3,15 @@ import 'package:flutter/rendering.dart';
 import 'package:geo_diagnostique_app/Size.dart';
 
 class CreationREF extends StatefulWidget {
+  final Function updateNumAffaireList;
+
+  CreationREF(this.updateNumAffaireList);
   @override
   CreationREFState createState() => CreationREFState();
 }
 
 class CreationREFState extends State<CreationREF> {
+  
   final TextStyle textSize = new TextStyle(fontSize: SizeConfig.fontSize);
   final Color color = Colors.green;
   final EdgeInsetsGeometry textPadding =
@@ -110,6 +114,8 @@ class CreationREFState extends State<CreationREF> {
                   textColor: Colors.white,
                   onPressed: () {
                     if (testREFvalidate(formKeylist)) {
+
+                      widget.updateNumAffaireList(controllerList[0].text);
                       Scaffold.of(context).showSnackBar(SnackBar(
                         duration: new Duration(seconds: 3),
                         backgroundColor: color,
@@ -125,6 +131,7 @@ class CreationREFState extends State<CreationREF> {
                           },
                         ),
                       ));
+                      Navigator.pop(context);
                     }
                   },
                   child: Text('Ajouter la Réf.', style: textSize),
