@@ -5,6 +5,7 @@ import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/CreationREF.dart';
 import 'package:geo_diagnostique_app/Size.dart';
+import 'package:geo_diagnostique_app/main.dart';
 
 class MenuAffaire extends StatefulWidget{
  MenuAffaireState createState() => MenuAffaireState(); 
@@ -19,10 +20,10 @@ class MenuAffaireState extends State<MenuAffaire>{
   initState(){
     super.initState();
   }
-  void _addNumAffaire(String name){
+  void _addNumAffaire(String numeroAffaire,String nomCommune){
     setState(() {
       _listNumeroAffaire.add(
-        new NumeroAffaire(name)
+        new NumeroAffaire(numeroAffaire)
       );
       _listTile.add(
         new Card(
@@ -36,7 +37,7 @@ class MenuAffaireState extends State<MenuAffaire>{
                   child: Icon(Icons.account_circle, color: Colors.grey[700],size: SizeConfig.fontSize,),
                 ),
                 title: Text(
-                  name,
+                  nomCommune,
                   style: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.bold,fontSize: SizeConfig.fontSize),
                 ),
                 subtitle: Text("Nombre de commune",style: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.bold,fontSize: SizeConfig.fontSize/3),),
@@ -60,8 +61,25 @@ class MenuAffaireState extends State<MenuAffaire>{
         centerTitle: true,
       ),
       body: ListView.builder(
-        
-        children: _listTile,
+        itemCount: _listNumeroAffaire.length,
+        itemBuilder: (BuildContext context, int index){
+          return new Card(
+           elevation: 10,
+           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0),),
+           margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+           child: new ExpansionTile(
+                leading: Container(
+                  padding: EdgeInsets.only(right: 12.0),
+                  child: Icon(Icons.account_circle, color: Colors.grey[700],size: SizeConfig.fontSize*1.5,),
+                ),
+                title: Text(
+                  _listNumeroAffaire[index].name,
+                  style: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.bold,fontSize: SizeConfig.fontSize*1.5),
+                ),
+                children: _listTile,
+            ),
+          ); 
+        },
       ),
       floatingActionButton: FloatingActionButton.extended(
         
