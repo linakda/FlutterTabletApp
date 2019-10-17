@@ -7,11 +7,10 @@ class CreationREF extends StatefulWidget {
 
   CreationREF(this.updateNumAffaireList);
   @override
-  CreationREFState createState() => CreationREFState();
+  _CreationREFState createState() => _CreationREFState();
 }
 
-class CreationREFState extends State<CreationREF> {
-  
+class _CreationREFState extends State<CreationREF> {
   final TextStyle textSize = new TextStyle(fontSize: SizeConfig.fontSize);
   final Color color = Colors.green;
   final EdgeInsetsGeometry textPadding =
