@@ -81,7 +81,8 @@ class _CreationREFState extends State<CreationREF> {
                 return numAffaires(widget.numAffaireList);
                 break;
               case 1:
-                return communeList(actuelNumAffaire(widget.numAffaireList));
+                  return communeList(actuelNumAffaire(widget.numAffaireList));
+              
                 break;
               default :
               return null;
@@ -128,9 +129,11 @@ class _CreationREFState extends State<CreationREF> {
   
   //Méthode qui à partir d'un numéro d'affaire, nous donnes une liste des noms des communes
   List<String> communeList(NumeroAffaire affaire){
+    if(affaire == null){return null;}
     List<Commune> communes=affaire.listCommune;
     List<String> listString=new List<String>();
     for(var i=0;i<communes.length;i++){
+      
       listString.add(communes[i].nomCommune);
     }
     return listString;
@@ -141,10 +144,10 @@ class _CreationREFState extends State<CreationREF> {
     int index;
     for(index=0;index<affaire.length;index++){
       if(affaire[index].numeroAffaire==controllerList[0].text){
-        break;
+        return affaire[index];
       }
     }
-    return affaire[index];
+    return null;
   }
 
   @override
@@ -173,7 +176,7 @@ class _CreationREFState extends State<CreationREF> {
                   textColor: Colors.white,
                   onPressed: () {
                     if (testREFvalidate(formKeylist)) {
-                      widget.updateNumAffaireList(controllerList[0].text,controllerList[1].text);
+                      widget.updateNumAffaireList(controllerList[0].text,controllerList[1].text,controllerList[2].text);
                       Scaffold.of(context).showSnackBar(SnackBar(
                         duration: new Duration(seconds: 3),
                         backgroundColor: color,
