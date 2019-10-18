@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/rendering.dart';
-import 'package:geo_diagnostique_app/Anomalies.dart';
 import 'package:geo_diagnostique_app/FicheOuvrage.dart';
-import 'package:geo_diagnostique_app/Localisation.dart';
-import 'package:geo_diagnostique_app/Schema.dart';
 import 'package:geo_diagnostique_app/Size.dart';
-import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 
 
-class Caractere extends StatelessWidget{
+class Caractere extends StatefulWidget{
+@override
+  CaractereState createState() => CaractereState();
+}
+class CaractereState extends   State<Caractere> {
   FicheOuvrage ouvrage = new FicheOuvrage();
   SizeConfig size = new SizeConfig();
   TextStyle textSize = new TextStyle(fontSize: SizeConfig.fontSize);

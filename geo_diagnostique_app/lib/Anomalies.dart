@@ -6,8 +6,13 @@ import 'package:geo_diagnostique_app/Size.dart';
 
 
 
-class Anomalie extends StatelessWidget{
+class Anomalie extends StatefulWidget{
+  @override
+  AnomalieState createState() => AnomalieState();
+}
   
+  class AnomalieState extends State<Anomalie> { 
+    
   FicheOuvrage ouvrage = new FicheOuvrage();
   SizeConfig size = new SizeConfig();
   TextStyle textSize = new TextStyle(fontSize: SizeConfig.fontSize);
