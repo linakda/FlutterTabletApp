@@ -9,8 +9,9 @@ import 'package:geo_diagnostique_app/FeuilleOuvrage.dart';
 class CreationREF extends StatefulWidget {
   final Function updateNumAffaireList;
   final List<NumeroAffaire> numAffaireList;
+  final String dernierNumeroAffaire;
 
-  CreationREF(this.updateNumAffaireList, this.numAffaireList);
+  CreationREF(this.updateNumAffaireList, this.numAffaireList,this.dernierNumeroAffaire);
   @override
   _CreationREFState createState() => _CreationREFState();
 } 
@@ -40,6 +41,9 @@ class _CreationREFState extends State<CreationREF> {
     for (int i = 0; i < controllerList.length; i++) {
       controllerList[i] = new TextEditingController(text: '');
       formKeylist[i] = new GlobalKey<FormState>();
+      if(i==0){
+        controllerList[i].text=widget.dernierNumeroAffaire;
+      }
     }
     super.initState();
   }
@@ -58,6 +62,19 @@ class _CreationREFState extends State<CreationREF> {
               return null;
             },
             textFieldConfiguration: TextFieldConfiguration(
+              textCapitalization: TextCapitalization.characters,
+              onChanged: (text)
+              {
+                setState(() {
+                  if(index==1){
+                    affiche3Lettres(controllerList[1],controllerList[2]);
+                    affiche3Lettres(controllerList[2], controllerList[3]);
+                  }
+                  else if (index==2){
+                    affiche3Lettres(controllerList[2], controllerList[3]);
+                  }
+                });        
+              },
               controller: controllerList[index],
               cursorColor: Config.color,
               style: textSize,
@@ -163,6 +180,11 @@ class _CreationREFState extends State<CreationREF> {
     return rechercheList;
   }
 
+  //Méthode pour afficher les trois premières lettres
+  void affiche3Lettres(TextEditingController textController1,TextEditingController textController2){
+    String text1 = textController1.text;
+    textController2.text = text1.substring(0,3);
+  }
 
   @override
   Widget build(BuildContext context) {

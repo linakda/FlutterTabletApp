@@ -14,6 +14,7 @@ class MenuAffaire extends StatefulWidget{
 class MenuAffaireState extends State<MenuAffaire>{
 
   List<NumeroAffaire> _listNumeroAffaire= new List<NumeroAffaire>();
+  String _dernierNumeroAffaire="";
 
   @override
   initState(){
@@ -27,6 +28,7 @@ class MenuAffaireState extends State<MenuAffaire>{
 
   void _addNumAffaire(String numeroAffaire,String nomCommune,String refCommune){
     Commune _nouvelCommune = new Commune(nomCommune,refCommune);
+    _dernierNumeroAffaire=numeroAffaire;
 
     setState(() {
       if (_isAffaireExist(_listNumeroAffaire, numeroAffaire) != null){
@@ -130,7 +132,7 @@ class MenuAffaireState extends State<MenuAffaire>{
       floatingActionButton: FloatingActionButton.extended(
         
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => CreationREF(_addNumAffaire,_listNumeroAffaire)),);
+          Navigator.push(context, MaterialPageRoute(builder: (context) => CreationREF(_addNumAffaire,_listNumeroAffaire,_dernierNumeroAffaire)),);
         },
         backgroundColor: Config.buttonColor,
         splashColor: Config.splashColor,
