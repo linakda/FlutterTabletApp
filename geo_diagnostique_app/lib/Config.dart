@@ -1,12 +1,18 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class SizeConfig {
+class Config {
  static MediaQueryData _mediaQueryData;
  static double screenWidth;
  static double screenHeight;
  static double screenPadding;
  static double blockSizeVertical;
  static double fontSize;
+ static Color color;
+ static Color textColor;
+ static Color buttonColor;
+ static Color splashColor;
+ static Color bottomBarColor;
  
  void init(BuildContext context) {
   _mediaQueryData = MediaQuery.of(context);
@@ -15,5 +21,10 @@ class SizeConfig {
   screenPadding = screenWidth / 50;
   blockSizeVertical = screenHeight / 50;
   fontSize=screenHeight/25;
+  color = Colors.green;
+  textColor = Colors.grey[600];
+  buttonColor = Colors.orangeAccent;
+  splashColor = Colors.orange;
+  bottomBarColor = Colors.lime[50];
  }
 }

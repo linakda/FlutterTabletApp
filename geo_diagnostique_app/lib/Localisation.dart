@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/rendering.dart';
-import 'package:geo_diagnostique_app/Anomalies.dart';
-import 'package:geo_diagnostique_app/Caractere.dart';
 import 'package:geo_diagnostique_app/FicheOuvrage.dart';
-import 'package:geo_diagnostique_app/Schema.dart';
-import 'package:geo_diagnostique_app/Size.dart';
-import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
+import 'package:geo_diagnostique_app/Config.dart';
 
 
 class Localisation extends StatefulWidget{
@@ -15,10 +11,9 @@ class Localisation extends StatefulWidget{
 }
 class LocalisationState extends State<Localisation> {
   FicheOuvrage ouvrage = new FicheOuvrage();
-  SizeConfig size = new SizeConfig();
-  TextStyle textSize = new TextStyle(fontSize: SizeConfig.fontSize);
-  Color color = Colors.teal[700];
-  EdgeInsetsGeometry textPadding = EdgeInsets.all(SizeConfig.screenPadding);
+  Config size = new Config();
+  TextStyle textSize = new TextStyle(fontSize: Config.fontSize);
+  EdgeInsetsGeometry textPadding = EdgeInsets.all(Config.screenPadding);
   int navigationIndex;
   final int currentIndex=0;
   TextEditingController communeController = TextEditingController();
@@ -31,7 +26,7 @@ class LocalisationState extends State<Localisation> {
   @override
   Widget build(BuildContext context){
    
-    SizeConfig().init(context);
+    Config().init(context);
     return new Scaffold(
       
 

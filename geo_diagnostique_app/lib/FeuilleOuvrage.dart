@@ -7,7 +7,7 @@ import 'package:geo_diagnostique_app/Anomalies.dart';
 import 'package:geo_diagnostique_app/Caractere.dart';
 import 'package:geo_diagnostique_app/Localisation.dart';
 import 'package:geo_diagnostique_app/Schema.dart';
-import 'package:geo_diagnostique_app/Size.dart';
+import 'package:geo_diagnostique_app/Config.dart';
 
 
 class FeuilleOuvrage extends StatefulWidget{
@@ -51,7 +51,7 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
   
   Widget build(BuildContext context){
    
-    SizeConfig().init(context);
+    Config().init(context);
     return new Scaffold(
       
       appBar: AppBar(
@@ -74,14 +74,14 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
           print("Confirm action $action");
                     },
                 child: Icon(Icons.check, size: 25,),
-                backgroundColor: Colors.green,
+                backgroundColor: Config.color,
         ),
    
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
 
 
       bottomNavigationBar: BubbleBottomBar(
-        backgroundColor: Colors.lime[50],
+        backgroundColor: Config.bottomBarColor,
         opacity: .2,
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
         elevation: 8,

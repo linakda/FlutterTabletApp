@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
-import 'package:geo_diagnostique_app/Size.dart';
+import 'package:geo_diagnostique_app/Config.dart';
 
 class CreationREF extends StatefulWidget {
   final Function updateNumAffaireList;
@@ -12,13 +12,12 @@ class CreationREF extends StatefulWidget {
   CreationREF(this.updateNumAffaireList, this.numAffaireList);
   @override
   _CreationREFState createState() => _CreationREFState();
-}
+} 
 
 class _CreationREFState extends State<CreationREF> {
-  final TextStyle textSize = new TextStyle(fontSize: SizeConfig.fontSize);
-  final Color color = Colors.green;
+  final TextStyle textSize = new TextStyle(fontSize: Config.fontSize);
   final EdgeInsetsGeometry textPadding =
-      EdgeInsets.all(SizeConfig.screenPadding);
+      EdgeInsets.all(Config.screenPadding);
   //Le controller avec le text
   final List<TextEditingController> controllerList =
       new List<TextEditingController>(4);
@@ -53,22 +52,22 @@ class _CreationREFState extends State<CreationREF> {
           child: TypeAheadFormField(
             validator: (value) {
               if (value.isEmpty) {
-                return 'Veuillez entrez un champ';
+                return 'Veuillez entrer un champ';
               }
               return null;
             },
             textFieldConfiguration: TextFieldConfiguration(
               controller: controllerList[index],
-              cursorColor: color,
+              cursorColor: Config.color,
               style: textSize,
               decoration: InputDecoration(
                 labelText: label,
-                labelStyle: TextStyle(color: Colors.grey[700]),
-                focusColor: color,
+                labelStyle: TextStyle(color: Config.textColor),
+                focusColor: Config.color,
                 fillColor: Colors.white,
                 focusedBorder: new OutlineInputBorder(
                   borderRadius: new BorderRadius.circular(25.0),
-                  borderSide: new BorderSide(color: color),
+                  borderSide: new BorderSide(color: Config.color),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25.0),
@@ -88,6 +87,8 @@ class _CreationREFState extends State<CreationREF> {
               return null;
               }
             },
+            noItemsFoundBuilder: (BuildContext context) =>
+            Text("Pas d'éléments trouvés",style: TextStyle(fontSize: Config.fontSize/2),),
             itemBuilder: (context, suggestion) {
               return ListTile(
                 title: Text(suggestion),
@@ -141,8 +142,7 @@ class _CreationREFState extends State<CreationREF> {
 
   //Méthode qui à partir de la liste des numéros d'affaire, nous donne le numéro d'affaire taper précédemment
   NumeroAffaire actuelNumAffaire(List<NumeroAffaire> affaire){
-    int index;
-    for(index=0;index<affaire.length;index++){
+    for(var index=0;index<affaire.length;index++){
       if(affaire[index].numeroAffaire==controllerList[0].text){
         return affaire[index];
       }
@@ -150,12 +150,15 @@ class _CreationREFState extends State<CreationREF> {
     return null;
   }
 
+  //Méthode pour filtrer le résultat
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Création d\'une référence', style: textSize),
-        backgroundColor: color,
+        backgroundColor: Config.color,
       ),
       body: Builder(
         builder: (context) => SingleChildScrollView(
@@ -169,24 +172,24 @@ class _CreationREFState extends State<CreationREF> {
               Padding(
                 padding: textPadding,
                 child: RaisedButton(
-                  splashColor: Colors.greenAccent,
+                  splashColor: Config.splashColor,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0)),
-                  color: color,
+                  color: Config.buttonColor,
                   textColor: Colors.white,
                   onPressed: () {
                     if (testREFvalidate(formKeylist)) {
                       widget.updateNumAffaireList(controllerList[0].text,controllerList[1].text,controllerList[2].text);
                       Scaffold.of(context).showSnackBar(SnackBar(
                         duration: new Duration(seconds: 3),
-                        backgroundColor: color,
+                        backgroundColor: Config.color,
                         content: Text(
                           'Ajouter avec Succés !',
-                          style: TextStyle(fontSize: SizeConfig.fontSize / 2),
+                          style: TextStyle(fontSize: Config.fontSize / 2),
                         ),
                         action: SnackBarAction(
                           label: 'Annuler',
-                          textColor: Colors.redAccent,
+                          textColor: Config.buttonColor,
                           onPressed: () {
                             //Code pour annuler l'ajout
                           },

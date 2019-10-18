@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/CreationREF.dart';
-import 'package:geo_diagnostique_app/Size.dart';
+import 'package:geo_diagnostique_app/Config.dart';
 
 
 class MenuAffaire extends StatefulWidget{
@@ -77,14 +77,14 @@ class MenuAffaireState extends State<MenuAffaire>{
                 contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                 leading: Container(
                   padding: EdgeInsets.only(right: 12.0),
-                  child: Icon(Icons.location_city, color: Colors.grey[600],size: SizeConfig.fontSize,),
+                  child: Icon(Icons.location_city, color: Config.textColor,size: Config.fontSize,),
                 ),
                 title: Text(
                   list[index].nomCommune,
-                  style: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.bold,fontSize: SizeConfig.fontSize),),
+                  style: TextStyle(color: Config.textColor, fontWeight: FontWeight.bold,fontSize: Config.fontSize),),
                 subtitle: Text(
                   list[index].refCommune,
-                  style: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.bold)),
+                  style: TextStyle(color: Config.textColor, fontWeight: FontWeight.bold)),
 
               ),
         )
@@ -95,13 +95,13 @@ class MenuAffaireState extends State<MenuAffaire>{
   
   @override
   Widget build(BuildContext context){
-    SizeConfig().init(context);
+    Config().init(context);
     return new Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: Config.color,
         title: Text(
           "Menu d'affaire",
-          style: TextStyle(fontSize: SizeConfig.fontSize),
+          style: TextStyle(fontSize: Config.fontSize),
         ),
         centerTitle: true,
       ),
@@ -110,17 +110,17 @@ class MenuAffaireState extends State<MenuAffaire>{
         itemBuilder: (BuildContext context, int index){
           return new Card(
            elevation: 10,
-           color: Colors.grey[600],
+           color: Config.textColor,
            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0),),
            margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
            child: new ExpansionTile(
                 leading: Container(
                   padding: EdgeInsets.only(right: 12.0),
-                  child: Icon(Icons.account_circle, color: Colors.white,size: SizeConfig.fontSize*1.5,),
+                  child: Icon(Icons.account_circle, color: Colors.white,size: Config.fontSize*1.5,),
                 ),
                 title: Text(
                   _listNumeroAffaire[index].numeroAffaire,
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: SizeConfig.fontSize*1.5),
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: Config.fontSize*1.5),
                 ),
                 children: listCommuneGenerator(_listNumeroAffaire[index].listCommune),
             ),
@@ -132,10 +132,11 @@ class MenuAffaireState extends State<MenuAffaire>{
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => CreationREF(_addNumAffaire,_listNumeroAffaire)),);
         },
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: Config.buttonColor,
+        splashColor: Config.splashColor,
         tooltip: 'Image',
         icon: Icon(Icons.add_circle),
-        label:Text("Nouvel ouvrage",style: TextStyle(fontSize: SizeConfig.fontSize/1.5),),
+        label:Text("Nouvel ouvrage",style: TextStyle(fontSize: Config.fontSize/1.5),),
       ),
     );
   }
