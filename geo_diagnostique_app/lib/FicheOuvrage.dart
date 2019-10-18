@@ -26,7 +26,9 @@ class FicheOuvrage {
   List <CaracteristiqueCanalisation> listCanalisation;
 
   // --- Anomalies observées --- \\
-  List <String> tracesCharge = new List(2);
+  //List <String> tracesCharge = new List(2);
+  List <String> tracesCharge = ['Oui', 'Non'];
+
   List <String> perturbationEcoulement = new List(3);
   List <String> defautEtancheite = new List(3);
   List <String> tracesInfiltration = new List(3);
