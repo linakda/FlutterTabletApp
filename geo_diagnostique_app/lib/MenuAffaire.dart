@@ -11,10 +11,13 @@ import 'package:geo_diagnostique_app/Config.dart';
 class MenuAffaire extends StatefulWidget{
  MenuAffaireState createState() => MenuAffaireState(); 
 }
+
 class MenuAffaireState extends State<MenuAffaire>{
 
   List<NumeroAffaire> _listNumeroAffaire= new List<NumeroAffaire>();
-  String _dernierNumeroAffaire="";
+  List<NumeroAffaire> _searchNumeroAffairelist= new List<NumeroAffaire>();
+  String _dernierNumeroAffaire = "";
+  bool _searchMode = false;
 
   @override
   initState(){
@@ -28,9 +31,10 @@ class MenuAffaireState extends State<MenuAffaire>{
 
   void _addNumAffaire(String numeroAffaire,String nomCommune,String refCommune){
     Commune _nouvelCommune = new Commune(nomCommune,refCommune);
-    _dernierNumeroAffaire=numeroAffaire;
+    _dernierNumeroAffaire = numeroAffaire;
 
     setState(() {
+      
       if (_isAffaireExist(_listNumeroAffaire, numeroAffaire) != null){
         //numero d'affaire déjà existant
         int index = _isAffaireExist(_listNumeroAffaire, numeroAffaire);
@@ -45,6 +49,16 @@ class MenuAffaireState extends State<MenuAffaire>{
         _listNumeroAffaire[_listNumeroAffaire.length-1].addCommune(_nouvelCommune);
       }
     });
+  }
+
+  void _updateSearchAffaireList(String searchNumAffaire){
+    _searchNumeroAffairelist = new List<NumeroAffaire>();
+    for(int i=0;i<_listNumeroAffaire.length;i++){
+      
+      if(_listNumeroAffaire[i].numeroAffaire.contains(searchNumAffaire)){
+        _searchNumeroAffairelist.add(_listNumeroAffaire[i]);
+      }
+    }
   }
 
   int _isAffaireExist(List<NumeroAffaire> listNumeroAffaire, String numero){
@@ -107,30 +121,7 @@ class MenuAffaireState extends State<MenuAffaire>{
         ),
         centerTitle: true,
       ),
-      body: ListView.builder(
-        itemCount: _listNumeroAffaire.length,
-        itemBuilder: (BuildContext context, int index){
-          return new Card(
-           elevation: 10,
-           color: Config.textColor,
-           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0),),
-           margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-           child: new ExpansionTile(
-                leading: Container(
-                  padding: EdgeInsets.only(right: 12.0),
-                  child: Icon(Icons.account_circle, color: Colors.white,size: Config.fontSize*1.5,),
-                ),
-                title: Text(
-                  _listNumeroAffaire[index].numeroAffaire,
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: Config.fontSize*1.5),
-                ),
-                children: listCommuneGenerator(_listNumeroAffaire[index].listCommune),
-            ),
-          ); 
-        },
-      ),
       floatingActionButton: FloatingActionButton.extended(
-        
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) => CreationREF(_addNumAffaire,_listNumeroAffaire,_dernierNumeroAffaire)),);
         },
@@ -139,6 +130,61 @@ class MenuAffaireState extends State<MenuAffaire>{
         tooltip: 'Image',
         icon: Icon(Icons.add_circle),
         label:Text("Nouvel ouvrage",style: TextStyle(fontSize: Config.fontSize/1.5),),
+      ),
+      body: Column(
+        children: <Widget>[
+
+          TextField(
+            cursorColor: Config.color,
+              style: TextStyle(fontSize: Config.fontSize),
+              decoration: InputDecoration(
+                labelText: "Rechercher une commune ou un numéro d'affaire",
+                labelStyle: TextStyle(color: Config.textColor),
+                focusColor: Config.color,
+                fillColor: Colors.white,
+                focusedBorder: new OutlineInputBorder(
+                  borderRadius: new BorderRadius.circular(25.0),
+                  borderSide: new BorderSide(color: Config.color),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                ),
+              ),
+              onChanged: (String text){
+                if(_listNumeroAffaire.isNotEmpty){
+                  setState(() {
+                    _searchMode = true;
+                    _updateSearchAffaireList(text); 
+                  });
+                if(text == ""){_searchMode=false;}
+                }
+              },
+          ),
+
+          Expanded(
+            child: ListView.builder(
+              itemCount: !_searchMode ? _listNumeroAffaire.length : _searchNumeroAffairelist.length,
+              itemBuilder: (BuildContext context, int index){
+                return new Card(
+                elevation: 10,
+                color: Config.textColor,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0),),
+                margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+                child: new ExpansionTile(
+                      leading: Container(
+                        padding: EdgeInsets.only(right: 12.0),
+                        child: Icon(Icons.account_circle, color: Colors.white,size: Config.fontSize*1.5,),
+                      ),
+                      title: Text(!_searchMode ? _listNumeroAffaire[index].numeroAffaire : _searchNumeroAffairelist[index].numeroAffaire,
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: Config.fontSize*1.5),
+                      ),
+                      children: listCommuneGenerator(!_searchMode ? _listNumeroAffaire[index].listCommune : _searchNumeroAffairelist[index].listCommune),
+                  ),
+                ); 
+              },
+            ),
+          )
+        ],
       ),
     );
   }

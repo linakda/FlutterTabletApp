@@ -6,11 +6,13 @@ import 'package:flutter/rendering.dart';
 import 'package:geo_diagnostique_app/Anomalies.dart';
 import 'package:geo_diagnostique_app/Caractere.dart';
 import 'package:geo_diagnostique_app/Localisation.dart';
+import 'package:geo_diagnostique_app/MenuAffaire.dart';
 import 'package:geo_diagnostique_app/Schema.dart';
 import 'package:geo_diagnostique_app/Config.dart';
 
 
 class FeuilleOuvrage extends StatefulWidget{
+
 @override
   FeuilleOuvrageState createState() => FeuilleOuvrageState();
 }
@@ -81,6 +83,11 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
         backgroundColor: Colors.green,
         title: Text("Feuille Ouvrage"),
         centerTitle: true,
+        leading: IconButton(icon:Icon(Icons.arrow_back),
+          onPressed: (){
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          },
+        )
       ),
 
       body: [
