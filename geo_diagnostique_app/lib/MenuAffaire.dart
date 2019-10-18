@@ -25,38 +25,42 @@ class MenuAffaireState extends State<MenuAffaire>{
     super.dispose();
   }
 
-  void _addNumAffaire(String numeroAffaire,String nomCommune){
-    int _index;
-    Commune _nouvelCommune = new Commune(nomCommune);
-    bool _isNouveauNumAffaire = true;
-    bool _isNouvelCommune = true;
+  void _addNumAffaire(String numeroAffaire,String nomCommune,String refCommune){
+    Commune _nouvelCommune = new Commune(nomCommune,refCommune);
+
     setState(() {
-      for(_index=0;_index<_listNumeroAffaire.length;_index++){
-        if(_listNumeroAffaire[_index].numeroAffaire == numeroAffaire){
-          //numéro d'affaire déjà existant
-          for(int k=0;k<_listNumeroAffaire[_index].listCommune.length;k++){
-            if(_listNumeroAffaire[_index].listCommune[k].nomCommune == nomCommune){
-              //nom de commune déjà existant
-              _isNouvelCommune = false;
-              break;
-            }
-          }
-          _isNouveauNumAffaire = false;
-          break;
+      if (_isAffaireExist(_listNumeroAffaire, numeroAffaire) != null){
+        //numero d'affaire déjà existant
+        int index = _isAffaireExist(_listNumeroAffaire, numeroAffaire);
+        if(!_isCommuneExist(_listNumeroAffaire[index].listCommune, nomCommune)){
+          //si la commune n'existe pas
+          _listNumeroAffaire[index].addCommune(_nouvelCommune);
         }
       }
-      //Si on a parcouru toute la liste et qu'aucun numéro d'affaire en ai ressortie alors:
-      if(_isNouveauNumAffaire){
-        // - un nouveau numéro d'affaire à la liste
+      else{
+        //numéro d'affaire non-existant
         _listNumeroAffaire.add(new NumeroAffaire(numeroAffaire,));
-        // - une fois celui-ci créer on lui ajoute une nouvelle commune
         _listNumeroAffaire[_listNumeroAffaire.length-1].addCommune(_nouvelCommune);
       }
-      else if(_isNouvelCommune){
-        //on se trouve dans le cas ou on ajoute une commune à un numéro d'affaire déjà existant
-        _listNumeroAffaire[_index].addCommune(_nouvelCommune);
-      }
     });
+  }
+
+  int _isAffaireExist(List<NumeroAffaire> listNumeroAffaire, String numero){
+    if(listNumeroAffaire.isNotEmpty){
+      for(int index=0;index<_listNumeroAffaire.length;index++){
+        if(listNumeroAffaire[index].numeroAffaire == numero){return index;}
+      }
+    }
+    return null;
+  }
+
+  bool _isCommuneExist(List<Commune> listCommune, String nomCommune){
+    if(listCommune.isNotEmpty){
+      for(int index=0;index<listCommune.length;index++){
+          if(listCommune[index].nomCommune == nomCommune){return true;}
+      }
+    }
+    return false;
   }
 
   List<Card> listCommuneGenerator(List<Commune> list){
@@ -77,8 +81,11 @@ class MenuAffaireState extends State<MenuAffaire>{
                 ),
                 title: Text(
                   list[index].nomCommune,
-                  style: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.bold,fontSize: SizeConfig.fontSize),
-                ),
+                  style: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.bold,fontSize: SizeConfig.fontSize),),
+                subtitle: Text(
+                  list[index].refCommune,
+                  style: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.bold)),
+
               ),
         )
       ); 
@@ -128,7 +135,7 @@ class MenuAffaireState extends State<MenuAffaire>{
         backgroundColor: Colors.orangeAccent,
         tooltip: 'Image',
         icon: Icon(Icons.add_circle),
-        label:Text("Nouvelle ouvrage",style: TextStyle(fontSize: SizeConfig.fontSize/1.5),),
+        label:Text("Nouvel ouvrage",style: TextStyle(fontSize: SizeConfig.fontSize/1.5),),
       ),
     );
   }
