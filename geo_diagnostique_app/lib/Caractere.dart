@@ -5,7 +5,11 @@ import 'package:geo_diagnostique_app/FicheOuvrage.dart';
 import 'package:geo_diagnostique_app/Config.dart';
 
 
-class Caractere extends StatelessWidget{
+class Caractere extends StatefulWidget{
+@override
+  CaractereState createState() => CaractereState();
+}
+class CaractereState extends   State<Caractere> {
   FicheOuvrage ouvrage = new FicheOuvrage();
   Config size = new Config();
   TextStyle textSize = new TextStyle(fontSize: Config.fontSize);
