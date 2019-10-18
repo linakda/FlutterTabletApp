@@ -18,10 +18,33 @@ class FeuilleOuvrage extends StatefulWidget{
 enum ConfirmAction { Annuler, Valider }
 
 class FeuilleOuvrageState extends State<FeuilleOuvrage> {
-  
+  var _scaffoldKey = GlobalKey<ScaffoldState>();
   int currentIndex=0;
- 
- //Création d'une boîte AlertDialog après validation du formulaire
+  
+  @override
+  initState(){
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => 
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+        duration: new Duration(seconds: 3),
+        backgroundColor: Config.color,
+        content: Text(
+          'Ajouter avec Succés !',
+          style: TextStyle(fontSize: Config.fontSize / 2),
+        ),
+        action: SnackBarAction(
+          label: 'Annuler',
+          textColor: Config.buttonColor,
+          onPressed: () {
+            //Code pour annuler l'ajout
+          },
+        ),
+      )
+    ));
+  }
+
+  //Création d'une boîte AlertDialog après validation du formulaire
   Future<ConfirmAction>  _asyncConfirmDialog(BuildContext context) async {
     return showDialog<ConfirmAction>(
       context: context,
@@ -48,12 +71,12 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
       },
     );
   }
-  
+
   Widget build(BuildContext context){
    
     Config().init(context);
     return new Scaffold(
-      
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.green,
         title: Text("Feuille Ouvrage"),
@@ -69,10 +92,10 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
 
 
       floatingActionButton: FloatingActionButton(
-                onPressed: () async{
-        final ConfirmAction action = await _asyncConfirmDialog(context);
+        onPressed: () async{
+          final ConfirmAction action = await _asyncConfirmDialog(context);
           print("Confirm action $action");
-                    },
+        },
                 child: Icon(Icons.check, size: 25,),
                 backgroundColor: Config.color,
         ),

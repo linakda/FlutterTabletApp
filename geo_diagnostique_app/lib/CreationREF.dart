@@ -4,6 +4,7 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Config.dart';
+import 'package:geo_diagnostique_app/FeuilleOuvrage.dart';
 
 class CreationREF extends StatefulWidget {
   final Function updateNumAffaireList;
@@ -77,10 +78,10 @@ class _CreationREFState extends State<CreationREF> {
             suggestionsCallback: (pattern){
               switch(index){
               case 0:
-                return numAffaires(widget.numAffaireList);
+                return filtreSuggestion(pattern, numAffaires(widget.numAffaireList)) ;
                 break;
               case 1:
-                  return communeList(actuelNumAffaire(widget.numAffaireList));
+                  return filtreSuggestion(pattern, communeList(actuelNumAffaire(widget.numAffaireList))) ;
               
                 break;
               default :
@@ -151,6 +152,16 @@ class _CreationREFState extends State<CreationREF> {
   }
 
   //Méthode pour filtrer le résultat
+  List<String> filtreSuggestion(String string,List<String> listString) {
+    if(listString == null){return null;}
+    List<String> rechercheList = List<String>();
+    listString.forEach((item) {
+      if(item.contains(string)) {
+        rechercheList.add(item);
+      }
+    });
+    return rechercheList;
+  }
 
 
   @override
@@ -180,22 +191,8 @@ class _CreationREFState extends State<CreationREF> {
                   onPressed: () {
                     if (testREFvalidate(formKeylist)) {
                       widget.updateNumAffaireList(controllerList[0].text,controllerList[1].text,controllerList[2].text);
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                        duration: new Duration(seconds: 3),
-                        backgroundColor: Config.color,
-                        content: Text(
-                          'Ajouter avec Succés !',
-                          style: TextStyle(fontSize: Config.fontSize / 2),
-                        ),
-                        action: SnackBarAction(
-                          label: 'Annuler',
-                          textColor: Config.buttonColor,
-                          onPressed: () {
-                            //Code pour annuler l'ajout
-                          },
-                        ),
-                      ));
-                      Navigator.pop(context);
+                      //Navigator.pop(context);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => FeuilleOuvrage(),));
                     }
                   },
                   child: Text('Ajouter la Réf.', style: textSize),
