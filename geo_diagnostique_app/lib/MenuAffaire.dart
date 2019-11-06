@@ -17,6 +17,7 @@ class MenuAffaireState extends State<MenuAffaire>{
   List<NumeroAffaire> _listNumeroAffaire= new List<NumeroAffaire>();
   List<NumeroAffaire> _searchNumeroAffairelist= new List<NumeroAffaire>();
   String _dernierNumeroAffaire = "";
+  Commune _derniereCommune;
   bool _searchMode = false;
   Commune _communeSearch;
 
@@ -33,6 +34,7 @@ class MenuAffaireState extends State<MenuAffaire>{
   void _addNumAffaire(String numeroAffaire,String nomCommune,String refCommune){
     Commune _nouvelCommune = new Commune(nomCommune,refCommune);
     _dernierNumeroAffaire = numeroAffaire;
+    _derniereCommune = _nouvelCommune;
 
     setState(() {
       
@@ -137,7 +139,7 @@ class MenuAffaireState extends State<MenuAffaire>{
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => CreationREF(_addNumAffaire,_listNumeroAffaire,_dernierNumeroAffaire)),);
+          Navigator.push(context, MaterialPageRoute(builder: (context) => CreationREF(_addNumAffaire,_listNumeroAffaire,_dernierNumeroAffaire,_derniereCommune)),);
         },
         backgroundColor: Config.buttonColor,
         splashColor: Config.splashColor,

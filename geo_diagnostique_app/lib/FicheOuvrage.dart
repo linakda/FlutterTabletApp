@@ -2,6 +2,8 @@ import 'dart:core';
 import 'dart:io';
 
 class FicheOuvrage {
+  String refOuvrage;
+  
   // --- Localisation de l'ouvrage --- \\
   String commune;
   String nomRue;

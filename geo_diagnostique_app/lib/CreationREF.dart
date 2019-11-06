@@ -10,8 +10,9 @@ class CreationREF extends StatefulWidget {
   final Function updateNumAffaireList;
   final List<NumeroAffaire> numAffaireList;
   final String dernierNumeroAffaire;
+  final Commune derniereCommune;
 
-  CreationREF(this.updateNumAffaireList, this.numAffaireList,this.dernierNumeroAffaire);
+  CreationREF(this.updateNumAffaireList, this.numAffaireList,this.dernierNumeroAffaire,this.derniereCommune);
   @override
   _CreationREFState createState() => _CreationREFState();
 } 
@@ -41,8 +42,20 @@ class _CreationREFState extends State<CreationREF> {
     for (int i = 0; i < controllerList.length; i++) {
       controllerList[i] = new TextEditingController(text: '');
       formKeylist[i] = new GlobalKey<FormState>();
-      if(i==0){
-        controllerList[i].text=widget.dernierNumeroAffaire;
+      switch(i){
+        case 0 :
+          controllerList[i].text=widget.dernierNumeroAffaire;
+          break;
+        case 1 :
+           if (widget.derniereCommune!=null) {controllerList[i].text=widget.derniereCommune.nomCommune;}
+          break;
+        case 2 :
+          if (widget.derniereCommune!=null) {controllerList[i].text=widget.derniereCommune.refCommune;}
+          break;
+        case 3 :
+        break;
+        default :
+          break;
       }
     }
     super.initState();
@@ -117,6 +130,13 @@ class _CreationREFState extends State<CreationREF> {
             },
             onSuggestionSelected: (suggestion) {
             this.controllerList[index].text = suggestion;
+            if(index==1){
+              affiche3Lettres(controllerList[1],controllerList[2]);
+              affiche3Lettres(controllerList[2], controllerList[3]);
+            }
+            else if (index==2){
+              affiche3Lettres(controllerList[2], controllerList[3]);
+            }
           },
           ),
         ));

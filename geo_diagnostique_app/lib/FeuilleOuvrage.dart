@@ -6,7 +6,6 @@ import 'package:flutter/rendering.dart';
 import 'package:geo_diagnostique_app/Anomalies.dart';
 import 'package:geo_diagnostique_app/Caractere.dart';
 import 'package:geo_diagnostique_app/Localisation.dart';
-import 'package:geo_diagnostique_app/MenuAffaire.dart';
 import 'package:geo_diagnostique_app/Schema.dart';
 import 'package:geo_diagnostique_app/Config.dart';
 
