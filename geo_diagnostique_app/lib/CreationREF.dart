@@ -232,7 +232,7 @@ class _CreationREFState extends State<CreationREF> {
                   textColor: Colors.white,
                   onPressed: () {
                     if (testREFvalidate(formKeylist)) {
-                      widget.updateNumAffaireList(controllerList[0].text,controllerList[1].text,controllerList[2].text);
+                      widget.updateNumAffaireList(controllerList[0].text,controllerList[1].text,controllerList[2].text,controllerList[3].text);
                       //Navigator.pop(context);
                       Navigator.push(context, MaterialPageRoute(builder: (context) => FeuilleOuvrage(),));
                     }

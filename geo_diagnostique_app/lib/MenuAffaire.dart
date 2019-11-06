@@ -6,6 +6,8 @@ import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/CreationREF.dart';
 import 'package:geo_diagnostique_app/Config.dart';
+import 'package:geo_diagnostique_app/MenuOuvrage.dart';
+import 'package:geo_diagnostique_app/Ouvrage.dart';
 
 
 class MenuAffaire extends StatefulWidget{
@@ -31,8 +33,10 @@ class MenuAffaireState extends State<MenuAffaire>{
     super.dispose();
   }
 
-  void _addNumAffaire(String numeroAffaire,String nomCommune,String refCommune){
+  void _addNumAffaire(String numeroAffaire,String nomCommune,String refCommune,String refOuvrage){
     Commune _nouvelCommune = new Commune(nomCommune,refCommune);
+    Ouvrage _nouvelOuvrage = new Ouvrage(refOuvrage); 
+    _nouvelCommune.addOuvrage(_nouvelOuvrage);
     _dernierNumeroAffaire = numeroAffaire;
     _derniereCommune = _nouvelCommune;
 
@@ -90,7 +94,7 @@ class MenuAffaireState extends State<MenuAffaire>{
     return false;
   }
 
-  List<Card> listCommuneGenerator(List<Commune> listCommune){
+  List<Card> listCommuneGenerator(List<Commune> listCommune, BuildContext context){
     List<Card> _listCardCommune = new List<Card>();
     int length = listCommune.length;
 
@@ -117,7 +121,10 @@ class MenuAffaireState extends State<MenuAffaire>{
                 subtitle: Text(
                   _communeSearch != null ?_communeSearch.refCommune :listCommune[i].refCommune,
                   style: TextStyle(color: Config.textColor, fontWeight: FontWeight.bold)),
-
+                onTap: ()  {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) => MenuOuvrage(_communeSearch!= null ?_communeSearch:listCommune[i])));
+                },
               ),
         )
       ); 
@@ -201,7 +208,7 @@ class MenuAffaireState extends State<MenuAffaire>{
                       title: Text(!_searchMode ? _listNumeroAffaire[index].numeroAffaire : _searchNumeroAffairelist[index].numeroAffaire,
                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: Config.fontSize*1.5),
                       ),
-                      children: listCommuneGenerator(!_searchMode ? _listNumeroAffaire[index].listCommune : _searchNumeroAffairelist[index].listCommune),
+                      children: listCommuneGenerator(!_searchMode ? _listNumeroAffaire[index].listCommune : _searchNumeroAffairelist[index].listCommune,context),
                   ),
                 ); 
               },

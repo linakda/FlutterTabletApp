@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/rendering.dart';
-import 'package:geo_diagnostique_app/FicheOuvrage.dart';
+import 'package:geo_diagnostique_app/Ouvrage.dart';
 import 'package:geo_diagnostique_app/Config.dart';
 
 
@@ -12,7 +12,7 @@ class Anomalie extends StatefulWidget{
   
   class AnomalieState extends State<Anomalie> { 
     
-  FicheOuvrage ouvrage = new FicheOuvrage();
+  Ouvrage ouvrage;
   Config size = new Config();
   TextStyle textSize = new TextStyle(fontSize: Config.fontSize);
   EdgeInsetsGeometry textPadding = EdgeInsets.all(Config.screenPadding);
