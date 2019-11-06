@@ -18,6 +18,7 @@ class MenuAffaireState extends State<MenuAffaire>{
   List<NumeroAffaire> _searchNumeroAffairelist= new List<NumeroAffaire>();
   String _dernierNumeroAffaire = "";
   bool _searchMode = false;
+  Commune _communeSearch;
 
   @override
   initState(){
@@ -51,12 +52,20 @@ class MenuAffaireState extends State<MenuAffaire>{
     });
   }
 
-  void _updateSearchAffaireList(String searchNumAffaire){
+  void _updateSearchAffaireList(String searchElement){
     _searchNumeroAffairelist = new List<NumeroAffaire>();
     for(int i=0;i<_listNumeroAffaire.length;i++){
       
-      if(_listNumeroAffaire[i].numeroAffaire.contains(searchNumAffaire)){
+      if(_listNumeroAffaire[i].numeroAffaire.contains(searchElement)){
         _searchNumeroAffairelist.add(_listNumeroAffaire[i]);
+      }
+      else{
+        for(var k = 0;k<_listNumeroAffaire[i].listCommune.length;k++){
+          if(_listNumeroAffaire[i].listCommune[k].nomCommune.contains(searchElement)){
+            _searchNumeroAffairelist.add(_listNumeroAffaire[i]);
+            _communeSearch = _listNumeroAffaire[i].listCommune[k];
+          }
+        }
       }
     }
   }
@@ -79,11 +88,16 @@ class MenuAffaireState extends State<MenuAffaire>{
     return false;
   }
 
-  List<Card> listCommuneGenerator(List<Commune> list){
+  List<Card> listCommuneGenerator(List<Commune> listCommune){
     List<Card> _listCardCommune = new List<Card>();
+    int length = listCommune.length;
 
-    for(int index=0;index<list.length;index++){
-       _listCardCommune.add(
+    //si une commune a été rechercher alors il suffit de générer une seule card avec le nom de commune correspondant
+    if(_communeSearch != null){
+      length = 1;
+    }
+    for(var i=0;i<length;i++){
+      _listCardCommune.add(
         new Card(
            elevation: 10,
            color: Colors.white,
@@ -96,10 +110,10 @@ class MenuAffaireState extends State<MenuAffaire>{
                   child: Icon(Icons.location_city, color: Config.textColor,size: Config.fontSize,),
                 ),
                 title: Text(
-                  list[index].nomCommune,
+                  _communeSearch != null ?_communeSearch.nomCommune :listCommune[i].nomCommune,
                   style: TextStyle(color: Config.textColor, fontWeight: FontWeight.bold,fontSize: Config.fontSize),),
                 subtitle: Text(
-                  list[index].refCommune,
+                  _communeSearch != null ?_communeSearch.refCommune :listCommune[i].refCommune,
                   style: TextStyle(color: Config.textColor, fontWeight: FontWeight.bold)),
 
               ),
@@ -133,33 +147,40 @@ class MenuAffaireState extends State<MenuAffaire>{
       ),
       body: Column(
         children: <Widget>[
-
-          TextField(
-            cursorColor: Config.color,
-              style: TextStyle(fontSize: Config.fontSize),
-              decoration: InputDecoration(
-                labelText: "Rechercher une commune ou un numéro d'affaire",
-                labelStyle: TextStyle(color: Config.textColor),
-                focusColor: Config.color,
-                fillColor: Colors.white,
-                focusedBorder: new OutlineInputBorder(
-                  borderRadius: new BorderRadius.circular(25.0),
-                  borderSide: new BorderSide(color: Config.color),
+          _listNumeroAffaire.isNotEmpty 
+          ? Padding(
+            padding: EdgeInsets.all(Config.screenPadding),
+            child:TextField(
+              cursorColor: Config.color,
+                style: TextStyle(fontSize: Config.fontSize),
+                decoration: InputDecoration(
+                  labelText: "Rechercher une commune ou un numéro d'affaire",
+                  labelStyle: TextStyle(color: Config.textColor,fontSize: Config.fontSize/1.5),
+                  focusColor: Config.color,
+                  fillColor: Colors.white,
+                  focusedBorder: new OutlineInputBorder(
+                    borderRadius: new BorderRadius.circular(25.0),
+                    borderSide: new BorderSide(color: Config.color),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(25.0),
-                ),
+                onChanged: (String text){
+                  if(_listNumeroAffaire.isNotEmpty){
+                    setState(() {
+                      _searchMode = true;
+                      _updateSearchAffaireList(text); 
+                    });
+                  if(text == ""){_searchMode = false;_communeSearch=null;}
+                  }
+                },
+                textCapitalization: TextCapitalization.characters,
+              ))
+              :Padding(
+                padding: EdgeInsets.all(Config.screenPadding),
               ),
-              onChanged: (String text){
-                if(_listNumeroAffaire.isNotEmpty){
-                  setState(() {
-                    _searchMode = true;
-                    _updateSearchAffaireList(text); 
-                  });
-                if(text == ""){_searchMode=false;}
-                }
-              },
-          ),
+          
 
           Expanded(
             child: ListView.builder(
