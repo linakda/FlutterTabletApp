@@ -8,10 +8,13 @@ import 'package:geo_diagnostique_app/Caractere.dart';
 import 'package:geo_diagnostique_app/Localisation.dart';
 import 'package:geo_diagnostique_app/Schema.dart';
 import 'package:geo_diagnostique_app/Config.dart';
+import 'package:geo_diagnostique_app/Storage.dart';
 
 
 class FeuilleOuvrage extends StatefulWidget{
+  final Storage storage;
 
+  FeuilleOuvrage(this.storage);
 @override
   FeuilleOuvrageState createState() => FeuilleOuvrageState();
 }
