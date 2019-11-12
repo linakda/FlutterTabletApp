@@ -10,7 +10,7 @@ class Storage{
     this.refNumAffaire=refNumAffaire;
   }
   Future<String> get localPath async {
-    final dir = await getApplicationDocumentsDirectory();
+    final dir = await getExternalStorageDirectory();
     return dir.path;
   }
 
