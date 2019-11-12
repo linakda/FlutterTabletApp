@@ -17,21 +17,23 @@ class _LandingScreenState extends State<LandingScreen> {
   File imageFile;
   String _imageString = "";
 
+//Accès caméra
   _openCamera(BuildContext context) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
     Navigator.of(context).pop();
     this.setState(() {
       imageFile = picture;
     });
-  } //opencamera
+  } 
 
+//Accès gallerie 
   _openGallery(BuildContext context) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
     Navigator.of(context).pop();
     this.setState(() {
       imageFile = picture;
     });
-  } //opengallery
+  } 
 
   String setImage() {
     if (imageFile != null){
@@ -50,10 +52,10 @@ class _LandingScreenState extends State<LandingScreen> {
         color: Colors.grey,
         padding: EdgeInsets.all(Config.screenPadding*5),
         child: const Text(
-          'Aucune image sélectionnée',
+          'Aucune image',
           style: TextStyle(
             fontFamily: 'AbrilFatface-Regular',
-            fontSize: 40
+            fontSize: 30
           ),
           textAlign: TextAlign.center,
         ),
@@ -115,6 +117,7 @@ class _LandingScreenState extends State<LandingScreen> {
     return clickableSchema;
   }
 
+//Sélection camera ou gallerie
   Future<void> _showChoiceDialog(BuildContext context) {
     return showDialog(
         context: context,
@@ -151,12 +154,12 @@ class _LandingScreenState extends State<LandingScreen> {
     return Scaffold(
       body:Column(
             children: <Widget>[
-              /*RaisedButton(
+              RaisedButton(
                 onPressed: () {
                   _showChoiceDialog(context);
                 },
                 child: Text("Ajouter image"),
-              ),*/
+              ),
               Stack(
                 children: _cliclableArrayGenerator(),
               )

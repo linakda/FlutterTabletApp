@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geo_diagnostique_app/FeuilleOuvrage.dart';
+import 'package:geo_diagnostique_app/Home.dart';
 import 'package:geo_diagnostique_app/MenuAffaire.dart';
 
 
@@ -16,7 +17,7 @@ class App extends StatelessWidget {
   build(BuildContext context){
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MenuAffaire(),
+      home: Home(),
     );
   }
 }
