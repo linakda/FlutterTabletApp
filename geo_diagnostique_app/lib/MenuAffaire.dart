@@ -33,6 +33,7 @@ class MenuAffaireState extends State<MenuAffaire>{
     super.dispose();
   }
 
+  //ajoute un numéro d'affaire, une commune ou un ouvrage
   void _addNumAffaire(String numeroAffaire,String nomCommune,String refCommune,String refOuvrage){
     Commune _nouvelCommune = new Commune(nomCommune,refCommune);
     Ouvrage _nouvelOuvrage = new Ouvrage(refOuvrage); 
@@ -43,11 +44,16 @@ class MenuAffaireState extends State<MenuAffaire>{
     setState(() {
       
       if (_isAffaireExist(_listNumeroAffaire, numeroAffaire) != null){
-        //numero d'affaire déjà existant
+        //numero d'affaire existant
         int index = _isAffaireExist(_listNumeroAffaire, numeroAffaire);
-        if(!_isCommuneExist(_listNumeroAffaire[index].listCommune, nomCommune)){
-          //si la commune n'existe pas
+        if(_isCommuneExist(_listNumeroAffaire[index].listCommune, nomCommune)==null){
+          //commune non existante
           _listNumeroAffaire[index].addCommune(_nouvelCommune);
+        }
+        else{
+          //commune existante -> nouvel ouvrage
+          int index2 = _isCommuneExist(_listNumeroAffaire[index].listCommune, nomCommune);
+          _listNumeroAffaire[index].listCommune[index2].addOuvrage(_nouvelOuvrage);
         }
       }
       else{
@@ -58,6 +64,7 @@ class MenuAffaireState extends State<MenuAffaire>{
     });
   }
 
+  //Creér une nouvelle liste suite à la recherche d'une commune ou d'un numéro d'affaire
   void _updateSearchAffaireList(String searchElement){
     _searchNumeroAffairelist = new List<NumeroAffaire>();
     for(int i=0;i<_listNumeroAffaire.length;i++){
@@ -76,6 +83,7 @@ class MenuAffaireState extends State<MenuAffaire>{
     }
   }
 
+  
   int _isAffaireExist(List<NumeroAffaire> listNumeroAffaire, String numero){
     if(listNumeroAffaire.isNotEmpty){
       for(int index=0;index<_listNumeroAffaire.length;index++){
@@ -85,15 +93,17 @@ class MenuAffaireState extends State<MenuAffaire>{
     return null;
   }
 
-  bool _isCommuneExist(List<Commune> listCommune, String nomCommune){
+  //Méthode qui renvoie l'index d'une commune qui existe déjà
+  int _isCommuneExist(List<Commune> listCommune, String nomCommune){
     if(listCommune.isNotEmpty){
       for(int index=0;index<listCommune.length;index++){
-          if(listCommune[index].nomCommune == nomCommune){return true;}
+          if(listCommune[index].nomCommune == nomCommune){return index;}
       }
     }
-    return false;
+    return null;
   }
 
+  //Méthode qui génère la sous-list des communes par num d'affaire
   List<Card> listCommuneGenerator(List<Commune> listCommune, BuildContext context){
     List<Card> _listCardCommune = new List<Card>();
     int length = listCommune.length;

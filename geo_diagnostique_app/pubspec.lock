@@ -121,6 +121,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.5.5"
+  stack_overlay:
+    dependency: "direct main"
+    description:
+      name: stack_overlay
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
   stack_trace:
     dependency: transitive
     description:

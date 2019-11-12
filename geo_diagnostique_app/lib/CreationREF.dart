@@ -4,7 +4,7 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Config.dart';
-import 'package:geo_diagnostique_app/FeuilleOuvrage.dart';
+import 'package:geo_diagnostique_app/Ouvrage.dart';
 
 class CreationREF extends StatefulWidget {
   final Function updateNumAffaireList;
@@ -53,6 +53,12 @@ class _CreationREFState extends State<CreationREF> {
           if (widget.derniereCommune!=null) {controllerList[i].text=widget.derniereCommune.refCommune;}
           break;
         case 3 :
+          if(widget.derniereCommune!=null){
+            int index = widget.derniereCommune.listOuvrage.length -1;
+            if(widget.derniereCommune.listOuvrage[index].refOuvrage.isNotEmpty){
+              controllerList[i].text = widget.derniereCommune.refCommune +'0'+nextRefOuvrage(widget.derniereCommune);
+            }
+          }
         break;
         default :
           break;
@@ -61,6 +67,13 @@ class _CreationREFState extends State<CreationREF> {
     super.initState();
   }
 
+  //Méthode qui renvoi la prochaine reférence d'ouvrage
+  String nextRefOuvrage(Commune dernierCommune){
+    int index = widget.derniereCommune.listOuvrage.length -1;
+    int refCommuneLength = widget.derniereCommune.refCommune.length;
+    int nextRefOuvrage = int.parse(widget.derniereCommune.listOuvrage[index].refOuvrage.substring(refCommuneLength))+1;
+    return nextRefOuvrage.toString();
+  }
   //Méthode pour créer les TextForms
   Padding textformREF(String label, int index) {
     return Padding(
@@ -71,6 +84,9 @@ class _CreationREFState extends State<CreationREF> {
             validator: (value) {
               if (value.isEmpty) {
                 return 'Veuillez entrer un champ';
+              }
+              else if(_isOuvrageExist(widget.numAffaireList, value)){
+                return 'Reférence ouvrage déja existante';
               }
               return null;
             },
@@ -157,6 +173,17 @@ class _CreationREFState extends State<CreationREF> {
     }
   }
 
+  bool _isOuvrageExist(List<NumeroAffaire> listNumAffaire, String refOuvrage){
+    for(NumeroAffaire tmpAffaire in listNumAffaire){
+      for(Commune tmpCommune in tmpAffaire.listCommune){
+        for(Ouvrage tmpOuvrage in tmpCommune.listOuvrage){
+          if(tmpOuvrage.refOuvrage == refOuvrage) return true;
+        }
+      }
+    }
+    return false;
+  } 
+
   //Méthode qui à partir de la liste des numéros d'affaires, nous donnes une liste des noms des numéros d'affaires
   List<String> numAffaires(List<NumeroAffaire> list){
     List<String> listString=new List<String>();
@@ -233,8 +260,11 @@ class _CreationREFState extends State<CreationREF> {
                   onPressed: () {
                     if (testREFvalidate(formKeylist)) {
                       widget.updateNumAffaireList(controllerList[0].text,controllerList[1].text,controllerList[2].text,controllerList[3].text);
-                      //Navigator.pop(context);
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => FeuilleOuvrage(),));
+                      Navigator.pop(context);
+                      //Navigator.push(context, MaterialPageRoute(builder: (context) => FeuilleOuvrage(),));
+                    }
+                    else{
+
                     }
                   },
                   child: Text('Ajouter la Réf.', style: textSize),

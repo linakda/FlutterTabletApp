@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Config.dart';
+import 'package:geo_diagnostique_app/FeuilleOuvrage.dart';
 
 class MenuOuvrage extends StatefulWidget{
   final Commune selectedCommune;
@@ -57,7 +58,7 @@ class MenuOuvrageState extends State<MenuOuvrage>{
                 color: Config.textColor,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0),),
                 margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-                child: new ExpansionTile(
+                child: new ListTile(
                       leading: Container(
                         padding: EdgeInsets.only(right: 12.0),
                         child: Icon(Icons.account_circle, color: Colors.white,size: Config.fontSize*1.5,),
@@ -66,6 +67,10 @@ class MenuOuvrageState extends State<MenuOuvrage>{
                         widget.selectedCommune.listOuvrage[index].refOuvrage,
                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: Config.fontSize*1.5),
                       ),
+                      onTap: ()  {
+                         Navigator.push(context, MaterialPageRoute(
+                           builder: (context) => FeuilleOuvrage()));
+                      },
                   ),
                 ); 
               },
