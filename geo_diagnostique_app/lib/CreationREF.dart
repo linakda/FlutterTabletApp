@@ -4,26 +4,23 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Config.dart';
-import 'package:geo_diagnostique_app/FeuilleOuvrage.dart';
 import 'package:geo_diagnostique_app/Ouvrage.dart';
 import 'package:geo_diagnostique_app/Storage.dart';
+import 'package:geo_diagnostique_app/main.dart';
 
 class CreationREF extends StatefulWidget {
-  final Function updateNumAffaireList;
-  final List<NumeroAffaire> numAffaireList;
-  final String dernierNumeroAffaire;
-  final Commune derniereCommune;
-  final Storage storage;
 
-  CreationREF(this.updateNumAffaireList, this.numAffaireList,this.dernierNumeroAffaire,this.derniereCommune,this.storage);
+  CreationREF();
   @override
   _CreationREFState createState() => _CreationREFState();
 } 
 
 class _CreationREFState extends State<CreationREF> {
+  String _dernierNumeroAffaire = "";
+  Commune _derniereCommune;
+  Storage storage;
   final TextStyle textSize = new TextStyle(fontSize: Config.fontSize);
-  final EdgeInsetsGeometry textPadding =
-      EdgeInsets.all(Config.screenPadding);
+  final EdgeInsetsGeometry textPadding = EdgeInsets.all(Config.screenPadding);
   //Le controller avec le text
   final List<TextEditingController> controllerList =
       new List<TextEditingController>(4);
@@ -48,19 +45,19 @@ class _CreationREFState extends State<CreationREF> {
       formKeylist[i] = new GlobalKey<FormState>();
       switch(i){
         case 0 :
-          controllerList[i].text=widget.dernierNumeroAffaire;
+          controllerList[i].text=_dernierNumeroAffaire;
           break;
         case 1 :
-           if (widget.derniereCommune!=null) {controllerList[i].text=widget.derniereCommune.nomCommune;}
+           if (_derniereCommune!=null) {controllerList[i].text=_derniereCommune.nomCommune;}
           break;
         case 2 :
-          if (widget.derniereCommune!=null) {controllerList[i].text=widget.derniereCommune.refCommune;}
+          if (_derniereCommune!=null) {controllerList[i].text=_derniereCommune.refCommune;}
           break;
         case 3 :
-          if(widget.derniereCommune!=null){
-            int index = widget.derniereCommune.listOuvrage.length -1;
-            if(widget.derniereCommune.listOuvrage[index].refOuvrage.isNotEmpty){
-              controllerList[i].text = widget.derniereCommune.refCommune +nextRefOuvrage(widget.derniereCommune);
+          if(_derniereCommune!=null){
+            int index = _derniereCommune.listOuvrage.length -1;
+            if(_derniereCommune.listOuvrage[index].refOuvrage.isNotEmpty){
+              controllerList[i].text = _derniereCommune.refCommune +nextRefOuvrage(_derniereCommune);
             }
           }
         break;
@@ -71,12 +68,63 @@ class _CreationREFState extends State<CreationREF> {
     super.initState();
   }
 
+   //ajoute un numéro d'affaire, une commune ou un ouvrage
+  void _addNumAffaire(String numeroAffaire,String nomCommune,String refCommune,String refOuvrage){
+    Commune _nouvelCommune = new Commune(nomCommune,refCommune);
+    Ouvrage _nouvelOuvrage = new Ouvrage(refOuvrage);
+    storage = new Storage(numeroAffaire); 
+    _nouvelCommune.addOuvrage(_nouvelOuvrage);
+    _dernierNumeroAffaire = numeroAffaire;
+    _derniereCommune = _nouvelCommune;
+
+    setState(() {
+      
+      if (_isAffaireExist(listNumeroAffaire, numeroAffaire) != null){
+        //numero d'affaire existant
+        int index = _isAffaireExist(listNumeroAffaire, numeroAffaire);
+        if(_isCommuneExist(listNumeroAffaire[index].listCommune, nomCommune)==null){
+          //commune non existante
+          listNumeroAffaire[index].addCommune(_nouvelCommune);
+        }
+        else{
+          //commune existante -> nouvel ouvrage
+          int index2 = _isCommuneExist(listNumeroAffaire[index].listCommune, nomCommune);
+          listNumeroAffaire[index].listCommune[index2].addOuvrage(_nouvelOuvrage);
+        }
+      }
+      else{
+        //numéro d'affaire non-existant
+        listNumeroAffaire.add(new NumeroAffaire(numeroAffaire,));
+        listNumeroAffaire[listNumeroAffaire.length-1].addCommune(_nouvelCommune);
+      }
+    });
+  }
+
+  int _isAffaireExist(List<NumeroAffaire> listNumeroAffaire, String numero){
+    if(listNumeroAffaire.isNotEmpty){
+      for(int index=0;index<listNumeroAffaire.length;index++){
+        if(listNumeroAffaire[index].numeroAffaire == numero){return index;}
+      }
+    }
+    return null;
+  }
+
+  //Méthode qui renvoie l'index d'une commune qui existe déjà
+  int _isCommuneExist(List<Commune> listCommune, String nomCommune){
+    if(listCommune.isNotEmpty){
+      for(int index=0;index<listCommune.length;index++){
+          if(listCommune[index].nomCommune == nomCommune){return index;}
+      }
+    }
+    return null;
+  }
+
   //Méthode qui renvoi la prochaine reférence d'ouvrage
   String nextRefOuvrage(Commune dernierCommune){
-    if(widget.derniereCommune.listOuvrage.isNotEmpty){
-      int index = widget.derniereCommune.listOuvrage.length -1;
-      int refCommuneLength = widget.derniereCommune.refCommune.length;
-      int nextRefOuvrage = int.parse(widget.derniereCommune.listOuvrage[index].refOuvrage.substring(refCommuneLength))+1;
+    if(_derniereCommune.listOuvrage.isNotEmpty){
+      int index = _derniereCommune.listOuvrage.length -1;
+      int refCommuneLength = _derniereCommune.refCommune.length;
+      int nextRefOuvrage = int.parse(_derniereCommune.listOuvrage[index].refOuvrage.substring(refCommuneLength))+1;
       return nextRefOuvrage.toString().padLeft(3,'0');
     }
     return null;
@@ -134,10 +182,10 @@ class _CreationREFState extends State<CreationREF> {
             suggestionsCallback: (pattern){
               switch(index){
               case 0:
-                return filtreSuggestion(pattern, numAffaires(widget.numAffaireList)) ;
+                return filtreSuggestion(pattern, numAffaires(listNumeroAffaire)) ;
                 break;
               case 1:
-                  return filtreSuggestion(pattern, communeList(actuelNumAffaire(widget.numAffaireList))) ;
+                  return filtreSuggestion(pattern, communeList(actuelNumAffaire(listNumeroAffaire))) ;
               
                 break;
               default :
@@ -185,7 +233,7 @@ class _CreationREFState extends State<CreationREF> {
 
   //Méthode pour vérifier si l'ouvrage existe
   bool _isOuvrageExist(String refOuvrage){
-    List<NumeroAffaire> listNumAffaire=widget.numAffaireList;
+    List<NumeroAffaire> listNumAffaire = listNumeroAffaire;
     for(NumeroAffaire tmpAffaire in listNumAffaire){
       for(Commune tmpCommune in tmpAffaire.listCommune){
         for(Ouvrage tmpOuvrage in tmpCommune.listOuvrage){
@@ -280,7 +328,10 @@ class _CreationREFState extends State<CreationREF> {
                   textColor: Colors.white,
                   onPressed: () {
                     if (testREFvalidate(formKeylist)) {
-                      widget.updateNumAffaireList(controllerList[0].text,controllerList[1].text,controllerList[2].text,controllerList[3].text);
+                      _addNumAffaire(controllerList[0].text,controllerList[1].text,controllerList[2].text,controllerList[3].text);
+                      storage.refNumAffaire = controllerList[0].text;
+                      print(storage.localPath);
+                      //storage.writeData(controllerList[0].text+','+controllerList[1].text+','+controllerList[2].text+','+controllerList[3].text);
                       Navigator.pop(context);
                       //Navigator.push(context, MaterialPageRoute(builder: (context) => FeuilleOuvrage(widget.storage),));
                     }

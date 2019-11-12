@@ -7,7 +7,6 @@ import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/CreationREF.dart';
 import 'package:geo_diagnostique_app/Config.dart';
 import 'package:geo_diagnostique_app/MenuOuvrage.dart';
-import 'package:geo_diagnostique_app/Ouvrage.dart';
 import 'package:geo_diagnostique_app/Storage.dart';
 import 'package:geo_diagnostique_app/main.dart';
 
@@ -20,8 +19,6 @@ class MenuAffaireState extends State<MenuAffaire>{
 
   List<NumeroAffaire> _searchNumeroAffairelist= new List<NumeroAffaire>();
   Storage storage;
-  String _dernierNumeroAffaire = "";
-  Commune _derniereCommune;
   bool _searchMode = false;
   Commune _communeSearch;
 
@@ -35,37 +32,7 @@ class MenuAffaireState extends State<MenuAffaire>{
     super.dispose();
   }
 
-  //ajoute un numéro d'affaire, une commune ou un ouvrage
-  void _addNumAffaire(String numeroAffaire,String nomCommune,String refCommune,String refOuvrage){
-    Commune _nouvelCommune = new Commune(nomCommune,refCommune);
-    Ouvrage _nouvelOuvrage = new Ouvrage(refOuvrage);
-    storage= new Storage(numeroAffaire); 
-    _nouvelCommune.addOuvrage(_nouvelOuvrage);
-    _dernierNumeroAffaire = numeroAffaire;
-    _derniereCommune = _nouvelCommune;
-
-    setState(() {
-      
-      if (_isAffaireExist(listNumeroAffaire, numeroAffaire) != null){
-        //numero d'affaire existant
-        int index = _isAffaireExist(listNumeroAffaire, numeroAffaire);
-        if(_isCommuneExist(listNumeroAffaire[index].listCommune, nomCommune)==null){
-          //commune non existante
-          listNumeroAffaire[index].addCommune(_nouvelCommune);
-        }
-        else{
-          //commune existante -> nouvel ouvrage
-          int index2 = _isCommuneExist(listNumeroAffaire[index].listCommune, nomCommune);
-          listNumeroAffaire[index].listCommune[index2].addOuvrage(_nouvelOuvrage);
-        }
-      }
-      else{
-        //numéro d'affaire non-existant
-        listNumeroAffaire.add(new NumeroAffaire(numeroAffaire,));
-        listNumeroAffaire[listNumeroAffaire.length-1].addCommune(_nouvelCommune);
-      }
-    });
-  }
+ 
 
   //Creér une nouvelle liste suite à la recherche d'une commune ou d'un numéro d'affaire
   void _updateSearchAffaireList(String searchElement){
@@ -84,26 +51,6 @@ class MenuAffaireState extends State<MenuAffaire>{
         }
       }
     }
-  }
-
-  
-  int _isAffaireExist(List<NumeroAffaire> listNumeroAffaire, String numero){
-    if(listNumeroAffaire.isNotEmpty){
-      for(int index=0;index<listNumeroAffaire.length;index++){
-        if(listNumeroAffaire[index].numeroAffaire == numero){return index;}
-      }
-    }
-    return null;
-  }
-
-  //Méthode qui renvoie l'index d'une commune qui existe déjà
-  int _isCommuneExist(List<Commune> listCommune, String nomCommune){
-    if(listCommune.isNotEmpty){
-      for(int index=0;index<listCommune.length;index++){
-          if(listCommune[index].nomCommune == nomCommune){return index;}
-      }
-    }
-    return null;
   }
 
   //Méthode qui génère la sous-list des communes par num d'affaire
@@ -159,7 +106,7 @@ class MenuAffaireState extends State<MenuAffaire>{
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => CreationREF(_addNumAffaire,listNumeroAffaire,_dernierNumeroAffaire,_derniereCommune,storage)),);
+          Navigator.push(context, MaterialPageRoute(builder: (context) => CreationREF()),);
         },
         backgroundColor: Config.buttonColor,
         splashColor: Config.splashColor,
