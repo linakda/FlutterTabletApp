@@ -8,6 +8,8 @@ import 'package:geo_diagnostique_app/CreationREF.dart';
 import 'package:geo_diagnostique_app/Config.dart';
 import 'package:geo_diagnostique_app/MenuOuvrage.dart';
 import 'package:geo_diagnostique_app/Ouvrage.dart';
+import 'package:geo_diagnostique_app/Storage.dart';
+import 'package:geo_diagnostique_app/main.dart';
 
 
 class MenuAffaire extends StatefulWidget{
@@ -16,8 +18,8 @@ class MenuAffaire extends StatefulWidget{
 
 class MenuAffaireState extends State<MenuAffaire>{
 
-  List<NumeroAffaire> _listNumeroAffaire= new List<NumeroAffaire>();
   List<NumeroAffaire> _searchNumeroAffairelist= new List<NumeroAffaire>();
+  Storage storage;
   String _dernierNumeroAffaire = "";
   Commune _derniereCommune;
   bool _searchMode = false;
@@ -36,30 +38,31 @@ class MenuAffaireState extends State<MenuAffaire>{
   //ajoute un numéro d'affaire, une commune ou un ouvrage
   void _addNumAffaire(String numeroAffaire,String nomCommune,String refCommune,String refOuvrage){
     Commune _nouvelCommune = new Commune(nomCommune,refCommune);
-    Ouvrage _nouvelOuvrage = new Ouvrage(refOuvrage); 
+    Ouvrage _nouvelOuvrage = new Ouvrage(refOuvrage);
+    storage= new Storage(numeroAffaire); 
     _nouvelCommune.addOuvrage(_nouvelOuvrage);
     _dernierNumeroAffaire = numeroAffaire;
     _derniereCommune = _nouvelCommune;
 
     setState(() {
       
-      if (_isAffaireExist(_listNumeroAffaire, numeroAffaire) != null){
+      if (_isAffaireExist(listNumeroAffaire, numeroAffaire) != null){
         //numero d'affaire existant
-        int index = _isAffaireExist(_listNumeroAffaire, numeroAffaire);
-        if(_isCommuneExist(_listNumeroAffaire[index].listCommune, nomCommune)==null){
+        int index = _isAffaireExist(listNumeroAffaire, numeroAffaire);
+        if(_isCommuneExist(listNumeroAffaire[index].listCommune, nomCommune)==null){
           //commune non existante
-          _listNumeroAffaire[index].addCommune(_nouvelCommune);
+          listNumeroAffaire[index].addCommune(_nouvelCommune);
         }
         else{
           //commune existante -> nouvel ouvrage
-          int index2 = _isCommuneExist(_listNumeroAffaire[index].listCommune, nomCommune);
-          _listNumeroAffaire[index].listCommune[index2].addOuvrage(_nouvelOuvrage);
+          int index2 = _isCommuneExist(listNumeroAffaire[index].listCommune, nomCommune);
+          listNumeroAffaire[index].listCommune[index2].addOuvrage(_nouvelOuvrage);
         }
       }
       else{
         //numéro d'affaire non-existant
-        _listNumeroAffaire.add(new NumeroAffaire(numeroAffaire,));
-        _listNumeroAffaire[_listNumeroAffaire.length-1].addCommune(_nouvelCommune);
+        listNumeroAffaire.add(new NumeroAffaire(numeroAffaire,));
+        listNumeroAffaire[listNumeroAffaire.length-1].addCommune(_nouvelCommune);
       }
     });
   }
@@ -67,16 +70,16 @@ class MenuAffaireState extends State<MenuAffaire>{
   //Creér une nouvelle liste suite à la recherche d'une commune ou d'un numéro d'affaire
   void _updateSearchAffaireList(String searchElement){
     _searchNumeroAffairelist = new List<NumeroAffaire>();
-    for(int i=0;i<_listNumeroAffaire.length;i++){
+    for(int i=0;i<listNumeroAffaire.length;i++){
       
-      if(_listNumeroAffaire[i].numeroAffaire.contains(searchElement)){
-        _searchNumeroAffairelist.add(_listNumeroAffaire[i]);
+      if(listNumeroAffaire[i].numeroAffaire.contains(searchElement)){
+        _searchNumeroAffairelist.add(listNumeroAffaire[i]);
       }
       else{
-        for(var k = 0;k<_listNumeroAffaire[i].listCommune.length;k++){
-          if(_listNumeroAffaire[i].listCommune[k].nomCommune.contains(searchElement)){
-            _searchNumeroAffairelist.add(_listNumeroAffaire[i]);
-            _communeSearch = _listNumeroAffaire[i].listCommune[k];
+        for(var k = 0;k<listNumeroAffaire[i].listCommune.length;k++){
+          if(listNumeroAffaire[i].listCommune[k].nomCommune.contains(searchElement)){
+            _searchNumeroAffairelist.add(listNumeroAffaire[i]);
+            _communeSearch = listNumeroAffaire[i].listCommune[k];
           }
         }
       }
@@ -86,7 +89,7 @@ class MenuAffaireState extends State<MenuAffaire>{
   
   int _isAffaireExist(List<NumeroAffaire> listNumeroAffaire, String numero){
     if(listNumeroAffaire.isNotEmpty){
-      for(int index=0;index<_listNumeroAffaire.length;index++){
+      for(int index=0;index<listNumeroAffaire.length;index++){
         if(listNumeroAffaire[index].numeroAffaire == numero){return index;}
       }
     }
@@ -133,7 +136,7 @@ class MenuAffaireState extends State<MenuAffaire>{
                   style: TextStyle(color: Config.textColor, fontWeight: FontWeight.bold)),
                 onTap: ()  {
                   Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => MenuOuvrage(_communeSearch!= null ?_communeSearch:listCommune[i])));
+                    builder: (context) => MenuOuvrage(_communeSearch!= null ?_communeSearch:listCommune[i],storage)));
                 },
               ),
         )
@@ -156,7 +159,7 @@ class MenuAffaireState extends State<MenuAffaire>{
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => CreationREF(_addNumAffaire,_listNumeroAffaire,_dernierNumeroAffaire,_derniereCommune)),);
+          Navigator.push(context, MaterialPageRoute(builder: (context) => CreationREF(_addNumAffaire,listNumeroAffaire,_dernierNumeroAffaire,_derniereCommune,storage)),);
         },
         backgroundColor: Config.buttonColor,
         splashColor: Config.splashColor,
@@ -166,7 +169,7 @@ class MenuAffaireState extends State<MenuAffaire>{
       ),
       body: Column(
         children: <Widget>[
-          _listNumeroAffaire.isNotEmpty 
+          listNumeroAffaire.isNotEmpty 
           ? Padding(
             padding: EdgeInsets.all(Config.screenPadding),
             child:TextField(
@@ -186,7 +189,7 @@ class MenuAffaireState extends State<MenuAffaire>{
                   ),
                 ),
                 onChanged: (String text){
-                  if(_listNumeroAffaire.isNotEmpty){
+                  if(listNumeroAffaire.isNotEmpty){
                     setState(() {
                       _searchMode = true;
                       _updateSearchAffaireList(text); 
@@ -203,7 +206,7 @@ class MenuAffaireState extends State<MenuAffaire>{
 
           Expanded(
             child: ListView.builder(
-              itemCount: !_searchMode ? _listNumeroAffaire.length : _searchNumeroAffairelist.length,
+              itemCount: !_searchMode ? listNumeroAffaire.length : _searchNumeroAffairelist.length,
               itemBuilder: (BuildContext context, int index){
                 return new Card(
                 elevation: 10,
@@ -215,10 +218,10 @@ class MenuAffaireState extends State<MenuAffaire>{
                         padding: EdgeInsets.only(right: 12.0),
                         child: Icon(Icons.account_circle, color: Colors.white,size: Config.fontSize*1.5,),
                       ),
-                      title: Text(!_searchMode ? _listNumeroAffaire[index].numeroAffaire : _searchNumeroAffairelist[index].numeroAffaire,
+                      title: Text(!_searchMode ? listNumeroAffaire[index].numeroAffaire : _searchNumeroAffairelist[index].numeroAffaire,
                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: Config.fontSize*1.5),
                       ),
-                      children: listCommuneGenerator(!_searchMode ? _listNumeroAffaire[index].listCommune : _searchNumeroAffairelist[index].listCommune,context),
+                      children: listCommuneGenerator(!_searchMode ? listNumeroAffaire[index].listCommune : _searchNumeroAffairelist[index].listCommune,context),
                   ),
                 ); 
               },

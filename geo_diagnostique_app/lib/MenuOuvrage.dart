@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Config.dart';
 import 'package:geo_diagnostique_app/FeuilleOuvrage.dart';
+import 'package:geo_diagnostique_app/Storage.dart';
 
 class MenuOuvrage extends StatefulWidget{
   final Commune selectedCommune;
+  final Storage storage;
 
-  MenuOuvrage(this.selectedCommune);
+  MenuOuvrage(this.selectedCommune,this.storage);
   @override
   MenuOuvrageState createState() => MenuOuvrageState(); 
 }
@@ -69,7 +71,7 @@ class MenuOuvrageState extends State<MenuOuvrage>{
                       ),
                       onTap: ()  {
                          Navigator.push(context, MaterialPageRoute(
-                           builder: (context) => FeuilleOuvrage()));
+                           builder: (context) => FeuilleOuvrage(widget.storage)));
                       },
                   ),
                 ); 

@@ -4,15 +4,18 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Config.dart';
+import 'package:geo_diagnostique_app/FeuilleOuvrage.dart';
 import 'package:geo_diagnostique_app/Ouvrage.dart';
+import 'package:geo_diagnostique_app/Storage.dart';
 
 class CreationREF extends StatefulWidget {
   final Function updateNumAffaireList;
   final List<NumeroAffaire> numAffaireList;
   final String dernierNumeroAffaire;
   final Commune derniereCommune;
+  final Storage storage;
 
-  CreationREF(this.updateNumAffaireList, this.numAffaireList,this.dernierNumeroAffaire,this.derniereCommune);
+  CreationREF(this.updateNumAffaireList, this.numAffaireList,this.dernierNumeroAffaire,this.derniereCommune,this.storage);
   @override
   _CreationREFState createState() => _CreationREFState();
 } 
@@ -78,7 +81,6 @@ class _CreationREFState extends State<CreationREF> {
     }
     return null;
   }
-
   //Méthode pour créer les TextForms
   Padding textformREF(String label, int index) {
     return Padding(
@@ -86,7 +88,7 @@ class _CreationREFState extends State<CreationREF> {
         child: Form(
           key: formKeylist[index],
           child: TypeAheadFormField(
-            validator: (value){
+            validator: (value) {
               if (value.isEmpty) {
                 return 'Veuillez entrer un champ';
               }
@@ -136,7 +138,8 @@ class _CreationREFState extends State<CreationREF> {
                 break;
               case 1:
                   return filtreSuggestion(pattern, communeList(actuelNumAffaire(widget.numAffaireList))) ;
-                  break;
+              
+                break;
               default :
               return null;
               }
@@ -191,7 +194,7 @@ class _CreationREFState extends State<CreationREF> {
       }
     }
     return false;
-  }
+  } 
 
   //Méthode pour vérifier que l'utilisateur a entré 3 chiffre à la fin de la refOuvrage
   bool _isREFOuvrageValid(String refOuvrage,String refCommune){
@@ -201,7 +204,7 @@ class _CreationREFState extends State<CreationREF> {
       }
       return true;
   }
-
+  
   //Méthode qui à partir de la liste des numéros d'affaires, nous donnes une liste des noms des numéros d'affaires
   List<String> numAffaires(List<NumeroAffaire> list){
     List<String> listString=new List<String>();
@@ -279,7 +282,7 @@ class _CreationREFState extends State<CreationREF> {
                     if (testREFvalidate(formKeylist)) {
                       widget.updateNumAffaireList(controllerList[0].text,controllerList[1].text,controllerList[2].text,controllerList[3].text);
                       Navigator.pop(context);
-                      //Navigator.push(context, MaterialPageRoute(builder: (context) => FeuilleOuvrage(),));
+                      //Navigator.push(context, MaterialPageRoute(builder: (context) => FeuilleOuvrage(widget.storage),));
                     }
                     else{
 
