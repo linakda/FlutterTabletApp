@@ -37,6 +37,7 @@ class _CreationREFState extends State<CreationREF> {
     super.dispose();
   }
 
+  //AutoCompletion
   @override
   void initState() {
     for (int i = 0; i < controllerList.length; i++) {
@@ -56,7 +57,7 @@ class _CreationREFState extends State<CreationREF> {
           if(widget.derniereCommune!=null){
             int index = widget.derniereCommune.listOuvrage.length -1;
             if(widget.derniereCommune.listOuvrage[index].refOuvrage.isNotEmpty){
-              controllerList[i].text = widget.derniereCommune.refCommune +'0'+nextRefOuvrage(widget.derniereCommune);
+              controllerList[i].text = widget.derniereCommune.refCommune +nextRefOuvrage(widget.derniereCommune);
             }
           }
         break;
@@ -69,11 +70,15 @@ class _CreationREFState extends State<CreationREF> {
 
   //Méthode qui renvoi la prochaine reférence d'ouvrage
   String nextRefOuvrage(Commune dernierCommune){
-    int index = widget.derniereCommune.listOuvrage.length -1;
-    int refCommuneLength = widget.derniereCommune.refCommune.length;
-    int nextRefOuvrage = int.parse(widget.derniereCommune.listOuvrage[index].refOuvrage.substring(refCommuneLength))+1;
-    return nextRefOuvrage.toString();
+    if(widget.derniereCommune.listOuvrage.isNotEmpty){
+      int index = widget.derniereCommune.listOuvrage.length -1;
+      int refCommuneLength = widget.derniereCommune.refCommune.length;
+      int nextRefOuvrage = int.parse(widget.derniereCommune.listOuvrage[index].refOuvrage.substring(refCommuneLength))+1;
+      return nextRefOuvrage.toString().padLeft(3,'0');
+    }
+    return null;
   }
+
   //Méthode pour créer les TextForms
   Padding textformREF(String label, int index) {
     return Padding(
@@ -81,12 +86,15 @@ class _CreationREFState extends State<CreationREF> {
         child: Form(
           key: formKeylist[index],
           child: TypeAheadFormField(
-            validator: (value) {
+            validator: (value){
               if (value.isEmpty) {
                 return 'Veuillez entrer un champ';
               }
-              else if(_isOuvrageExist(widget.numAffaireList, value)){
+              else if(index==3 && _isOuvrageExist(value)){
                 return 'Reférence ouvrage déja existante';
+              }
+              else if (index==3 && _isREFOuvrageValid(value,controllerList[2].text)){
+                return 'La référence ouvrage n\'est pas valide (min. 3 chiffres)';
               }
               return null;
             },
@@ -96,11 +104,11 @@ class _CreationREFState extends State<CreationREF> {
               {
                 setState(() {
                   if(index==1){
-                    affiche3Lettres(controllerList[1],controllerList[2]);
-                    affiche3Lettres(controllerList[2], controllerList[3]);
+                   showFirst3Letters(controllerList[1],controllerList[2]);
+                   showFirst3Letters(controllerList[2], controllerList[3]);
                   }
                   else if (index==2){
-                    affiche3Lettres(controllerList[2], controllerList[3]);
+                   showFirst3Letters(controllerList[2], controllerList[3]);
                   }
                 });        
               },
@@ -128,8 +136,7 @@ class _CreationREFState extends State<CreationREF> {
                 break;
               case 1:
                   return filtreSuggestion(pattern, communeList(actuelNumAffaire(widget.numAffaireList))) ;
-              
-                break;
+                  break;
               default :
               return null;
               }
@@ -147,11 +154,11 @@ class _CreationREFState extends State<CreationREF> {
             onSuggestionSelected: (suggestion) {
             this.controllerList[index].text = suggestion;
             if(index==1){
-              affiche3Lettres(controllerList[1],controllerList[2]);
-              affiche3Lettres(controllerList[2], controllerList[3]);
+             showFirst3Letters(controllerList[1],controllerList[2]);
+             showFirst3Letters(controllerList[2], controllerList[3]);
             }
             else if (index==2){
-              affiche3Lettres(controllerList[2], controllerList[3]);
+             showFirst3Letters(controllerList[2], controllerList[3]);
             }
           },
           ),
@@ -173,7 +180,9 @@ class _CreationREFState extends State<CreationREF> {
     }
   }
 
-  bool _isOuvrageExist(List<NumeroAffaire> listNumAffaire, String refOuvrage){
+  //Méthode pour vérifier si l'ouvrage existe
+  bool _isOuvrageExist(String refOuvrage){
+    List<NumeroAffaire> listNumAffaire=widget.numAffaireList;
     for(NumeroAffaire tmpAffaire in listNumAffaire){
       for(Commune tmpCommune in tmpAffaire.listCommune){
         for(Ouvrage tmpOuvrage in tmpCommune.listOuvrage){
@@ -182,7 +191,16 @@ class _CreationREFState extends State<CreationREF> {
       }
     }
     return false;
-  } 
+  }
+
+  //Méthode pour vérifier que l'utilisateur a entré 3 chiffre à la fin de la refOuvrage
+  bool _isREFOuvrageValid(String refOuvrage,String refCommune){
+      int refCommuneLength = refCommune.length;
+      if(refOuvrage.substring(refCommuneLength).length==3 && int.parse(refOuvrage.substring(refCommuneLength)) is int){
+        return false;
+      }
+      return true;
+  }
 
   //Méthode qui à partir de la liste des numéros d'affaires, nous donnes une liste des noms des numéros d'affaires
   List<String> numAffaires(List<NumeroAffaire> list){
@@ -228,7 +246,7 @@ class _CreationREFState extends State<CreationREF> {
   }
 
   //Méthode pour afficher les trois premières lettres
-  void affiche3Lettres(TextEditingController textController1,TextEditingController textController2){
+  void showFirst3Letters(TextEditingController textController1,TextEditingController textController2){
     String text1 = textController1.text;
     textController2.text = text1.substring(0,3);
   }
