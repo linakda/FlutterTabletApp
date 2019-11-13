@@ -29,6 +29,9 @@ class MenuAffaireState extends State<MenuAffaire>{
   @override
   initState(){
     super.initState();
+    setState((){
+      
+    });
   }
 
   @override

@@ -12,7 +12,7 @@ Storage storage = new Storage();
 //création d'un répertoire dans lequel on va enregistrer nos fichiers
 Directory myDir = new Directory('/storage/emulated/0/Android/data/com.example.geo_diagnostique_app/files/fiches');
 
-main()async {
+main()async{
   myDir.create()
     // The created directory is returned as a Future.
     .then((Directory directory) {

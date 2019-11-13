@@ -39,13 +39,13 @@ class Storage{
       lines=await file.readAsLines();
       int index=lines.length;
       lines[0]="Numéro d'Affaire,Référence de l\'ouvrage,Commune,Nom de la rue,Implantation,Type de réseau,Type d'ouvrage,Observation,Dispositif de fermeture,Section,Nature,Dimension,Dispositif d'accés,Cunette,Photo,Côte tn,Profondeur radier,Rôle(fs),Géométrie(fs),Dimension(fs),Nature(fs),Profondeur(fs),Observation(fs),Rôle(f1),Géométrie(f1),Dimension(f1),Nature(f1),Profondeur(f1),Angle(f1),Observation(f1),Rôle(f2),Géométrie(f2),Dimension(f2),Nature(f2),Profondeur(f2),Angle(f2),Observation(f2),Rôle(f3),Géométrie(f3),Dimension(f3),Nature(f3),Profondeur(f3),Angle(f3),Observation(f3),Rôle(f4),Géométrie(f4),Dimension(f4),Nature(f4),Profondeur(f4),Angle(f4),Observation(f4),Rôle(f5),Géométrie(f5),Dimension(f5),Nature(f5),Profondeur(f5),Angle(f5),Observation(f5),Traces de mises en charge,Perturbation de l'écoulement,Précision,Défaut d\'étanchéité,Traces d'infiltration,Branchement non étanche,Défaut de structure,Génie civil fissuré,Déboitement,Défaut de fermeture,Tampon détérioré,Présence d\'H2S,Autres observations,$index";
-      await file.writeAsString("${lines[0]}\n");
-      for(var i=1;i<lines.length;i++){await file.writeAsString("${lines[i]}\n",mode:FileMode.writeOnlyAppend);}
-      await file.writeAsString("$data",mode:FileMode.writeOnlyAppend);
+      await file.writeAsString("${lines[0]}");
+      for(var i=1;i<lines.length;i++){await file.writeAsString("\n${lines[i]}",mode:FileMode.writeOnlyAppend);}
+      await file.writeAsString("\n$data",mode:FileMode.writeOnlyAppend);
     }
     else{
-      await file.writeAsString("Numéro d'Affaire,Référence de l'ouvrage,Commune,Nom de la rue,Implantation,Type de réseau,Type d'ouvrage,Observation,Dispositif de fermeture,Section,Nature,Dimension,Dispositif d'accés,Cunette,Photo,Côte tn,Profondeur radier,Rôle(fs),Géométrie(fs),Dimension(fs),Nature(fs),Profondeur(fs),Observation(fs),Rôle(f1),Géométrie(f1),Dimension(f1),Nature(f1),Profondeur(f1),Angle(f1),Observation(f1),Rôle(f2),Géométrie(f2),Dimension(f2),Nature(f2),Profondeur(f2),Angle(f2),Observation(f2),Rôle(f3),Géométrie(f3),Dimension(f3),Nature(f3),Profondeur(f3),Angle(f3),Observation(f3),Rôle(f4),Géométrie(f4),Dimension(f4),Nature(f4),Profondeur(f4),Angle(f4),Observation(f4),Rôle(f5),Géométrie(f5),Dimension(f5),Nature(f5),Profondeur(f5),Angle(f5),Observation(f5),Traces de mises en charge,Perturbation de l'écoulement,Précision,Défaut d'étanchéité,Traces d'infiltration,Branchement non étanche,Défaut de structure,Génie civil fissuré,Déboitement,Défaut de fermeture,Tampon détérioré,Présence d'H2S,Autres observations,$index\n");
-      await file.writeAsString("$data",mode:FileMode.writeOnlyAppend);
+      await file.writeAsString("Numéro d'Affaire,Référence de l'ouvrage,Commune,Nom de la rue,Implantation,Type de réseau,Type d'ouvrage,Observation,Dispositif de fermeture,Section,Nature,Dimension,Dispositif d'accés,Cunette,Photo,Côte tn,Profondeur radier,Rôle(fs),Géométrie(fs),Dimension(fs),Nature(fs),Profondeur(fs),Observation(fs),Rôle(f1),Géométrie(f1),Dimension(f1),Nature(f1),Profondeur(f1),Angle(f1),Observation(f1),Rôle(f2),Géométrie(f2),Dimension(f2),Nature(f2),Profondeur(f2),Angle(f2),Observation(f2),Rôle(f3),Géométrie(f3),Dimension(f3),Nature(f3),Profondeur(f3),Angle(f3),Observation(f3),Rôle(f4),Géométrie(f4),Dimension(f4),Nature(f4),Profondeur(f4),Angle(f4),Observation(f4),Rôle(f5),Géométrie(f5),Dimension(f5),Nature(f5),Profondeur(f5),Angle(f5),Observation(f5),Traces de mises en charge,Perturbation de l'écoulement,Précision,Défaut d'étanchéité,Traces d'infiltration,Branchement non étanche,Défaut de structure,Génie civil fissuré,Déboitement,Défaut de fermeture,Tampon détérioré,Présence d'H2S,Autres observations,$index");
+      await file.writeAsString("\n$data",mode:FileMode.writeOnlyAppend);
     }
   }
 
@@ -54,12 +54,16 @@ class Storage{
     List<FileSystemEntity> listFile = new List<FileSystemEntity>();
     listFile = myDir.listSync(recursive: true, followLinks: false);
     List<String> textSplit;
+    List<String> lineSplit;
 
     for(FileSystemEntity tmp in listFile){
       String text = await readData(tmp.path);
-      textSplit = text.split(",");
-      addREFOuvrage(textSplit[0], textSplit[1], textSplit[2], textSplit[3]);
+      lineSplit = text.split("\n");
 
+      for(var i=1;i<lineSplit.length-1;i++){
+        textSplit = lineSplit[i].split(",");
+        addREFOuvrage(textSplit[0], textSplit[1], textSplit[2], textSplit[3]);
+      }
     }
     print("list retourné");
   }
