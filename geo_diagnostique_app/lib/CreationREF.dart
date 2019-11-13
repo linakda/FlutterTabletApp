@@ -9,16 +9,12 @@ import 'package:geo_diagnostique_app/Storage.dart';
 import 'package:geo_diagnostique_app/main.dart';
 
 class CreationREF extends StatefulWidget {
-
-  CreationREF();
   @override
   _CreationREFState createState() => _CreationREFState();
 } 
 
 class _CreationREFState extends State<CreationREF> {
-  String _dernierNumeroAffaire = "";
-  Commune _derniereCommune;
-  Storage storage;
+  
   final TextStyle textSize = new TextStyle(fontSize: Config.fontSize);
   final EdgeInsetsGeometry textPadding = EdgeInsets.all(Config.screenPadding);
   //Le controller avec le text
@@ -45,19 +41,19 @@ class _CreationREFState extends State<CreationREF> {
       formKeylist[i] = new GlobalKey<FormState>();
       switch(i){
         case 0 :
-          controllerList[i].text=_dernierNumeroAffaire;
+          controllerList[i].text=dernierNumeroAffaire;
           break;
         case 1 :
-           if (_derniereCommune!=null) {controllerList[i].text=_derniereCommune.nomCommune;}
+           if (derniereCommune!=null) {controllerList[i].text=derniereCommune.nomCommune;}
           break;
         case 2 :
-          if (_derniereCommune!=null) {controllerList[i].text=_derniereCommune.refCommune;}
+          if (derniereCommune!=null) {controllerList[i].text=derniereCommune.refCommune;}
           break;
         case 3 :
-          if(_derniereCommune!=null){
-            int index = _derniereCommune.listOuvrage.length -1;
-            if(_derniereCommune.listOuvrage[index].refOuvrage.isNotEmpty){
-              controllerList[i].text = _derniereCommune.refCommune +nextRefOuvrage(_derniereCommune);
+          if(derniereCommune!=null){
+            int index = derniereCommune.listOuvrage.length -1;
+            if(derniereCommune.listOuvrage[index].refOuvrage.isNotEmpty){
+              controllerList[i].text = derniereCommune.refCommune +nextRefOuvrage(derniereCommune);
             }
           }
         break;
@@ -72,10 +68,9 @@ class _CreationREFState extends State<CreationREF> {
   void _addNumAffaire(String numeroAffaire,String nomCommune,String refCommune,String refOuvrage){
     Commune _nouvelCommune = new Commune(nomCommune,refCommune);
     Ouvrage _nouvelOuvrage = new Ouvrage(refOuvrage);
-    storage = new Storage(numeroAffaire); 
     _nouvelCommune.addOuvrage(_nouvelOuvrage);
-    _dernierNumeroAffaire = numeroAffaire;
-    _derniereCommune = _nouvelCommune;
+    dernierNumeroAffaire = numeroAffaire;
+    derniereCommune = _nouvelCommune;
 
     setState(() {
       
@@ -121,10 +116,10 @@ class _CreationREFState extends State<CreationREF> {
 
   //Méthode qui renvoi la prochaine reférence d'ouvrage
   String nextRefOuvrage(Commune dernierCommune){
-    if(_derniereCommune.listOuvrage.isNotEmpty){
-      int index = _derniereCommune.listOuvrage.length -1;
-      int refCommuneLength = _derniereCommune.refCommune.length;
-      int nextRefOuvrage = int.parse(_derniereCommune.listOuvrage[index].refOuvrage.substring(refCommuneLength))+1;
+    if(derniereCommune.listOuvrage.isNotEmpty){
+      int index = derniereCommune.listOuvrage.length -1;
+      int refCommuneLength = derniereCommune.refCommune.length;
+      int nextRefOuvrage = int.parse(derniereCommune.listOuvrage[index].refOuvrage.substring(refCommuneLength))+1;
       return nextRefOuvrage.toString().padLeft(3,'0');
     }
     return null;
@@ -329,9 +324,8 @@ class _CreationREFState extends State<CreationREF> {
                   onPressed: () {
                     if (testREFvalidate(formKeylist)) {
                       _addNumAffaire(controllerList[0].text,controllerList[1].text,controllerList[2].text,controllerList[3].text);
-                      storage.refNumAffaire = controllerList[0].text;
-                      print(storage.localPath);
-                      //storage.writeData(controllerList[0].text+','+controllerList[1].text+','+controllerList[2].text+','+controllerList[3].text);
+                      storage.writeData(controllerList[0].text+','+controllerList[1].text+','+controllerList[2].text+','+controllerList[3].text,myDir.path,controllerList[0].text);
+                      //widget.storage.readData();
                       Navigator.pop(context);
                       //Navigator.push(context, MaterialPageRoute(builder: (context) => FeuilleOuvrage(widget.storage),));
                     }

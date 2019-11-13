@@ -1,5 +1,6 @@
 
 import 'dart:core';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geo_diagnostique_app/Affaire.dart';
@@ -9,6 +10,9 @@ import 'package:geo_diagnostique_app/Config.dart';
 import 'package:geo_diagnostique_app/MenuOuvrage.dart';
 import 'package:geo_diagnostique_app/Storage.dart';
 import 'package:geo_diagnostique_app/main.dart';
+import 'package:geo_diagnostique_app/main.dart';
+import 'package:geo_diagnostique_app/main.dart';
+import 'package:path_provider/path_provider.dart';
 
 
 class MenuAffaire extends StatefulWidget{
@@ -18,7 +22,7 @@ class MenuAffaire extends StatefulWidget{
 class MenuAffaireState extends State<MenuAffaire>{
 
   List<NumeroAffaire> _searchNumeroAffairelist= new List<NumeroAffaire>();
-  Storage storage;
+  String state;
   bool _searchMode = false;
   Commune _communeSearch;
 
@@ -31,8 +35,6 @@ class MenuAffaireState extends State<MenuAffaire>{
   void dispose() {
     super.dispose();
   }
-
- 
 
   //Creér une nouvelle liste suite à la recherche d'une commune ou d'un numéro d'affaire
   void _updateSearchAffaireList(String searchElement){
@@ -83,7 +85,7 @@ class MenuAffaireState extends State<MenuAffaire>{
                   style: TextStyle(color: Config.textColor, fontWeight: FontWeight.bold)),
                 onTap: ()  {
                   Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => MenuOuvrage(_communeSearch!= null ?_communeSearch:listCommune[i],storage)));
+                    builder: (context) => MenuOuvrage(_communeSearch!= null ?_communeSearch:listCommune[i])));
                 },
               ),
         )
@@ -92,8 +94,28 @@ class MenuAffaireState extends State<MenuAffaire>{
     return _listCardCommune;
   }
   
+  /*Future<String> readData(String path) async {
+    try {
+      final file2 = File('$path');
+      
+      String body = await file2.readAsString();
+      print(body);
+      return body;
+
+    }catch (e) {
+      return e.toString();
+    }
+  }*/
+
   @override
   Widget build(BuildContext context){
+    
+    myDir.list(recursive: true, followLinks: false)
+    .listen((FileSystemEntity entity) {
+      //print("path ="+entity.path);
+      storage.readData(entity.path);
+    });
+
     Config().init(context);
     return new Scaffold(
       appBar: AppBar(

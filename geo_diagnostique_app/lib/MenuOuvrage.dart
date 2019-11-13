@@ -8,9 +8,7 @@ import 'package:geo_diagnostique_app/Storage.dart';
 
 class MenuOuvrage extends StatefulWidget{
   final Commune selectedCommune;
-  final Storage storage;
-
-  MenuOuvrage(this.selectedCommune,this.storage);
+  MenuOuvrage(this.selectedCommune);
   @override
   MenuOuvrageState createState() => MenuOuvrageState(); 
 }
@@ -71,7 +69,7 @@ class MenuOuvrageState extends State<MenuOuvrage>{
                       ),
                       onTap: ()  {
                          Navigator.push(context, MaterialPageRoute(
-                           builder: (context) => FeuilleOuvrage(widget.storage)));
+                           builder: (context) => FeuilleOuvrage()));
                       },
                   ),
                 ); 

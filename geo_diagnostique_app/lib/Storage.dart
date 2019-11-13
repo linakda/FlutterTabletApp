@@ -4,11 +4,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 class Storage{
-  String refNumAffaire;
 
-  Storage(String refNumAffaire){
-    this.refNumAffaire=refNumAffaire;
-  }
   Future<String> get localPath async {
     final dir = await getExternalStorageDirectory();
     return dir.path;
@@ -16,23 +12,27 @@ class Storage{
 
   Future<File> get localFile async {
     final path = await localPath;
-    String refNumAffaire=this.refNumAffaire;
-    return File('$path/$refNumAffaire.txt');
+    print('path = $path');
+    return File('$path');
   }
 
-  Future<String> readData() async {
+  Future<String> readData(String path) async {
     try {
       final file = await localFile;
-      String body = await file.readAsString();
-
+      final file2 = File('$path');
+      
+      String body = await file2.readAsString();
+      print(body);
       return body;
+
     } catch (e) {
       return e.toString();
     }
   }
 
-  Future<File> writeData(String data) async {
-    final file = await localFile;
+  Future<File> writeData(String data, String dirPath, String fileName) async {
+    File file= new File('$dirPath/$fileName.txt');
+    //await localFile.then((onValue){file = File("$onValue/$fileName.txt");});
     return file.writeAsString("$data");
   }
 }
