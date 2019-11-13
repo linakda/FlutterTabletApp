@@ -10,8 +10,6 @@ import 'package:geo_diagnostique_app/Config.dart';
 import 'package:geo_diagnostique_app/MenuOuvrage.dart';
 import 'package:geo_diagnostique_app/Storage.dart';
 import 'package:geo_diagnostique_app/main.dart';
-import 'package:geo_diagnostique_app/main.dart';
-import 'package:geo_diagnostique_app/main.dart';
 import 'package:path_provider/path_provider.dart';
 
 
@@ -55,7 +53,7 @@ class MenuAffaireState extends State<MenuAffaire>{
     }
   }
 
-  //Méthode qui génère la sous-list des communes par num d'affaire
+  //Méthode qui génère la sous-liste des communes par num d'affaire
   List<Card> listCommuneGenerator(List<Commune> listCommune, BuildContext context){
     List<Card> _listCardCommune = new List<Card>();
     int length = listCommune.length;
@@ -93,26 +91,12 @@ class MenuAffaireState extends State<MenuAffaire>{
     }
     return _listCardCommune;
   }
-  
-  /*Future<String> readData(String path) async {
-    try {
-      final file2 = File('$path');
-      
-      String body = await file2.readAsString();
-      print(body);
-      return body;
-
-    }catch (e) {
-      return e.toString();
-    }
-  }*/
 
   @override
   Widget build(BuildContext context){
     
     myDir.list(recursive: true, followLinks: false)
     .listen((FileSystemEntity entity) {
-      //print("path ="+entity.path);
       storage.readData(entity.path);
     });
 

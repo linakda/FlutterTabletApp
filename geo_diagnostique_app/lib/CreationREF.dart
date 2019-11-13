@@ -5,7 +5,6 @@ import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Config.dart';
 import 'package:geo_diagnostique_app/Ouvrage.dart';
-import 'package:geo_diagnostique_app/Storage.dart';
 import 'package:geo_diagnostique_app/main.dart';
 
 class CreationREF extends StatefulWidget {
@@ -64,56 +63,6 @@ class _CreationREFState extends State<CreationREF> {
     super.initState();
   }
 
-   //ajoute un numéro d'affaire, une commune ou un ouvrage
-  void _addNumAffaire(String numeroAffaire,String nomCommune,String refCommune,String refOuvrage){
-    Commune _nouvelCommune = new Commune(nomCommune,refCommune);
-    Ouvrage _nouvelOuvrage = new Ouvrage(refOuvrage);
-    _nouvelCommune.addOuvrage(_nouvelOuvrage);
-    dernierNumeroAffaire = numeroAffaire;
-    derniereCommune = _nouvelCommune;
-
-    setState(() {
-      
-      if (_isAffaireExist(listNumeroAffaire, numeroAffaire) != null){
-        //numero d'affaire existant
-        int index = _isAffaireExist(listNumeroAffaire, numeroAffaire);
-        if(_isCommuneExist(listNumeroAffaire[index].listCommune, nomCommune)==null){
-          //commune non existante
-          listNumeroAffaire[index].addCommune(_nouvelCommune);
-        }
-        else{
-          //commune existante -> nouvel ouvrage
-          int index2 = _isCommuneExist(listNumeroAffaire[index].listCommune, nomCommune);
-          listNumeroAffaire[index].listCommune[index2].addOuvrage(_nouvelOuvrage);
-        }
-      }
-      else{
-        //numéro d'affaire non-existant
-        listNumeroAffaire.add(new NumeroAffaire(numeroAffaire,));
-        listNumeroAffaire[listNumeroAffaire.length-1].addCommune(_nouvelCommune);
-      }
-    });
-  }
-
-  int _isAffaireExist(List<NumeroAffaire> listNumeroAffaire, String numero){
-    if(listNumeroAffaire.isNotEmpty){
-      for(int index=0;index<listNumeroAffaire.length;index++){
-        if(listNumeroAffaire[index].numeroAffaire == numero){return index;}
-      }
-    }
-    return null;
-  }
-
-  //Méthode qui renvoie l'index d'une commune qui existe déjà
-  int _isCommuneExist(List<Commune> listCommune, String nomCommune){
-    if(listCommune.isNotEmpty){
-      for(int index=0;index<listCommune.length;index++){
-          if(listCommune[index].nomCommune == nomCommune){return index;}
-      }
-    }
-    return null;
-  }
-
   //Méthode qui renvoi la prochaine reférence d'ouvrage
   String nextRefOuvrage(Commune dernierCommune){
     if(derniereCommune.listOuvrage.isNotEmpty){
@@ -135,7 +84,7 @@ class _CreationREFState extends State<CreationREF> {
               if (value.isEmpty) {
                 return 'Veuillez entrer un champ';
               }
-              else if(index==3 && _isOuvrageExist(value)){
+              else if(index==3 && _isOuvrageExist(controllerList[0].text,controllerList[1].text,value)){
                 return 'Reférence ouvrage déja existante';
               }
               else if (index==3 && _isREFOuvrageValid(value,controllerList[2].text)){
@@ -226,15 +175,22 @@ class _CreationREFState extends State<CreationREF> {
     }
   }
 
-  //Méthode pour vérifier si l'ouvrage existe
-  bool _isOuvrageExist(String refOuvrage){
-    List<NumeroAffaire> listNumAffaire = listNumeroAffaire;
-    for(NumeroAffaire tmpAffaire in listNumAffaire){
-      for(Commune tmpCommune in tmpAffaire.listCommune){
-        for(Ouvrage tmpOuvrage in tmpCommune.listOuvrage){
-          if(tmpOuvrage.refOuvrage == refOuvrage) return true;
+  //Méthode pour vérifier si l'ouvrage existe dans la même commune du même numéro d'affaire
+  bool _isOuvrageExist(String numAffaire,String commune, String refOuvrage){
+    var index1=0;
+    for(var numAffairetmp in listNumeroAffaire){
+      if(numAffairetmp.numeroAffaire==numAffaire){
+        var index2=0;
+        for(var communetmp in listNumeroAffaire[index1].listCommune){
+          if(communetmp.nomCommune==commune){
+            for(var refOuvragetmp in listNumeroAffaire[index1].listCommune[index2].listOuvrage){
+              if(refOuvragetmp.refOuvrage==refOuvrage){return true;}
+            }
+          }
+          index2++;
         }
       }
+      index1++;
     }
     return false;
   } 
@@ -323,11 +279,9 @@ class _CreationREFState extends State<CreationREF> {
                   textColor: Colors.white,
                   onPressed: () {
                     if (testREFvalidate(formKeylist)) {
-                      _addNumAffaire(controllerList[0].text,controllerList[1].text,controllerList[2].text,controllerList[3].text);
-                      storage.writeData(controllerList[0].text+','+controllerList[1].text+','+controllerList[2].text+','+controllerList[3].text,myDir.path,controllerList[0].text);
-                      //widget.storage.readData();
+                      storage.addREFOuvrage(controllerList[0].text,controllerList[1].text,controllerList[2].text,controllerList[3].text);
+                      storage.writeData(controllerList[0].text+','+controllerList[1].text+','+controllerList[2].text+','+controllerList[3].text+'\n',controllerList[0].text);
                       Navigator.pop(context);
-                      //Navigator.push(context, MaterialPageRoute(builder: (context) => FeuilleOuvrage(widget.storage),));
                     }
                     else{
 
