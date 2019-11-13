@@ -10,6 +10,8 @@ import 'package:geo_diagnostique_app/Config.dart';
 import 'package:geo_diagnostique_app/MenuOuvrage.dart';
 import 'package:geo_diagnostique_app/Storage.dart';
 import 'package:geo_diagnostique_app/main.dart';
+import 'package:geo_diagnostique_app/main.dart';
+import 'package:geo_diagnostique_app/main.dart';
 import 'package:path_provider/path_provider.dart';
 
 
@@ -94,12 +96,6 @@ class MenuAffaireState extends State<MenuAffaire>{
 
   @override
   Widget build(BuildContext context){
-    
-    myDir.list(recursive: true, followLinks: false)
-    .listen((FileSystemEntity entity) {
-      storage.readData(entity.path);
-    });
-
     Config().init(context);
     return new Scaffold(
       appBar: AppBar(

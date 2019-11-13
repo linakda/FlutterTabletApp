@@ -1,11 +1,11 @@
 
 import 'dart:io';
-
+import 'dart:async';
 import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Ouvrage.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:geo_diagnostique_app/main.dart';
+import 'main.dart';
 
 class Storage{
 
@@ -21,7 +21,6 @@ class Storage{
 
   Future<String> readData(String path) async {
     try {
-      final file = await localFile;
       final file2 = File('$path');
       
       String body = await file2.readAsString();
@@ -32,7 +31,7 @@ class Storage{
     }
   }
 
-   void  writeData(String data, String fileName) async {
+  void  writeData(String data, String fileName) async {
     File file= new File('${myDir.path}/$fileName.txt');
     List<String> lines;
     int index=1;
@@ -51,13 +50,28 @@ class Storage{
   }
 
   //ajoute un ouvrage avec si besoin un numéro d'affaire et/ou une commune
+  Future readAndUpdateList() async{
+    List<FileSystemEntity> listFile = new List<FileSystemEntity>();
+    listFile = myDir.listSync(recursive: true, followLinks: false);
+    List<String> textSplit;
+
+    for(FileSystemEntity tmp in listFile){
+      String text = await readData(tmp.path);
+      textSplit = text.split(",");
+      addREFOuvrage(textSplit[0], textSplit[1], textSplit[2], textSplit[3]);
+
+    }
+    print("list retourné");
+  }
+
   void addREFOuvrage(String numeroAffaire,String nomCommune,String refCommune,String refOuvrage){
+    
     Commune _nouvelCommune = new Commune(nomCommune,refCommune);
     Ouvrage _nouvelOuvrage = new Ouvrage(refOuvrage);
     _nouvelCommune.addOuvrage(_nouvelOuvrage);
     dernierNumeroAffaire = numeroAffaire;
     derniereCommune = _nouvelCommune;
-
+      
     if (affaireIndex(numeroAffaire) != null){
       //numero d'affaire existant
       int index = affaireIndex(numeroAffaire);
@@ -78,7 +92,7 @@ class Storage{
     }
   }
 
-  //Méthode qui renvoie l'index d'un NuméroAffaire qui existe déjà
+   //Méthode qui renvoie l'index d'un NuméroAffaire qui existe déjà
   int affaireIndex(String numero){
     if(listNumeroAffaire.isNotEmpty){
       for(int index=0;index<listNumeroAffaire.length;index++){
@@ -97,4 +111,5 @@ class Storage{
     }
     return null;
   }
+
 }

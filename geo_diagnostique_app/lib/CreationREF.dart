@@ -5,6 +5,7 @@ import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Config.dart';
 import 'package:geo_diagnostique_app/Ouvrage.dart';
+import 'package:geo_diagnostique_app/Storage.dart';
 import 'package:geo_diagnostique_app/main.dart';
 
 class CreationREF extends StatefulWidget {
@@ -126,10 +127,12 @@ class _CreationREFState extends State<CreationREF> {
             suggestionsCallback: (pattern){
               switch(index){
               case 0:
-                return filtreSuggestion(pattern, numAffaires(listNumeroAffaire)) ;
+                return filtreSuggestion(pattern, numAffaires(
+            listNumeroAffaire)) ;
                 break;
               case 1:
-                  return filtreSuggestion(pattern, communeList(actuelNumAffaire(listNumeroAffaire))) ;
+                  return filtreSuggestion(pattern, communeList(actuelNumAffaire(
+              listNumeroAffaire))) ;
               
                 break;
               default :
@@ -175,7 +178,7 @@ class _CreationREFState extends State<CreationREF> {
     }
   }
 
-  //Méthode pour vérifier si l'ouvrage existe dans la même commune du même numéro d'affaire
+    //Méthode pour vérifier si l'ouvrage existe dans la même commune du même numéro d'affaire
   bool _isOuvrageExist(String numAffaire,String commune, String refOuvrage){
     var index1=0;
     for(var numAffairetmp in listNumeroAffaire){
