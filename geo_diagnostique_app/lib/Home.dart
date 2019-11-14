@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geo_diagnostique_app/MenuAffaire.dart';
+import 'package:geo_diagnostique_app/Storage.dart';
 import 'dart:async';
 import 'main.dart';
 import 'package:delayed_display/delayed_display.dart';
@@ -17,8 +18,9 @@ class SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 8), () {
-      Navigator.push(
+    Future.delayed(Duration(seconds: 5), () async{
+      await storage.readAndUpdateList();
+      Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => MenuAffaire(),
