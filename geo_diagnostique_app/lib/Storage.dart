@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Ouvrage.dart';
+import 'package:geo_diagnostique_app/main.dart' as prefix0;
 import 'package:path_provider/path_provider.dart';
 import 'main.dart';
 
@@ -81,7 +82,6 @@ class Storage{
     for(FileSystemEntity tmp in list){
       listFile.add(File(tmp.path));
       DateTime tmpDateTime = await listFile[listFile.length-1].lastModified();
-      print("$tmpDateTime de ${tmp.path}");
       listDateTime.add(tmpDateTime);   
     }
     listDateTime.sort((b,a) => a.compareTo(b));
@@ -89,7 +89,7 @@ class Storage{
     for(DateTime tmp in listDateTime){
       for(File tmp2 in listFile){
         DateTime tmpDateTime = await tmp2.lastModified();
-        if(tmpDateTime==tmp){print(tmp2.path);orderedListFile.add(tmp2);}
+        if(tmpDateTime==tmp){orderedListFile.add(tmp2);}
       }
     }
     return orderedListFile;
