@@ -1,6 +1,7 @@
 
 import 'dart:io';
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Ouvrage.dart';
@@ -65,9 +66,11 @@ class Storage{
       String text = await tmp.readAsString();
       lineSplit = text.split("\n");
 
-      for(var i=1;i<lineSplit.length-1;i++){
-        textSplit = lineSplit[i].split(",");
-        addREFOuvrage(textSplit[0], textSplit[1], textSplit[2], textSplit[3]);
+      for(var i=1;i<lineSplit.length;i++){
+        if(lineSplit[i]!=""){
+          textSplit = lineSplit[i].split(",");
+          addREFOuvrage(textSplit[0], textSplit[1], textSplit[2], textSplit[3]);
+        }
       }
     }
   }
@@ -137,6 +140,39 @@ class Storage{
       }
     }
     return null;
+  }
+
+  void deleteSelectedOuvrageLine(String numeroAffaire,String ouvrageSelected)async{
+    File file= new File('${myDir.path}/$numeroAffaire.txt');
+    List<String> lines;
+    List<String> parameters;
+    lines=await file.readAsLines();
+    var i=1;
+    while(i<lines.length){
+      parameters=lines[i].split(',');
+      if(parameters[3]==ouvrageSelected){break;}
+      i++;
+    }
+    lines.removeAt(i);
+    if(lines.length==1){
+      file.delete();
+    }
+    else{
+      var index=lines.length-1;
+      lines[0]="Numéro d'Affaire,Référence de l\'ouvrage,Commune,Nom de la rue,Implantation,Type de réseau,Type d'ouvrage,Observation,Dispositif de fermeture,Section,Nature,Dimension,Dispositif d'accés,Cunette,Photo,Côte tn,Profondeur radier,Rôle(fs),Géométrie(fs),Dimension(fs),Nature(fs),Profondeur(fs),Observation(fs),Rôle(f1),Géométrie(f1),Dimension(f1),Nature(f1),Profondeur(f1),Angle(f1),Observation(f1),Rôle(f2),Géométrie(f2),Dimension(f2),Nature(f2),Profondeur(f2),Angle(f2),Observation(f2),Rôle(f3),Géométrie(f3),Dimension(f3),Nature(f3),Profondeur(f3),Angle(f3),Observation(f3),Rôle(f4),Géométrie(f4),Dimension(f4),Nature(f4),Profondeur(f4),Angle(f4),Observation(f4),Rôle(f5),Géométrie(f5),Dimension(f5),Nature(f5),Profondeur(f5),Angle(f5),Observation(f5),Traces de mises en charge,Perturbation de l'écoulement,Précision,Défaut d\'étanchéité,Traces d'infiltration,Branchement non étanche,Défaut de structure,Génie civil fissuré,Déboitement,Défaut de fermeture,Tampon détérioré,Présence d\'H2S,Autres observations,$index";
+      await file.writeAsString("${lines[0]}");
+      for(var i=1;i<lines.length;i++){await file.writeAsString("\n${lines[i]}",mode:FileMode.writeOnlyAppend);}
+    }
+  }
+
+  //Méthode pour supprimer un Ouvrage dans l'appli et dans le fichier .csv
+  void deleteOuvrage(NumeroAffaire numeroAffaireSelected,Commune communeSelected,int index,BuildContext context){
+    deleteSelectedOuvrageLine(numeroAffaireSelected.numeroAffaire,communeSelected.listOuvrage[index].refOuvrage);
+    communeSelected.listOuvrage.removeAt(index);
+    if(communeSelected.listOuvrage.length==0){
+      numeroAffaireSelected.listCommune.removeAt(numeroAffaireSelected.listCommune.indexOf(communeSelected));
+      Navigator.pop(context);
+    }
   }
 
 }

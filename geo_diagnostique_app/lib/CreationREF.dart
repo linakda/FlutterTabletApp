@@ -4,8 +4,6 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Config.dart';
-import 'package:geo_diagnostique_app/Ouvrage.dart';
-import 'package:geo_diagnostique_app/Storage.dart';
 import 'package:geo_diagnostique_app/main.dart';
 
 class CreationREF extends StatefulWidget {

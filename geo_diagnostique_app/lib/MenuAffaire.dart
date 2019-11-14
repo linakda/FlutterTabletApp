@@ -1,5 +1,4 @@
 import 'dart:core';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geo_diagnostique_app/Affaire.dart';
@@ -7,11 +6,7 @@ import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/CreationREF.dart';
 import 'package:geo_diagnostique_app/Config.dart';
 import 'package:geo_diagnostique_app/MenuOuvrage.dart';
-import 'package:geo_diagnostique_app/Storage.dart';
 import 'package:geo_diagnostique_app/main.dart';
-import 'package:geo_diagnostique_app/main.dart';
-import 'package:geo_diagnostique_app/main.dart';
-import 'package:path_provider/path_provider.dart';
 
 class MenuAffaire extends StatefulWidget {
   MenuAffaireState createState() => MenuAffaireState();
@@ -55,7 +50,7 @@ class MenuAffaireState extends State<MenuAffaire> {
   }
 
   //Méthode qui génère la sous-liste des communes par num d'affaire
-  List<Card> listCommuneGenerator(NumeroAffaire numeroAffaire,List<Commune> listCommune, BuildContext context) {
+  List<Card> listCommuneGenerator(NumeroAffaire numeroAffaire, List<Commune> listCommune, BuildContext context) {
     List<Card> _listCardCommune = new List<Card>();
     int length = listCommune.length;
 
@@ -202,22 +197,10 @@ class MenuAffaireState extends State<MenuAffaire> {
                         color: Colors.white,
                         size: Config.fontSize * 1.5,
                       ),
-                    ),
-                    title: Text(
-                      !_searchMode
-                          ? listNumeroAffaire[index].numeroAffaire
-                          : _searchNumeroAffairelist[index].numeroAffaire,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: Config.fontSize * 1.5),
-                    ),
-                    children: listCommuneGenerator(
-                        listNumeroAffaire[index],
-                        !_searchMode
-                            ?listNumeroAffaire[index].listCommune
-                            : _searchNumeroAffairelist[index].listCommune,
-                        context),
+                      title: Text(!_searchMode ? listNumeroAffaire[index].numeroAffaire : _searchNumeroAffairelist[index].numeroAffaire,
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: Config.fontSize*1.5),
+                      ),
+                      children: listCommuneGenerator(!_searchMode ? listNumeroAffaire[index].listCommune : _searchNumeroAffairelist[index].listCommune,context),
                   ),
                 );
               },
