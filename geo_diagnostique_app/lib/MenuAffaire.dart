@@ -200,7 +200,7 @@ class MenuAffaireState extends State<MenuAffaire> {
                       title: Text(!_searchMode ? listNumeroAffaire[index].numeroAffaire : _searchNumeroAffairelist[index].numeroAffaire,
                         style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: Config.fontSize*1.5),
                       ),
-                      children: listCommuneGenerator(!_searchMode ? listNumeroAffaire[index].listCommune : _searchNumeroAffairelist[index].listCommune,context),
+                      children: listCommuneGenerator(listNumeroAffaire[index],!_searchMode ? listNumeroAffaire[index].listCommune : _searchNumeroAffairelist[index].listCommune,context),
                   ),
                 );
               },
