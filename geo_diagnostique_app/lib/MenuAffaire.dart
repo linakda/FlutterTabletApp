@@ -50,7 +50,8 @@ class MenuAffaireState extends State<MenuAffaire> {
   }
 
   //Méthode qui génère la sous-liste des communes par num d'affaire
-  List<Card> listCommuneGenerator(NumeroAffaire numeroAffaire, List<Commune> listCommune, BuildContext context) {
+  List<Card> listCommuneGenerator(NumeroAffaire numeroAffaire,
+      List<Commune> listCommune, BuildContext context) {
     List<Card> _listCardCommune = new List<Card>();
     int length = listCommune.length;
 
@@ -96,9 +97,11 @@ class MenuAffaireState extends State<MenuAffaire> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MenuOuvrage(numeroAffaire,_communeSearch != null
-                        ? _communeSearch
-                        : listCommune[i])));
+                    builder: (context) => MenuOuvrage(
+                        numeroAffaire,
+                        _communeSearch != null
+                            ? _communeSearch
+                            : listCommune[i])));
           },
         ),
       ));
@@ -191,16 +194,27 @@ class MenuAffaireState extends State<MenuAffaire> {
                       new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
                   child: new ExpansionTile(
                     leading: Container(
-                      padding: EdgeInsets.only(right: 12.0),
-                      child: Icon(
-                        Icons.account_circle,
-                        color: Colors.white,
-                        size: Config.fontSize * 1.5,
-                      ),
-                      title: Text(!_searchMode ? listNumeroAffaire[index].numeroAffaire : _searchNumeroAffairelist[index].numeroAffaire,
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: Config.fontSize*1.5),
-                      ),
-                      children: listCommuneGenerator(listNumeroAffaire[index],!_searchMode ? listNumeroAffaire[index].listCommune : _searchNumeroAffairelist[index].listCommune,context),
+                        padding: EdgeInsets.only(right: 12.0),
+                        child: Icon(
+                          Icons.account_circle,
+                          color: Colors.white,
+                          size: Config.fontSize * 1.5,
+                        )),
+                    title: Text(
+                      !_searchMode
+                          ? listNumeroAffaire[index].numeroAffaire
+                          : _searchNumeroAffairelist[index].numeroAffaire,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: Config.fontSize * 1.5),
+                    ),
+                    children: listCommuneGenerator(
+                        listNumeroAffaire[index],
+                        !_searchMode
+                            ? listNumeroAffaire[index].listCommune
+                            : _searchNumeroAffairelist[index].listCommune,
+                        context),
                   ),
                 );
               },
