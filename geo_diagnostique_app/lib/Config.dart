@@ -25,6 +25,6 @@ class Config {
   textColor = Colors.grey[600];
   buttonColor = Colors.orangeAccent;
   splashColor = Colors.orange;
-  bottomBarColor = Colors.lime[50];
+  bottomBarColor = Colors.white;//Colors.lime[300];
  }
 }
