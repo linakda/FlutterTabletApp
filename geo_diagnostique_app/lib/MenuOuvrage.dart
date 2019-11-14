@@ -1,14 +1,16 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Config.dart';
 import 'package:geo_diagnostique_app/FeuilleOuvrage.dart';
 import 'package:geo_diagnostique_app/Storage.dart';
 
 class MenuOuvrage extends StatefulWidget{
+  final NumeroAffaire selectedNumeroAffaire;
   final Commune selectedCommune;
-  MenuOuvrage(this.selectedCommune);
+  MenuOuvrage(this.selectedNumeroAffaire,this.selectedCommune);
   @override
   MenuOuvrageState createState() => MenuOuvrageState(); 
 }

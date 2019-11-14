@@ -51,13 +51,18 @@ class Storage{
 
   //ajoute un ouvrage avec si besoin un numéro d'affaire et/ou une commune
   Future readAndUpdateList() async{
-    List<FileSystemEntity> listFile = new List<FileSystemEntity>();
-    listFile = myDir.listSync(recursive: true, followLinks: false);
+
+    List<FileSystemEntity> listFileSystemeEntity = new List<FileSystemEntity>();
+    List<File> listFile = new List<File>();
     List<String> textSplit;
     List<String> lineSplit;
-
-    for(FileSystemEntity tmp in listFile){
-      String text = await readData(tmp.path);
+    //récupération de tous les fichiers du répertoire
+    listFileSystemeEntity = myDir.listSync(recursive: true, followLinks: false);
+    //Génération d'un list de fichier
+    listFile = await orderedListFile(listFileSystemeEntity);
+    
+    for(File tmp in listFile){
+      String text = await tmp.readAsString();
       lineSplit = text.split("\n");
 
       for(var i=1;i<lineSplit.length-1;i++){
@@ -65,9 +70,27 @@ class Storage{
         addREFOuvrage(textSplit[0], textSplit[1], textSplit[2], textSplit[3]);
       }
     }
-    print("list retourné");
   }
-
+  Future<List<File>> orderedListFile(List<FileSystemEntity> list)async{
+    List<File> listFile = new List<File>();
+    List<File> orderedListFile = new List<File>();
+    List<DateTime> listDateTime = new List<DateTime>();
+    for(FileSystemEntity tmp in list){
+      listFile.add(File(tmp.path));
+      DateTime tmpDateTime = await listFile[listFile.length-1].lastModified();
+      print("$tmpDateTime de ${tmp.path}");
+      listDateTime.add(tmpDateTime);   
+    }
+    listDateTime.sort((b,a) => a.compareTo(b));
+    
+    for(DateTime tmp in listDateTime){
+      for(File tmp2 in listFile){
+        DateTime tmpDateTime = await tmp2.lastModified();
+        if(tmpDateTime==tmp){print(tmp2.path);orderedListFile.add(tmp2);}
+      }
+    }
+    return orderedListFile;
+  }
   void addREFOuvrage(String numeroAffaire,String nomCommune,String refCommune,String refOuvrage){
     
     Commune _nouvelCommune = new Commune(nomCommune,refCommune);
