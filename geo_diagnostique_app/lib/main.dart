@@ -4,6 +4,7 @@ import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/MenuAffaire.dart';
 import 'package:geo_diagnostique_app/Storage.dart';
+import 'package:geo_diagnostique_app/Home.dart';
 
 List<NumeroAffaire> listNumeroAffaire = new List<NumeroAffaire>();
 String dernierNumeroAffaire;
@@ -32,7 +33,7 @@ class App extends StatelessWidget {
   build(BuildContext context){
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MenuAffaire(),
+      home: MyApp(),
     );
   }
 }
