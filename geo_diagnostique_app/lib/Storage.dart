@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Ouvrage.dart';
-import 'package:geo_diagnostique_app/main.dart' as prefix0;
+import 'package:geo_diagnostique_app/main.dart';
 import 'package:path_provider/path_provider.dart';
 import 'main.dart';
 
