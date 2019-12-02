@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geo_diagnostique_app/MenuAffaire.dart';
+import 'package:geo_diagnostique_app/Storage.dart';
 import 'dart:async';
 import 'main.dart';
 import 'package:delayed_display/delayed_display.dart';

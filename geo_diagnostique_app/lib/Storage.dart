@@ -62,6 +62,7 @@ class Storage{
     listFileSystemeEntity = myDir.listSync(recursive: true, followLinks: false);
     //Génération d'un list de fichier
     listFile = await orderedListFile(listFileSystemeEntity);
+    String refCommune;
     
     for(File tmp in listFile){
       String text = await tmp.readAsString();
@@ -70,7 +71,8 @@ class Storage{
       for(var i=1;i<lineSplit.length;i++){
         if(lineSplit[i]!=""){
           textSplit = lineSplit[i].split(",");
-          addREFOuvrage(textSplit[0], textSplit[1], textSplit[2], textSplit[3]);
+          refCommune=textSplit[1].substring(0,textSplit[1].length-3);
+          addREFOuvrage(textSplit[0], textSplit[2], refCommune, textSplit[1]);
         }
       }
     }
