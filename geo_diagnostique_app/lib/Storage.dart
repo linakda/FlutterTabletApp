@@ -84,7 +84,14 @@ class Storage{
         if(lineSplit[i]!=""){
           textSplit = lineSplit[i].split(",");
           refCommune=textSplit[1].substring(0,textSplit[1].length-3);
-          addREFOuvrage(textSplit[0], textSplit[2], refCommune, textSplit[1]);
+         addREFOuvrage2( addREFOuvrage(textSplit[0], textSplit[2], refCommune, textSplit[1]), textSplit[3], textSplit[4], textSplit[5], textSplit[6], textSplit[7], textSplit[8], textSplit[9], 
+          textSplit[10], textSplit[11], textSplit[12], textSplit[13], textSplit[14], textSplit[15], textSplit[16], textSplit[17], textSplit[18], textSplit[19], textSplit[20], textSplit[21],
+          textSplit[22], textSplit[23], textSplit[24], textSplit[25], textSplit[26], textSplit[27], textSplit[28], textSplit[29], textSplit[30], textSplit[31],
+          textSplit[32], textSplit[33], textSplit[34], textSplit[35], textSplit[36],textSplit[37], textSplit[38], textSplit[39], textSplit[40], textSplit[41]
+          ,textSplit[41], textSplit[42], textSplit[43], textSplit[44], textSplit[45],textSplit[46], textSplit[47], textSplit[48], textSplit[49], textSplit[50]
+          ,textSplit[51], textSplit[52], textSplit[53], textSplit[54], textSplit[55], textSplit[56], textSplit[57], textSplit[58], textSplit[59], textSplit[60],
+          textSplit[61], textSplit[62], textSplit[63], textSplit[64], textSplit[65] ,textSplit[66], textSplit[67], textSplit[68], textSplit[69]);
+
         }
       }
     }
@@ -108,7 +115,7 @@ class Storage{
     }
     return orderedListFile;
   }
-  void addREFOuvrage(String numeroAffaire,String nomCommune,String refCommune,String refOuvrage){
+  Ouvrage addREFOuvrage(String numeroAffaire,String nomCommune,String refCommune,String refOuvrage){
     
     Commune _nouvelCommune = new Commune(nomCommune,refCommune);
     Ouvrage _nouvelOuvrage = new Ouvrage(refOuvrage);
@@ -134,7 +141,99 @@ class Storage{
       listNumeroAffaire.add(new NumeroAffaire(numeroAffaire,));
       listNumeroAffaire[listNumeroAffaire.length-1].addCommune(_nouvelCommune);
     }
+    return _nouvelOuvrage;
   }
+
+  void addREFOuvrage2( Ouvrage selectedOuvrage,String nomRue, String implantation, String typeReseau, String type, String observationCaracteristiques, 
+  String dispositifFermeture, String section,String natureCaracteristique, String dimensionCaracteristique,
+ String dispositifAcces,String cunette,
+  /*File photoOuvrage,File photoCroquis à remplacer par les noms des photos */String coteTN, String profondeurRadier, String rolefs, String geometriefs, String dimensionfs,
+  String naturefs, String profondeurfs, String anglefs, String observationsfs, String rolef1, String geometrief1, String dimensionf1,
+  String naturef1, String profondeurf1, String anglef1, String observationsf1, String rolef2, String geometrief2, String dimensionf2,
+  String naturef2, String profondeurf2, String anglef2, String observationsf2, String rolef3, String geometrief3, String dimensionf3,
+  String naturef3, String profondeurf3, String anglef3, String observationsf3, String rolef4, String geometrief4, String dimensionf4,
+  String naturef4, String profondeurf4, String anglef4, String observationsf4,String rolef5, String geometrief5, String dimensionf5,
+  String naturef5, String profondeurf5, String anglef5, String observationsf5, String tracesCharge, String perturbationEcoulement, String defautEtancheite,
+  String tracesInfiltration,String branchementNonEtanche, String defautStructure,  String genieCivilFissure, String deboitement,
+  String defautFermeture, String tamponDeteriore, String tamponNonAccessible, String presenceH2S , String observationsAnomalies) async {
+
+//Localisation---------------
+      selectedOuvrage.nomRue = nomRue;
+      selectedOuvrage.implantation = implantation;
+      selectedOuvrage.typeReseau = typeReseau; 
+//Caracteristiques------------
+      selectedOuvrage.type = type ;
+      selectedOuvrage.observationCaracteristiques = observationCaracteristiques;
+      selectedOuvrage.dispositifFermeture = dispositifFermeture;
+      selectedOuvrage.section = section ; 
+      selectedOuvrage.nature = natureCaracteristique ; 
+      selectedOuvrage.dimension = dimensionCaracteristique ; 
+      selectedOuvrage.dispositifAcces = dispositifAcces ; 
+      selectedOuvrage.cunette = cunette ; 
+//Schema------------
+      //selectedOuvrage.photoCroquis = photoCroquis;
+      //selectedOuvrage.photoOuvrage = photoOuvrage;
+      selectedOuvrage.coteTN = coteTN ; 
+      selectedOuvrage.profondeurRadier = profondeurRadier ;
+  //Caracteristique canalisation---------
+      selectedOuvrage.listCanalisation[0].role = rolefs;
+      selectedOuvrage.listCanalisation[0].geometrie = geometriefs;
+      selectedOuvrage.listCanalisation[0].dimension = dimensionfs;
+      selectedOuvrage.listCanalisation[0].nature = naturefs;
+      selectedOuvrage.listCanalisation[0].profondeur = profondeurfs;
+      selectedOuvrage.listCanalisation[0].angle = anglefs;
+      selectedOuvrage.listCanalisation[0].observations= observationsfs;
+      selectedOuvrage.listCanalisation[1].role = rolef1;
+      selectedOuvrage.listCanalisation[1].geometrie = geometrief1;
+      selectedOuvrage.listCanalisation[1].dimension = dimensionf1;
+      selectedOuvrage.listCanalisation[1].nature = naturef1;
+      selectedOuvrage.listCanalisation[1].profondeur = profondeurf1;
+      selectedOuvrage.listCanalisation[1].angle = anglef1;
+      selectedOuvrage.listCanalisation[1].observations= observationsf1;
+      selectedOuvrage.listCanalisation[2].role = rolef2;
+      selectedOuvrage.listCanalisation[2].geometrie = geometrief2;
+      selectedOuvrage.listCanalisation[2].dimension = dimensionf2;
+      selectedOuvrage.listCanalisation[2].nature = naturef2;
+      selectedOuvrage.listCanalisation[2].profondeur = profondeurf2;
+      selectedOuvrage.listCanalisation[2].angle = anglef2;
+      selectedOuvrage.listCanalisation[2].observations= observationsf2;
+      selectedOuvrage.listCanalisation[3].role = rolef3;
+      selectedOuvrage.listCanalisation[3].geometrie = geometrief3;
+      selectedOuvrage.listCanalisation[3].dimension = dimensionf3;
+      selectedOuvrage.listCanalisation[3].nature = naturef3;
+      selectedOuvrage.listCanalisation[3].profondeur = profondeurf3;
+      selectedOuvrage.listCanalisation[3].angle = anglef3;
+      selectedOuvrage.listCanalisation[3].observations= observationsf3;
+      selectedOuvrage.listCanalisation[4].role = rolef4;
+      selectedOuvrage.listCanalisation[4].geometrie = geometrief4;
+      selectedOuvrage.listCanalisation[4].dimension = dimensionf4;
+      selectedOuvrage.listCanalisation[4].nature = naturef4;
+      selectedOuvrage.listCanalisation[4].profondeur = profondeurf4;
+      selectedOuvrage.listCanalisation[4].angle = anglef4;
+      selectedOuvrage.listCanalisation[4].observations= observationsf4;
+      selectedOuvrage.listCanalisation[5].role = rolef5;
+      selectedOuvrage.listCanalisation[5].geometrie = geometrief5;
+      selectedOuvrage.listCanalisation[5].dimension = dimensionf5;
+      selectedOuvrage.listCanalisation[5].nature = naturef5;
+      selectedOuvrage.listCanalisation[5].profondeur = profondeurf5;
+      selectedOuvrage.listCanalisation[5].angle = anglef5;
+      selectedOuvrage.listCanalisation[5].observations= observationsf5;
+//Anomalies observees------------
+      selectedOuvrage.tracesCharge = tracesCharge ; 
+      selectedOuvrage.perturbationEcoulement = perturbationEcoulement ;
+      selectedOuvrage.defautEtancheite = defautEtancheite;
+      selectedOuvrage.tracesInfiltration = tracesInfiltration ; 
+      selectedOuvrage.branchementNonEtanche = branchementNonEtanche ;
+      selectedOuvrage.defautStructure = defautStructure;
+      selectedOuvrage.genieCivilFissure = genieCivilFissure;
+      selectedOuvrage.deboitement = deboitement;
+      selectedOuvrage.defautFermeture = defautFermeture ; 
+      selectedOuvrage.tamponDeteriore = tamponDeteriore;
+      selectedOuvrage.tamponNonAccessible = tamponNonAccessible ; 
+      selectedOuvrage.presenceH2S = presenceH2S ; 
+      selectedOuvrage.observationsAnomalies= observationsAnomalies; 
+  }
+
 
    //Méthode qui renvoie l'index d'un NuméroAffaire qui existe déjà
   int affaireIndex(String numero){
