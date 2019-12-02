@@ -22,8 +22,6 @@ class FeuilleOuvrage extends StatefulWidget {
   FeuilleOuvrageState createState() => FeuilleOuvrageState();
 }
 
-enum ConfirmAction { Annuler, Valider }
-
 class FeuilleOuvrageState extends State<FeuilleOuvrage> {
   var _scaffoldKey = GlobalKey<ScaffoldState>();
   int currentIndex = 0;
@@ -52,164 +50,158 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
               FlatButton(
                 child: const Text('Valider'),
                 onPressed: () {
-                  String ouvrageData = widget.selectedNumeroAffaire.numeroAffaire +
-                          ',' +
-                          widget.selectedOuvrage.refOuvrage +
-                          ',' +
-                          widget.selectedCommune.nomCommune +
-                          ',' +
-                          widget.selectedOuvrage.nomRue +
-                          ',' +
-                          widget.selectedOuvrage.implantation +
-                          ',' +
-                          widget.selectedOuvrage.typeReseau +
-                          ',' +
-                          widget.selectedOuvrage.type +
-                          ',' +
-                          widget.selectedOuvrage.observationCaracteristiques +
-                          ',' +
-                          widget.selectedOuvrage.dispositifFermeture +
-                          ',' +
-                          widget.selectedOuvrage.section +
-                          ',' +
-                          widget.selectedOuvrage.nature +
-                          ',' +
-                          widget.selectedOuvrage.dimension +
-                          ',' +
-                          widget.selectedOuvrage.dispositifAcces +
-                          ',' +
-                          widget.selectedOuvrage.cunette +
-                          ',' +
-                          widget.selectedOuvrage.refOuvrage +
-                          ',' +
-                          widget.selectedOuvrage.coteTN.toString() +
-                          ',' +
-                          widget.selectedOuvrage.profondeurRadier.toString() +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[0].role +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[0].geometrie +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[0].dimension +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[0].nature +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[0].profondeur
-                              .toString() +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[0]
-                              .observationsAnomalies +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[1].role +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[1].geometrie +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[1].dimension +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[1].nature +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[1].profondeur
-                              .toString() +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[1].angle +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[1]
-                              .observationsAnomalies +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[2].role +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[2].geometrie +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[2].dimension +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[2].nature +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[2].profondeur
-                              .toString() +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[2].angle +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[2]
-                              .observationsAnomalies +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[3].role +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[3].geometrie +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[3].dimension +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[3].nature +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[3].profondeur
-                              .toString() +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[3].angle +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[3]
-                              .observationsAnomalies +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[4].role +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[4].geometrie +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[4].dimension +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[4].nature +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[4].profondeur
-                              .toString() +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[4].angle +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[4]
-                              .observationsAnomalies +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[5].role +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[5].geometrie +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[5].dimension +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[5].nature +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[5].profondeur.toString() +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[5].angle +
-                          ',' +
-                          widget.selectedOuvrage.listCanalisation[5]
-                              .observationsAnomalies +
-                          ',' +
-                          widget.selectedOuvrage.tracesCharge +
-                          ',' +
-                          widget.selectedOuvrage.perturbationEcoulement +
-                          ',' +
-                          widget.selectedOuvrage.precisionPerturbationEcoulement +
-                          ',' +
-                          widget.selectedOuvrage.defautEtancheite +
-                          ',' +
-                          widget.selectedOuvrage.defautEtancheite +
-                          ',' +
-                          widget.selectedOuvrage.tracesInfiltration +
-                          ',' +
-                          widget.selectedOuvrage.branchementNonEtanche +
-                          ',' +
-                          widget.selectedOuvrage.defautStructure +
-                          ',' +
-                          widget.selectedOuvrage.genieCivilFissure +
-                          ',' +
-                          widget.selectedOuvrage.deboitement +
-                          ',' +
-                          widget.selectedOuvrage.defautFermeture +
-                          ',' +
-                          widget.selectedOuvrage.tamponDeteriore +
-                          ',' +
-                          widget.selectedOuvrage.presenceH2S +
-                          ',' +
-                          widget.selectedOuvrage.observations ;
-                  print(ouvrageData);
-                  storage.writeData(ouvrageData,widget.selectedNumeroAffaire.numeroAffaire);
-                  Navigator.of(context).pop();
-                  SnackBar(
+                  String ouvrageData = widget
+                          .selectedNumeroAffaire.numeroAffaire +
+                      ',' +
+                      widget.selectedOuvrage.refOuvrage +
+                      ',' +
+                      widget.selectedCommune.nomCommune +
+                      ',' +
+                      widget.selectedOuvrage.nomRue +
+                      ',' +
+                      widget.selectedOuvrage.implantation +
+                      ',' +
+                      widget.selectedOuvrage.typeReseau +
+                      ',' +
+                      widget.selectedOuvrage.type +
+                      ',' +
+                      widget.selectedOuvrage.observationCaracteristiques +
+                      ',' +
+                      widget.selectedOuvrage.dispositifFermeture +
+                      ',' +
+                      widget.selectedOuvrage.section +
+                      ',' +
+                      widget.selectedOuvrage.nature +
+                      ',' +
+                      widget.selectedOuvrage.dimension +
+                      ',' +
+                      widget.selectedOuvrage.dispositifAcces +
+                      ',' +
+                      widget.selectedOuvrage.cunette +
+                      ',' +
+                      widget.selectedOuvrage.refOuvrage +
+                      ',' +
+                      widget.selectedOuvrage.coteTN.toString() +
+                      ',' +
+                      widget.selectedOuvrage.profondeurRadier.toString() +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[0].role +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[0].geometrie +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[0].dimension +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[0].nature +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[0].profondeur
+                          .toString() +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[0].observations +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[1].role +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[1].geometrie +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[1].dimension +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[1].nature +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[1].profondeur
+                          .toString() +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[1].angle +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[1].observations +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[2].role +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[2].geometrie +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[2].dimension +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[2].nature +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[2].profondeur
+                          .toString() +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[2].angle +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[2].observations +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[3].role +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[3].geometrie +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[3].dimension +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[3].nature +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[3].profondeur
+                          .toString() +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[3].angle +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[3].observations +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[4].role +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[4].geometrie +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[4].dimension +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[4].nature +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[4].profondeur
+                          .toString() +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[4].angle +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[4].observations +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[5].role +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[5].geometrie +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[5].dimension +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[5].nature +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[5].profondeur
+                          .toString() +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[5].angle +
+                      ',' +
+                      widget.selectedOuvrage.listCanalisation[5].observations +
+                      ',' +
+                      widget.selectedOuvrage.tracesCharge +
+                      ',' +
+                      widget.selectedOuvrage.perturbationEcoulement +
+                      ',' +
+                      widget.selectedOuvrage.precisionPerturbationEcoulement +
+                      ',' +
+                      widget.selectedOuvrage.defautEtancheite +
+                      ',' +
+                      widget.selectedOuvrage.defautEtancheite +
+                      ',' +
+                      widget.selectedOuvrage.tracesInfiltration +
+                      ',' +
+                      widget.selectedOuvrage.branchementNonEtanche +
+                      ',' +
+                      widget.selectedOuvrage.defautStructure +
+                      ',' +
+                      widget.selectedOuvrage.genieCivilFissure +
+                      ',' +
+                      widget.selectedOuvrage.deboitement +
+                      ',' +
+                      widget.selectedOuvrage.defautFermeture +
+                      ',' +
+                      widget.selectedOuvrage.tamponDeteriore +
+                      ',' +
+                      widget.selectedOuvrage.presenceH2S +
+                      ',' +
+                      widget.selectedOuvrage.observationsAnomalies;
+                  storage.writeData(ouvrageData, widget.selectedNumeroAffaire.numeroAffaire,widget.selectedOuvrage.refOuvrage);
+                  final snackBar = SnackBar(
                     duration: new Duration(seconds: 3),
                     backgroundColor: Config.color,
                     content: Text(
@@ -217,6 +209,8 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
                       style: TextStyle(fontSize: Config.fontSize / 2),
                     ),
                   );
+                  _scaffoldKey.currentState.showSnackBar(snackBar);
+                  Navigator.of(context).pop();
                 },
               )
             ],
@@ -256,21 +250,80 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       bottomNavigationBar: BubbleBottomBar(
-        backgroundColor: Config.bottomBarColor,
-        opacity: .2,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-        elevation: 8,
-        fabLocation: BubbleBottomBarFabLocation.end, //new
-        hasNotch: true, //new
-        hasInk: true, //new, gives a cute ink effect
-        inkColor: Colors.black12, //optional, uses
-        currentIndex: currentIndex,
-        items: <BubbleBottomBarItem>[
-            BubbleBottomBarItem(backgroundColor: Colors.red, icon: Icon(Icons.map, color: Colors.black,), activeIcon: Icon(Icons.map, color: Colors.red,), title: Text("Localisation", style: TextStyle(fontSize: Config.fontSize/1.5,color:Colors.red ),),),
-            BubbleBottomBarItem(backgroundColor: Colors.deepPurple, icon: Icon(Icons.assignment, color: Colors.black,), activeIcon: Icon(Icons.assignment, color: Colors.deepPurple,), title: Text("Caractéristiques", style: TextStyle(fontSize: Config.fontSize/1.5,color:Colors.deepPurple ),)),
-            BubbleBottomBarItem(backgroundColor: Colors.lightBlue, icon: Icon(Icons.add_a_photo, color: Colors.black,), activeIcon: Icon(Icons.add_a_photo, color: Colors.lightBlue,), title: Text("Schéma", style: TextStyle(fontSize: Config.fontSize/1.5,color:Colors.indigo ),)),
-            BubbleBottomBarItem(backgroundColor: Colors.green, icon: Icon(Icons.new_releases, color: Colors.black,), activeIcon: Icon(Icons.new_releases, color: Colors.green,), title: Text("Anomalies",  style: TextStyle(fontSize: Config.fontSize/1.5,color:Colors.green ),))],
-        onTap: (newIndex) {
+          backgroundColor: Config.bottomBarColor,
+          opacity: .2,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          elevation: 8,
+          fabLocation: BubbleBottomBarFabLocation.end, //new
+          hasNotch: true, //new
+          hasInk: true, //new, gives a cute ink effect
+          inkColor: Colors.black12, //optional, uses
+          currentIndex: currentIndex,
+          items: <BubbleBottomBarItem>[
+            BubbleBottomBarItem(
+              backgroundColor: Colors.red,
+              icon: Icon(
+                Icons.map,
+                color: Colors.black,
+              ),
+              activeIcon: Icon(
+                Icons.map,
+                color: Colors.red,
+              ),
+              title: Text(
+                "Localisation",
+                style: TextStyle(
+                    fontSize: Config.fontSize / 1.5, color: Colors.red),
+              ),
+            ),
+            BubbleBottomBarItem(
+                backgroundColor: Colors.deepPurple,
+                icon: Icon(
+                  Icons.assignment,
+                  color: Colors.black,
+                ),
+                activeIcon: Icon(
+                  Icons.assignment,
+                  color: Colors.deepPurple,
+                ),
+                title: Text(
+                  "Caractéristiques",
+                  style: TextStyle(
+                      fontSize: Config.fontSize / 1.5,
+                      color: Colors.deepPurple),
+                )),
+            BubbleBottomBarItem(
+                backgroundColor: Colors.lightBlue,
+                icon: Icon(
+                  Icons.add_a_photo,
+                  color: Colors.black,
+                ),
+                activeIcon: Icon(
+                  Icons.add_a_photo,
+                  color: Colors.lightBlue,
+                ),
+                title: Text(
+                  "Schéma",
+                  style: TextStyle(
+                      fontSize: Config.fontSize / 1.5, color: Colors.indigo),
+                )),
+            BubbleBottomBarItem(
+                backgroundColor: Colors.green,
+                icon: Icon(
+                  Icons.new_releases,
+                  color: Colors.black,
+                ),
+                activeIcon: Icon(
+                  Icons.new_releases,
+                  color: Colors.green,
+                ),
+                title: Text(
+                  "Anomalies",
+                  style: TextStyle(
+                      fontSize: Config.fontSize / 1.5, color: Colors.green),
+                ))
+          ],
+          onTap: (newIndex) {
             setState(() {
               currentIndex = newIndex;
             });

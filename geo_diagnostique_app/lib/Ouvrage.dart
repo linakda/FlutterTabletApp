@@ -45,7 +45,7 @@ class Ouvrage {
   String tamponNonAccessible="";
   String tamponDeteriore="";
   String presenceH2S="";
-  String observations="";
+  String observationsAnomalies="";
 }
 
 class CaracteristiqueCanalisation{
@@ -56,5 +56,5 @@ class CaracteristiqueCanalisation{
   String nature="";
   String profondeur=""; //en m
   String angle="";
-  String observationsAnomalies="";
+  String observations="";
 }

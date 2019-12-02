@@ -22,15 +22,6 @@ class _CreationREFState extends State<CreationREF> {
   final List<GlobalKey<FormState>> formKeylist =
       new List<GlobalKey<FormState>>(4);
 
-  //A utiliser à la fin d'utilisation des controller pour s'assurer qu'aucun élément est supprimé
-  @override
-  void dispose() {
-    for (int i = 0; i < controllerList.length; i++) {
-      controllerList[i].dispose();
-    }
-    super.dispose();
-  }
-
   //AutoCompletion
   @override
   void initState() {
