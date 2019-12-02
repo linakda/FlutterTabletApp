@@ -1,20 +1,24 @@
-
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/rendering.dart';
+import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Anomalies.dart';
 import 'package:geo_diagnostique_app/Caractere.dart';
+import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Localisation.dart';
 import 'package:geo_diagnostique_app/Ouvrage.dart';
 import 'package:geo_diagnostique_app/Schema.dart';
 import 'package:geo_diagnostique_app/Config.dart';
+import 'package:geo_diagnostique_app/main.dart';
 
-
-class FeuilleOuvrage extends StatefulWidget{
+class FeuilleOuvrage extends StatefulWidget {
+  final NumeroAffaire selectedNumeroAffaire;
+  final Commune selectedCommune;
   final Ouvrage selectedOuvrage;
-  FeuilleOuvrage(this.selectedOuvrage);
-@override
+  FeuilleOuvrage(
+      this.selectedNumeroAffaire, this.selectedCommune, this.selectedOuvrage);
+  @override
   FeuilleOuvrageState createState() => FeuilleOuvrageState();
 }
 
@@ -22,95 +26,235 @@ enum ConfirmAction { Annuler, Valider }
 
 class FeuilleOuvrageState extends State<FeuilleOuvrage> {
   var _scaffoldKey = GlobalKey<ScaffoldState>();
-  int currentIndex=0;
-  
+  int currentIndex = 0;
+
   @override
-  initState(){
+  initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => 
-    _scaffoldKey.currentState.showSnackBar(
-      SnackBar(
-        duration: new Duration(seconds: 3),
-        backgroundColor: Config.color,
-        content: Text(
-          'Ajouter avec Succés !',
-          style: TextStyle(fontSize: Config.fontSize / 2),
-        ),
-        action: SnackBarAction(
-          label: 'Annuler',
-          textColor: Config.buttonColor,
-          onPressed: () {
-            //Code pour annuler l'ajout
-          },
-        ),
-      )
-    ));
   }
 
   //Création d'une boîte AlertDialog après validation du formulaire
-  Future<ConfirmAction>  _asyncConfirmDialog(BuildContext context) async {
-    return showDialog<ConfirmAction>(
-      context: context,
-      barrierDismissible: false,  // taper bouton pour fermer la fenêtre
-      builder: (BuildContext context){
-        return AlertDialog(
-          title: Text('Valider le formulaire?'),
-          content: const Text("Le fomulaire sera enregistré dans son intégralité"),
-          actions: <Widget>[
-            FlatButton(
-              child: const Text("Annuler"),
-            onPressed: () {
-            Navigator.of(context).pop(ConfirmAction.Annuler);
-            },
-            ),
-            FlatButton(
-              child:const Text('Valider'),
-              onPressed: () {
-              Navigator.of(context).pop(ConfirmAction.Valider);
-              },
-            )
-          ],
-        );
-      },
-    );
+  void _showDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Valider le formulaire?'),
+            content:
+                const Text("Le fomulaire sera enregistré dans son intégralité"),
+            actions: <Widget>[
+              FlatButton(
+                child: const Text("Annuler"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: const Text('Valider'),
+                onPressed: () {
+                  String ouvrageData = widget.selectedNumeroAffaire.numeroAffaire +
+                          ',' +
+                          widget.selectedOuvrage.refOuvrage +
+                          ',' +
+                          widget.selectedCommune.nomCommune +
+                          ',' +
+                          widget.selectedOuvrage.nomRue +
+                          ',' +
+                          widget.selectedOuvrage.implantation +
+                          ',' +
+                          widget.selectedOuvrage.typeReseau +
+                          ',' +
+                          widget.selectedOuvrage.type +
+                          ',' +
+                          widget.selectedOuvrage.observationCaracteristiques +
+                          ',' +
+                          widget.selectedOuvrage.dispositifFermeture +
+                          ',' +
+                          widget.selectedOuvrage.section +
+                          ',' +
+                          widget.selectedOuvrage.nature +
+                          ',' +
+                          widget.selectedOuvrage.dimension +
+                          ',' +
+                          widget.selectedOuvrage.dispositifAcces +
+                          ',' +
+                          widget.selectedOuvrage.cunette +
+                          ',' +
+                          widget.selectedOuvrage.refOuvrage +
+                          ',' +
+                          widget.selectedOuvrage.coteTN.toString() +
+                          ',' +
+                          widget.selectedOuvrage.profondeurRadier.toString() +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[0].role +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[0].geometrie +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[0].dimension +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[0].nature +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[0].profondeur
+                              .toString() +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[0]
+                              .observationsAnomalies +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[1].role +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[1].geometrie +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[1].dimension +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[1].nature +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[1].profondeur
+                              .toString() +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[1].angle +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[1]
+                              .observationsAnomalies +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[2].role +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[2].geometrie +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[2].dimension +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[2].nature +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[2].profondeur
+                              .toString() +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[2].angle +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[2]
+                              .observationsAnomalies +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[3].role +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[3].geometrie +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[3].dimension +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[3].nature +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[3].profondeur
+                              .toString() +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[3].angle +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[3]
+                              .observationsAnomalies +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[4].role +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[4].geometrie +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[4].dimension +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[4].nature +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[4].profondeur
+                              .toString() +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[4].angle +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[4]
+                              .observationsAnomalies +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[5].role +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[5].geometrie +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[5].dimension +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[5].nature +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[5].profondeur.toString() +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[5].angle +
+                          ',' +
+                          widget.selectedOuvrage.listCanalisation[5]
+                              .observationsAnomalies +
+                          ',' +
+                          widget.selectedOuvrage.tracesCharge +
+                          ',' +
+                          widget.selectedOuvrage.perturbationEcoulement +
+                          ',' +
+                          widget.selectedOuvrage.precisionPerturbationEcoulement +
+                          ',' +
+                          widget.selectedOuvrage.defautEtancheite +
+                          ',' +
+                          widget.selectedOuvrage.defautEtancheite +
+                          ',' +
+                          widget.selectedOuvrage.tracesInfiltration +
+                          ',' +
+                          widget.selectedOuvrage.branchementNonEtanche +
+                          ',' +
+                          widget.selectedOuvrage.defautStructure +
+                          ',' +
+                          widget.selectedOuvrage.genieCivilFissure +
+                          ',' +
+                          widget.selectedOuvrage.deboitement +
+                          ',' +
+                          widget.selectedOuvrage.defautFermeture +
+                          ',' +
+                          widget.selectedOuvrage.tamponDeteriore +
+                          ',' +
+                          widget.selectedOuvrage.presenceH2S +
+                          ',' +
+                          widget.selectedOuvrage.observations ;
+                  print(ouvrageData);
+                  storage.writeData(ouvrageData,widget.selectedNumeroAffaire.numeroAffaire);
+                  Navigator.of(context).pop();
+                  SnackBar(
+                    duration: new Duration(seconds: 3),
+                    backgroundColor: Config.color,
+                    content: Text(
+                      'Ajouter avec Succés !',
+                      style: TextStyle(fontSize: Config.fontSize / 2),
+                    ),
+                  );
+                },
+              )
+            ],
+          );
+        });
   }
 
-  Widget build(BuildContext context){
-   
+  Widget build(BuildContext context) {
     Config().init(context);
     return new Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Colors.green,
-        title: Text("Feuille Ouvrage"),
-        centerTitle: true,
-        leading: IconButton(icon:Icon(Icons.arrow_back),
-          onPressed: (){
-            Navigator.of(context).popUntil((route) => route.isFirst);
-          },
-        )
-      ),
-
+          backgroundColor: Colors.green,
+          title: Text(widget.selectedOuvrage.refOuvrage),
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            },
+          )),
       body: [
         Localisation(widget.selectedOuvrage),
         Caractere(widget.selectedOuvrage),
         LandingScreen(widget.selectedOuvrage),
         Anomalie(widget.selectedOuvrage),
       ].elementAt(currentIndex),
-
-
       floatingActionButton: FloatingActionButton(
-        onPressed: () async{
-          final ConfirmAction action = await _asyncConfirmDialog(context);
-          print("Confirm action $action");
+        onPressed: () {
+          _showDialog();
         },
-                child: Icon(Icons.check, size: 25,),
-                backgroundColor: Config.buttonColor,
+        child: Icon(
+          Icons.check,
+          size: 25,
         ),
-   
+        backgroundColor: Config.buttonColor,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-
-
       bottomNavigationBar: BubbleBottomBar(
         backgroundColor: Config.bottomBarColor,
         opacity: .2,
@@ -128,14 +272,9 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
             BubbleBottomBarItem(backgroundColor: Colors.green, icon: Icon(Icons.new_releases, color: Colors.black,), activeIcon: Icon(Icons.new_releases, color: Colors.green,), title: Text("Anomalies",  style: TextStyle(fontSize: Config.fontSize/1.5,color:Colors.green ),))],
         onTap: (newIndex) {
             setState(() {
-              currentIndex= newIndex;
+              currentIndex = newIndex;
             });
-   
-          }
-        ),
-
-      
-      );
-    }
-
+          }),
+    );
+  }
 }

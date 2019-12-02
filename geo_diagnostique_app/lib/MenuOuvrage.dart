@@ -20,7 +20,6 @@ class MenuOuvrageState extends State<MenuOuvrage> {
   
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     listOuvrage = widget.selectedCommune.listOuvrage.reversed.toList();
   }
@@ -168,7 +167,7 @@ class MenuOuvrageState extends State<MenuOuvrage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => FeuilleOuvrage(listOuvrage[index])));
+                                builder: (context) => FeuilleOuvrage(widget.selectedNumeroAffaire,widget.selectedCommune,listOuvrage[index])));
                       },
                     ),
                   ),

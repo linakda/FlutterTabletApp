@@ -281,7 +281,6 @@ class _CreationREFState extends State<CreationREF> {
                   onPressed: () {
                     if (testREFvalidate(formKeylist)) {
                       storage.addREFOuvrage(controllerList[0].text,controllerList[1].text,controllerList[2].text,controllerList[3].text);
-                      storage.writeData(controllerList[0].text+','+controllerList[3].text+','+controllerList[1].text+'\n',controllerList[0].text);
                       Navigator.pop(context);
                     }
                   },

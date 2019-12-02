@@ -53,7 +53,6 @@ class Storage{
 
   //ajoute un ouvrage avec si besoin un numéro d'affaire et/ou une commune
   Future readAndUpdateList() async{
-
     List<FileSystemEntity> listFileSystemeEntity = new List<FileSystemEntity>();
     List<File> listFile = new List<File>();
     List<String> textSplit;
@@ -144,6 +143,7 @@ class Storage{
     return null;
   }
 
+  //Supprime la ligne dans le fichier .csv selectionné
   void deleteSelectedOuvrageLine(String numeroAffaire,String ouvrageSelected)async{
     File file= new File('${myDir.path}/$numeroAffaire.txt');
     List<String> lines;
@@ -152,7 +152,7 @@ class Storage{
     var i=1;
     while(i<lines.length){
       parameters=lines[i].split(',');
-      if(parameters[3]==ouvrageSelected){break;}
+      if(parameters[1]==ouvrageSelected){break;}
       i++;
     }
     lines.removeAt(i);
