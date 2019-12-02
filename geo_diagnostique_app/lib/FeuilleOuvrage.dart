@@ -6,12 +6,14 @@ import 'package:flutter/rendering.dart';
 import 'package:geo_diagnostique_app/Anomalies.dart';
 import 'package:geo_diagnostique_app/Caractere.dart';
 import 'package:geo_diagnostique_app/Localisation.dart';
+import 'package:geo_diagnostique_app/Ouvrage.dart';
 import 'package:geo_diagnostique_app/Schema.dart';
 import 'package:geo_diagnostique_app/Config.dart';
 
 
 class FeuilleOuvrage extends StatefulWidget{
-
+  final Ouvrage selectedOuvrage;
+  FeuilleOuvrage(this.selectedOuvrage);
 @override
   FeuilleOuvrageState createState() => FeuilleOuvrageState();
 }
@@ -90,10 +92,10 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
       ),
 
       body: [
-        Localisation(),
-        Caractere(),
-        LandingScreen(),
-        Anomalie(),
+        Localisation(widget.selectedOuvrage),
+        Caractere(widget.selectedOuvrage),
+        LandingScreen(widget.selectedOuvrage),
+        Anomalie(widget.selectedOuvrage),
       ].elementAt(currentIndex),
 
 

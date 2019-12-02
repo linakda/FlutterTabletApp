@@ -5,6 +5,8 @@ import 'package:geo_diagnostique_app/Ouvrage.dart';
 import 'package:geo_diagnostique_app/Config.dart';
 
 class Anomalie extends StatefulWidget {
+  final Ouvrage selectedOuvrage;
+  Anomalie(this.selectedOuvrage);
   @override
   AnomalieState createState() => AnomalieState();
 }
@@ -25,6 +27,7 @@ class AnomalieState extends State<Anomalie> {
   bool radiodevoitement = false;
   bool radioTampon = false;
   bool radioDeteriore = false;
+  bool tracesCharges = false;
   String radioH2S2 = "";
   String radioH2S = "";
   String radioTampon2 = "";
@@ -47,40 +50,55 @@ class AnomalieState extends State<Anomalie> {
           child: Center(
             child: Column(
               children: [
-                Padding(
-                  padding: EdgeInsets.all(Config.screenPadding),
-                  child: DropdownButton<String>(
-                    hint: SizedBox(
-                      width: 320.0,
-                      child: Text(
-                        dropdownCharge,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: Config.fontSize, color: Colors.black),
-                      ),
+                Row(
+                  children: <Widget>[
+                    Text("Traces de mise en charge : "),
+                    Switch(
+                      value: tracesCharges,
+                      onChanged: (value){
+                        setState(() {
+                          tracesCharges=value;
+                        });
+                      },
                     ),
-                    style: TextStyle(
-                        fontSize: Config.fontSize, color: Colors.black),
-                    items: <String>['Oui', 'Non'].map((String value) {
-                      return new DropdownMenuItem<String>(
-                        value: value,
-                        child: SizedBox(
+                    Text(tracesCharges ?"oui":"non"),
+                    /*Padding(
+                      padding: EdgeInsets.all(Config.screenPadding),
+                      child: DropdownButton<String>(
+                        hint: SizedBox(
                           width: 320.0,
                           child: Text(
-                            value,
+                            dropdownCharge,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: Config.fontSize, color: Colors.black),
                           ),
                         ),
-                      );
-                    }).toList(),
-                    onChanged: (String newValue) {
-                      setState(() {
-                        dropdownCharge = newValue;
-                      });
-                    },
-                  ),
+                        style: TextStyle(
+                            fontSize: Config.fontSize, color: Colors.black),
+                        items: <String>['Oui', 'Non'].map((String value) {
+                          return new DropdownMenuItem<String>(
+                            value: value,
+                            child: SizedBox(
+                              width: 320.0,
+                              child: Text(
+                                value,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: Config.fontSize, color: Colors.black),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (String newValue) {
+                          setState(() {
+                            dropdownCharge = newValue;
+                            widget.selectedOuvrage.tracesCharge=newValue;
+                          });
+                        },
+                      ),
+                    ),*/
+                  ],
                 ),
                 Padding(
                   padding: EdgeInsets.all(Config.screenPadding),

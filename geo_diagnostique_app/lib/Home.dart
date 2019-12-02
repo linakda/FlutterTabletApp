@@ -17,8 +17,9 @@ class SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 8), () {
-      Navigator.push(
+    Future.delayed(Duration(seconds: 5), () async{
+      await storage.readAndUpdateList();
+      Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => MenuAffaire(),

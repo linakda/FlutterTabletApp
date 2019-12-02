@@ -8,18 +8,17 @@ class Ouvrage {
     this.refOuvrage = refOuvrage;
   }
   // --- Localisation de l'ouvrage --- \\
-  String commune;
   String nomRue;
   String implantation;
   String typeReseau;
 
   // --- Caractéristique de l'ouvrage -- \\
   String type;
-  String observation;
+  String observationCaracteristiques;
   String dispositifFermeture;
   String section;
   String nature;
-  double dimension;// diamètre en mm
+  String dimension;// diamètre en mm
   String dispositifAcces;
   String cunette;
 
@@ -51,5 +50,5 @@ class CaracteristiqueCanalisation{
   String dimension;
   String nature;
   int profondeur; //en m
-  String observations;
+  String observationsAnomalies;
 }

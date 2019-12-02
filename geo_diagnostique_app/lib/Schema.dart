@@ -3,12 +3,15 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geo_diagnostique_app/Config.dart';
+import 'package:geo_diagnostique_app/Ouvrage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 import 'dart:io';
 import 'dart:math' as Math;
 
 class LandingScreen extends StatefulWidget {
+  final Ouvrage selectedOuvrage;
+  LandingScreen(this.selectedOuvrage); 
   @override
   _LandingScreenState createState() => _LandingScreenState();
 }

@@ -4,6 +4,7 @@ import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Config.dart';
 import 'package:geo_diagnostique_app/FeuilleOuvrage.dart';
+import 'package:geo_diagnostique_app/Ouvrage.dart';
 import 'package:geo_diagnostique_app/main.dart';
 
 class MenuOuvrage extends StatefulWidget {
@@ -15,6 +16,15 @@ class MenuOuvrage extends StatefulWidget {
 }
 
 class MenuOuvrageState extends State<MenuOuvrage> {
+  List<Ouvrage> listOuvrage = new List<Ouvrage>();
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    listOuvrage = widget.selectedCommune.listOuvrage.reversed.toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     Config().init(context);
@@ -35,7 +45,7 @@ class MenuOuvrageState extends State<MenuOuvrage> {
                 cursorColor: Config.color,
                 style: TextStyle(fontSize: Config.fontSize),
                 decoration: InputDecoration(
-                  labelText: "Ajouter un nouvel ouvrage",
+                  labelText: "Rechercher un ouvrage",
                   labelStyle: TextStyle(
                       color: Config.textColor, fontSize: Config.fontSize / 1.5),
                   focusColor: Config.color,
@@ -52,11 +62,11 @@ class MenuOuvrageState extends State<MenuOuvrage> {
               )),
           Expanded(
             child: ListView.builder(
-              itemCount: widget.selectedCommune.listOuvrage.length,
+              itemCount: listOuvrage.length,
               itemBuilder: (BuildContext context, int index) {
                 return Dismissible(
                   key:
-                      Key(widget.selectedCommune.listOuvrage[index].refOuvrage),
+                      Key(listOuvrage[index].refOuvrage),
                   background: Container(
                     alignment: Alignment.centerLeft,
                     color: Config.color,
@@ -148,7 +158,7 @@ class MenuOuvrageState extends State<MenuOuvrage> {
                         ),
                       ),
                       title: Text(
-                        widget.selectedCommune.listOuvrage[index].refOuvrage,
+                        listOuvrage[index].refOuvrage,
                         style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -158,7 +168,7 @@ class MenuOuvrageState extends State<MenuOuvrage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => FeuilleOuvrage()));
+                                builder: (context) => FeuilleOuvrage(listOuvrage[index])));
                       },
                     ),
                   ),

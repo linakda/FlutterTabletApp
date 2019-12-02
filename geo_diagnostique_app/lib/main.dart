@@ -16,7 +16,6 @@ main(){
   myDir.create()
     // The created directory is returned as a Future.
     .then((Directory directory) {
-      print(directory.path);
   });
   runApp(App());
 }
