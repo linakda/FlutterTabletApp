@@ -12,725 +12,241 @@ class Anomalie extends StatefulWidget {
 }
 
 class AnomalieState extends State<Anomalie> {
-  Ouvrage ouvrage;
-  Config size = new Config();
-  TextStyle textSize = new TextStyle(fontSize: Config.fontSize);
+  TextStyle textStyle =
+      new TextStyle(fontSize: Config.fontSize, fontWeight: FontWeight.bold);
   EdgeInsetsGeometry textPadding = EdgeInsets.all(Config.screenPadding);
   final int currentIndex = 0;
   TextEditingController ecoulementController = TextEditingController();
   TextEditingController deboitementController = TextEditingController();
   TextEditingController observationController = TextEditingController();
-  String radioEtancheite = '';
-  bool radioEtancheite2 = false;
-  bool radioBranchement = false;
-  bool radioStructure = false;
-  bool radiodevoitement = false;
-  bool radioTampon = false;
-  bool radioDeteriore = false;
-  bool tracesCharges = false;
-  String radioH2S2 = "";
-  String radioH2S = "";
-  String radioTampon2 = "";
-  String radioStructure2 = '';
-  String dropdownCharge = 'Traces de mise en charge';
-  String dropdownEcoulement = 'Perturbation de l\'écoulement';
-  String dropdownEtancheite = 'Défaut d\'étanchéité';
-  String dropdownStructure = 'Défaut de structure';
-  String dropdownFermeture = 'Défaut de fermeture';
-  String dropdownH2S = 'Présence de H2S';
+  List<bool> boolList = new List();
+  List<String> stringlist = new List();
   double widthRadio3 = Config.screenWidth / 3 - Config.screenWidth / 75;
   double widthRadio2 = Config.screenWidth / 2 - Config.screenWidth / 150;
 
   @override
+  @override
+  void initState() {
+    super.initState();
+    for (var i = 0; i < 8; i++) {
+      boolList.add(false);
+      stringlist.add("Selectionner");
+    }
+  }
+
+  Padding dropDownList(int index, List<String> list, String elementOuvrage) {
+    return Padding(
+      padding: EdgeInsets.all(Config.screenPadding),
+      child: DropdownButton<String>(
+        hint: SizedBox(
+          child: Text(
+            stringlist[index],
+            textAlign: TextAlign.center,
+            style:
+                TextStyle(fontSize: Config.fontSize / 1.5, color: Colors.black),
+          ),
+        ),
+        style: TextStyle(fontSize: Config.fontSize / 1.5, color: Colors.black),
+        items: list.map((String value) {
+          return new DropdownMenuItem<String>(
+            child: SizedBox(
+              child: Text(
+                value,
+                textAlign: TextAlign.left,
+              ),
+            ),
+            value: value,
+          );
+        }).toList(),
+        onChanged: (String newValue) {
+          setState(() {
+            stringlist[index] = newValue;
+            elementOuvrage = newValue;
+          });
+        },
+      ),
+    );
+  }
+
+  Switch _switch(int index) {
+    return Switch(
+      value: boolList[index],
+      onChanged: (value) {
+        setState(() {
+          boolList[index] = value;
+        });
+      },
+    );
+  }
+
+  Expanded expandedTextField(String labelText, String elementOuvrage,
+      TextEditingController controller) {
+    return Expanded(
+      child: Padding(
+        padding: EdgeInsets.all(Config.screenPadding),
+        child: TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            labelText: labelText,
+            labelStyle: TextStyle(color: Config.textColor),
+            focusColor: Config.color,
+            fillColor: Colors.white,
+            focusedBorder: new OutlineInputBorder(
+              borderRadius: new BorderRadius.circular(25.0),
+              borderSide: new BorderSide(color: Config.color),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(25.0),
+            ),
+          ),
+          onChanged: (String text) {
+            setState(() {
+              elementOuvrage = text;
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print(stringlist[3] + "," + boolList[4].toString());
     Config().init(context);
     return new Scaffold(
       body: Builder(
         builder: (context) => SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                Row(
-                  children: <Widget>[
-                    Text("Traces de mise en charge : "),
-                    Switch(
-                      value: tracesCharges,
-                      onChanged: (value){
-                        setState(() {
-                          tracesCharges=value;
-                        });
-                      },
-                    ),
-                    Text(tracesCharges ?"oui":"non"),
-                    /*Padding(
-                      padding: EdgeInsets.all(Config.screenPadding),
-                      child: DropdownButton<String>(
-                        hint: SizedBox(
-                          width: 320.0,
-                          child: Text(
-                            dropdownCharge,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: Config.fontSize, color: Colors.black),
-                          ),
-                        ),
-                        style: TextStyle(
-                            fontSize: Config.fontSize, color: Colors.black),
-                        items: <String>['Oui', 'Non'].map((String value) {
-                          return new DropdownMenuItem<String>(
-                            value: value,
-                            child: SizedBox(
-                              width: 320.0,
-                              child: Text(
-                                value,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: Config.fontSize, color: Colors.black),
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (String newValue) {
-                          setState(() {
-                            dropdownCharge = newValue;
-                            widget.selectedOuvrage.tracesCharge=newValue;
-                          });
-                        },
+          child: Padding(
+            padding: EdgeInsets.all(Config.screenPadding),
+            child: Center(
+              child: Column(
+                children: [
+                  Row(
+                    children: <Widget>[
+                      Text("Traces de mise en charge : ", style: textStyle),
+                      _switch(0),
+                      Text(boolList[0] ? "oui" : "non"),
+                      boolList[0]
+                          ? dropDownList(
+                              0,
+                              <String>[
+                                'faible',
+                                'moyenne',
+                                'importante',
+                              ],
+                              widget.selectedOuvrage.tracesCharge)
+                          : Padding(padding: EdgeInsets.all(1)),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text("Perturbation de l'écoulement :", style: textStyle),
+                      _switch(1),
+                      Text(boolList[1] ? "oui" : "non"),
+                      boolList[1]
+                          ? expandedTextField(
+                              "préciser",
+                              widget.selectedOuvrage.perturbationEcoulement,
+                              null)
+                          : Padding(padding: EdgeInsets.all(1)),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text("Défaut d'étanchéité :", style: textStyle),
+                      _switch(2),
+                      Text(boolList[2] ? "oui" : "non"),
+                      boolList[2]
+                          ? dropDownList(
+                              1,
+                              <String>[
+                                "traces d'infiltration",
+                                "branchement non étanche"
+                              ],
+                              widget.selectedOuvrage.defautEtancheite)
+                          : Padding(padding: EdgeInsets.all(1)),
+                      stringlist[1] == "traces d'infiltration"
+                          ? dropDownList(
+                              2,
+                              <String>[
+                                'faible',
+                                'moyenne',
+                                'importante',
+                              ],
+                              widget.selectedOuvrage.defautEtancheite)
+                          : Padding(padding: EdgeInsets.all(1))
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        "Défaut de structure",
+                        style: textStyle,
                       ),
-                    ),*/
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.all(Config.screenPadding),
-                  child: DropdownButton<String>(
-                    hint: SizedBox(
-                      width: 320.0,
-                      child: Text(
-                        dropdownEcoulement,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: Config.fontSize, color: Colors.black),
-                      ),
-                    ),
-                    style: TextStyle(
-                        fontSize: Config.fontSize, color: Colors.black),
-                    items: <String>['Oui', 'Non'].map((String value) {
-                      return new DropdownMenuItem<String>(
-                        value: value,
-                        child: SizedBox(
-                          width: 320.0,
-                          child: Text(
-                            value,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: Config.fontSize, color: Colors.black),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (String newValue) {
-                      setState(() {
-                        dropdownEcoulement = newValue;
-                        if (dropdownEcoulement == 'Non') {
-                          ecoulementController.text = "";
-                        }
-                      });
-                    },
-                  ),
-                ),
-                Visibility(
-                  child: Padding(
-                    padding: EdgeInsets.all(Config.screenPadding),
-                    child: TextField(
-                        controller: ecoulementController,
-                        enabled: dropdownEcoulement == 'Oui',
-                        decoration: InputDecoration(
-                          labelText: 'Préciser',
-                          labelStyle: TextStyle(color: Config.textColor),
-                          focusColor: Config.color,
-                          fillColor: Colors.white,
-                          focusedBorder: new OutlineInputBorder(
-                            borderRadius: new BorderRadius.circular(25.0),
-                            borderSide: new BorderSide(color: Config.color),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                        )),
-                  ),
-                  visible: dropdownEcoulement == 'Oui',
-                  maintainState: dropdownEcoulement == 'Oui',
-                  maintainAnimation: dropdownEcoulement == 'Oui',
-                  maintainSize: dropdownEcoulement == 'Oui',
-                ),
-                Padding(
-                  padding: EdgeInsets.all(Config.screenPadding),
-                  child: DropdownButton<String>(
-                    hint: SizedBox(
-                      width: 320.0,
-                      child: Text(
-                        dropdownEtancheite,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: Config.fontSize, color: Colors.black),
-                      ),
-                    ),
-                    items: <String>['Oui', 'Non'].map((String value) {
-                      return new DropdownMenuItem<String>(
-                          value: value,
-                          child: SizedBox(
-                            width: 320.0,
-                            child: Text(
-                              value,
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  fontSize: Config.fontSize,
-                                  color: Colors.black),
-                            ),
-                          ));
-                    }).toList(),
-                    onChanged: (String newValue) {
-                      setState(() {
-                        dropdownEtancheite = newValue;
-                        if (dropdownEtancheite == 'Non') {
-                          radioEtancheite2 = false;
-                          radioEtancheite = '';
-                          radioBranchement = false;
-                        }
-                      });
-                    },
-                  ),
-                ),
-                Visibility(
-                  child: Padding(
-                    padding: EdgeInsets.all(Config.screenPadding),
-                    child: Container(
-                      height: 150.0,
-                      width: Config.screenWidth,
-                      child: ListView(children: <Widget>[
-                        Container(
-                          height: 50.0,
-                          width: Config.screenWidth,
-                          child: Card(
-                            child: CheckboxListTile(
-                                title: Text(
-                                  "Traces d'infiltration",
-                                  style: TextStyle(
-                                      fontSize: Config.fontSize,
-                                      color: Colors.black),
-                                ),
-                                value: radioEtancheite2,
-                                onChanged: (bool newValue) {
-                                  setState(() {
-                                    radioEtancheite2 = newValue;
-                                    radioEtancheite = '';
-                                  });
-                                }),
-                          ),
-                        ),
-                        Visibility(
-                          visible: radioEtancheite2,
-                          child: Container(
-                            width: Config.screenWidth,
-                            height: 50.0,
-                            child: Card(
-                              child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                children: <Widget>[
-                                  Container(
-                                    height: 50.0,
-                                    width: widthRadio3,
-                                    child: RadioListTile(
-                                      title: Text("faible"),
-                                      value: "faible",
-                                      groupValue: radioEtancheite,
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          radioEtancheite = newValue;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 50.0,
-                                    width: widthRadio3,
-                                    child: RadioListTile(
-                                      title: Text(
-                                        "moyenne",
-                                      ),
-                                      value: "moyenne",
-                                      groupValue: radioEtancheite,
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          radioEtancheite = newValue;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 50.0,
-                                    width: widthRadio3,
-                                    child: RadioListTile(
-                                      title: Text("forte"),
-                                      value: "forte",
-                                      groupValue: radioEtancheite,
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          radioEtancheite = newValue;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 50.0,
-                          width: Config.screenWidth,
-                          child: Card(
-                            child: CheckboxListTile(
-                                title: Text(
-                                  "Branchement non étanche",
-                                  style: TextStyle(
-                                      fontSize: Config.fontSize,
-                                      color: Colors.black),
-                                ),
-                                value: radioBranchement,
-                                onChanged: (bool newValue) {
-                                  setState(() {
-                                    radioBranchement = newValue;
-                                  });
-                                }),
-                          ),
-                        ),
-                      ]),
-                    ),
-                  ),
-                  visible: dropdownEtancheite == 'Oui',
-                  maintainState: dropdownEtancheite == 'Oui',
-                  maintainAnimation: dropdownEtancheite == 'Oui',
-                  maintainSize: dropdownEtancheite == 'Oui',
-                ),
-                Padding(
-                  padding: EdgeInsets.all(Config.screenPadding),
-                  child: DropdownButton<String>(
-                    hint: SizedBox(
-                      width: 320.0,
-                      child: Text(
-                        dropdownStructure,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: Config.fontSize, color: Colors.black),
-                      ),
-                    ),
-                    items: <String>[
-                      'Oui',
-                      'Non',
-                    ].map((String value) {
-                      return new DropdownMenuItem<String>(
-                        value: value,
-                        child: SizedBox(
-                          width: 320.0,
-                          child: Text(
-                            value,
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontSize: Config.fontSize, color: Colors.black),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (String newValue) {
-                      setState(() {
-                        dropdownStructure = newValue;
-                        if (dropdownStructure == 'Non') {
-                          radioStructure = false;
-                          radioStructure2 = '';
-                          radiodevoitement = false;
-                          deboitementController.text = '';
-                        }
-                      });
-                    },
-                  ),
-                ),
-                Visibility(
-                  child: Padding(
-                    padding: EdgeInsets.all(Config.screenPadding),
-                    child: Container(
-                      height: 225.0,
-                      width: Config.screenWidth,
-                      child: ListView(children: <Widget>[
-                        Card(
-                          child: Container(
-                            height: 50.0,
-                            width: Config.screenWidth,
-                            child: CheckboxListTile(
-                                title: Text(
-                                  "Génie civil fissuré",
-                                  style: TextStyle(
-                                      fontSize: Config.fontSize,
-                                      color: Colors.black),
-                                ),
-                                value: radioStructure,
-                                onChanged: (bool newValue) {
-                                  setState(() {
-                                    radioStructure = newValue;
-                                    if (!radioStructure) {
-                                      radioStructure2 = '';
-                                    }
-                                  });
-                                }),
-                          ),
-                        ),
-                        Visibility(
-                          visible: radioStructure,
-                          child: Card(
-                            child: Container(
-                              width: Config.screenWidth,
-                              height: 50.0,
-                              child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                children: <Widget>[
-                                  Container(
-                                    height: 50.0,
-                                    width: widthRadio2,
-                                    child: RadioListTile(
-                                      title: Text(
-                                        "léger",
-                                        style: TextStyle(
-                                            fontSize: Config.fontSize,
-                                            color: Colors.black),
-                                      ),
-                                      value: "léger",
-                                      groupValue: radioStructure2,
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          radioStructure2 = newValue;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  Container(
-                                    height: 50.0,
-                                    width: widthRadio2,
-                                    child: RadioListTile(
-                                      title: Text(
-                                        "lourd",
-                                        style: TextStyle(
-                                            fontSize: Config.fontSize,
-                                            color: Colors.black),
-                                      ),
-                                      value: "lourd",
-                                      groupValue: radioStructure2,
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          radioStructure2 = newValue;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Card(
-                          child: Container(
-                            height: 50.0,
-                            width: Config.screenWidth,
-                            child: CheckboxListTile(
-                                title: Text(
-                                  "Déboitement",
-                                  style: TextStyle(
-                                      fontSize: Config.fontSize,
-                                      color: Colors.black),
-                                ),
-                                value: radiodevoitement,
-                                onChanged: (bool newValue) {
-                                  setState(() {
-                                    radiodevoitement = newValue;
-                                    if (radiodevoitement) {
-                                      deboitementController.text = '';
-                                    }
-                                  });
-                                }),
-                          ),
-                        ),
-                        Visibility(
-                          visible: radiodevoitement,
-                          child: Container(
-                            width: Config.screenWidth,
-                            height: 50.0,
-                            child: TextField(
-                                controller: deboitementController,
-                                decoration: InputDecoration(
-                                  labelText: 'Précision',
-                                  labelStyle:
-                                      TextStyle(color: Config.textColor),
-                                  focusColor: Config.color,
-                                  fillColor: Colors.white,
-                                  focusedBorder: new OutlineInputBorder(
-                                    borderRadius:
-                                        new BorderRadius.circular(25.0),
-                                    borderSide:
-                                        new BorderSide(color: Config.color),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(25.0),
-                                  ),
-                                )),
-                          ),
-                        ),
-                      ]),
-                    ),
-                  ),
-                  visible: dropdownStructure == 'Oui',
-                  maintainState: dropdownStructure == 'Oui',
-                  maintainAnimation: dropdownStructure == 'Oui',
-                  maintainSize: dropdownStructure == 'Oui',
-                ),
-                Padding(
-                  padding: EdgeInsets.all(Config.screenPadding),
-                  child: Container(
-                    height: 173.0,
-                    width: Config.screenWidth,
-                    child: ListView(children: <Widget>[
-                      Card(
-                        child: Container(
-                        height: 50.0,
-                        width: Config.screenWidth,
-                          child: CheckboxListTile(
-                              title: Text("Tampon non accessible",
-                                  style: TextStyle(
-                                      fontSize: Config.fontSize,
-                                      color: Colors.black),),
-                              value: radioTampon,
-                              onChanged: (bool newValue) {
-                                setState(() {
-                                  radioTampon = newValue;
-                                  if (!radioTampon) {
-                                    radioTampon2 = '';
-                                  }
-                                });
-                              }),
-                        ),
-                      ),
+                      _switch(4),
+                      Text(boolList[4] ? "oui" : "non"),
+                      boolList[4]
+                          ? dropDownList(
+                              3,
+                              <String>["Genie civil fissuré", "déboitement"],
+                              widget.selectedOuvrage.defautStructure)
+                          : Padding(padding: EdgeInsets.all(1)),
                       Visibility(
-                        visible: radioTampon,
-                        child: Card(
-                          child: Container(
-                          width: Config.screenWidth,
-                          height: 50.0,
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              children: <Widget>[
-                                Container(
-                                  height: 50.0,
-                                  width: widthRadio2,
-                                  child: RadioListTile(
-                                    title: Text("sous enrobé",
-                                  style: TextStyle(
-                                      fontSize: Config.fontSize,
-                                      color: Colors.black),),
-                                    value: "sous enrobé",
-                                    groupValue: radioTampon2,
-                                    onChanged: (String newValue) {
-                                      setState(() {
-                                        radioTampon2 = newValue;
-                                      });
-                                    },
-                                  ),
-                                ),
-                                Container(
-                                  height: 50.0,
-                                  width: widthRadio2,
-                                  child: RadioListTile(
-                                    title: Text(
-                                      "sous véhicule",
-                                  style: TextStyle(
-                                      fontSize: Config.fontSize,
-                                      color: Colors.black),
-                                    ),
-                                    value: "sous véhicule",
-                                    groupValue: radioTampon2,
-                                    onChanged: (String newValue) {
-                                      setState(() {
-                                        radioTampon2 = newValue;
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Card(
-                        child: Container(
-                        height: 50.0,
-                        width: Config.screenWidth,
-                          child: CheckboxListTile(
-                              title: Text("Tampon détérioré",
-                                  style: TextStyle(
-                                      fontSize: Config.fontSize,
-                                      color: Colors.black),),
-                              value: radioDeteriore,
-                              onChanged: (bool newValue) {
-                                setState(() {
-                                  radioDeteriore = newValue;
-                                });
-                              }),
-                        ),
-                      ),
-                    ]),
+                        visible: stringlist[3] != "Selectionner",
+                        child: stringlist[3] == "Genie civil fissuré"
+                            ? dropDownList(
+                                4,
+                                <String>[
+                                  'léger',
+                                  'lourd',
+                                ],
+                                widget.selectedOuvrage.genieCivilFissure)
+                            : expandedTextField("commentaires",
+                                widget.selectedOuvrage.genieCivilFissure, null),
+                      )
+                    ],
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(Config.screenPadding),
-                  child: Container(
-                    height: 120.0,
-                    width: Config.screenWidth,
-                    child: ListView(
-                      children: <Widget>[
-                        Card(
-                          child: Container(
-                          width: Config.screenWidth,
-                          height: 50.0,
-                            child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              children: <Widget>[
-                                Container(
-                                  height: 50.0,
-                                  width: widthRadio2,
-                                  child: RadioListTile(
-                                    title: Text("Absence de H2S",
-                                  style: TextStyle(
-                                      fontSize: Config.fontSize,
-                                      color: Colors.black),),
-                                    value: "Absence de H2S",
-                                    groupValue: radioH2S,
-                                    onChanged: (String newValue) {
-                                      setState(() {
-                                        radioH2S = newValue;
-                                        radioH2S2 = "";
-                                      });
-                                    },
-                                  ),
-                                ),
-                                Container(
-                                  height: 50.0,
-                                  width: widthRadio2,
-                                  child: RadioListTile(
-                                    title: Text(
-                                      "Présence de H2S",
-                                  style: TextStyle(
-                                      fontSize: Config.fontSize,
-                                      color: Colors.black),
-                                    ),
-                                    value: "Présence de H2S",
-                                    groupValue: radioH2S,
-                                    onChanged: (String newValue) {
-                                      setState(() {
-                                        radioH2S = newValue;
-                                      });
-                                    },
-                                  ),
-                                ),
+                  Row(
+                    children: <Widget>[
+                      Text("Défaut de fermeture", style: textStyle),
+                      _switch(6),
+                      Text(boolList[6]
+                          ? "tampon non accessible"
+                          : "tampon détérioré"),
+                      boolList[6]
+                          ? dropDownList(
+                              5,
+                              <String>[
+                                'sous enrobé',
+                                'sous véhicule',
                               ],
-                            ),
-                          ),
-                        ),
-                        Visibility(
-                            visible: radioH2S == "Présence de H2S",
-                            child: Card(
-                              child: Container(
-                              height: 50.0,
-                              width: Config.screenWidth,
-                                child: ListView(
-                                  scrollDirection: Axis.horizontal,
-                                  children: <Widget>[
-                                    Container(
-                                      height: 50.0,
-                                      width: widthRadio3,
-                                      child: RadioListTile(
-                                        title: Text("faible",
-                                  style: TextStyle(
-                                      fontSize: Config.fontSize,
-                                      color: Colors.black),),
-                                        value: "faible",
-                                        groupValue: radioH2S2,
-                                        onChanged: (String newValue) {
-                                          setState(() {
-                                            radioH2S2 = newValue;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    Container(
-                                      height: 50.0,
-                                      width: widthRadio3,
-                                      child: RadioListTile(
-                                        title: Text(
-                                          "moyenne",
-                                  style: TextStyle(
-                                      fontSize: Config.fontSize,
-                                      color: Colors.black),
-                                        ),
-                                        value: "moyenne",
-                                        groupValue: radioH2S2,
-                                        onChanged: (String newValue) {
-                                          setState(() {
-                                            radioH2S2 = newValue;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                    Container(
-                                      height: 50.0,
-                                      width: widthRadio3,
-                                      child: RadioListTile(
-                                        title: Text("importante",
-                                  style: TextStyle(
-                                      fontSize: Config.fontSize,
-                                      color: Colors.black),),
-                                        value: "importante",
-                                        groupValue: radioH2S2,
-                                        onChanged: (String newValue) {
-                                          setState(() {
-                                            radioH2S2 = newValue;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )),
-                      ],
-                    ),
+                              widget.selectedOuvrage.defautFermeture)
+                          : Padding(padding: EdgeInsets.all(1))
+                    ],
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(Config.screenPadding),
-                  child: TextField(
-                      controller: observationController,
-                      decoration: InputDecoration(
-                        labelText: 'Autres observations',
-                        labelStyle: TextStyle(color: Config.textColor),
-                        focusColor: Config.color,
-                        fillColor: Colors.white,
-                        focusedBorder: new OutlineInputBorder(
-                          borderRadius: new BorderRadius.circular(25.0),
-                          borderSide: new BorderSide(color: Config.color),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                      )),
-                ),
-              ], //Children
+                  Row(
+                    children: <Widget>[
+                      Text("Présence d'H2S", style: textStyle),
+                      _switch(7),
+                      Text(boolList[7] ? "non" : "oui"),
+                      boolList[7]
+                          ? dropDownList(
+                              6,
+                              <String>[
+                                'faible',
+                                'moyenne',
+                                'importante',
+                              ],
+                              widget.selectedOuvrage.presenceH2S)
+                          : Padding(padding: EdgeInsets.all(1))
+                    ],
+                  ),
+                  Row(children: <Widget>[
+                    expandedTextField("Autres observations",
+                        widget.selectedOuvrage.observationsAnomalies, null),
+                  ])
+                ],
+              ),
             ),
           ),
         ),

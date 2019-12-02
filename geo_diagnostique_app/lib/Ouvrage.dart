@@ -25,8 +25,8 @@ class Ouvrage {
   // --- Schéma de l'ouvrage --- \\
   File photoOuvrage;
   File photoCroquis;
-  int coteTN; //en m
-  int profondeurRadier;// en m
+  String coteTN; //en m
+  String profondeurRadier;// en m
   CaracteristiqueCanalisation listCanalisation;
 
   // --- Anomalies observées --- \\
@@ -40,7 +40,7 @@ class Ouvrage {
   String tamponNonAccessible;
   String presenceH2S;
   String ouiPresenceH2S;
-  String observations;
+  String observationsAnomalies;
 }
 
 class CaracteristiqueCanalisation{
@@ -49,6 +49,6 @@ class CaracteristiqueCanalisation{
   String geometrie;
   String dimension;
   String nature;
-  int profondeur; //en m
+  String profondeur; //en m
   String observationsAnomalies;
 }

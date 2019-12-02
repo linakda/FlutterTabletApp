@@ -122,10 +122,10 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
         inkColor: Colors.black12, //optional, uses
         currentIndex: currentIndex,
         items: <BubbleBottomBarItem>[
-            BubbleBottomBarItem(backgroundColor: Colors.red, icon: Icon(Icons.map, color: Colors.black,), activeIcon: Icon(Icons.map, color: Colors.red,), title: Text("Localisation", style: TextStyle(fontSize: Config.fontSize,color:Colors.red ),),),
-            BubbleBottomBarItem(backgroundColor: Colors.deepPurple, icon: Icon(Icons.assignment, color: Colors.black,), activeIcon: Icon(Icons.assignment, color: Colors.deepPurple,), title: Text("Caractéristiques", style: TextStyle(fontSize: Config.fontSize,color:Colors.deepPurple ),)),
-            BubbleBottomBarItem(backgroundColor: Colors.lightBlue, icon: Icon(Icons.add_a_photo, color: Colors.black,), activeIcon: Icon(Icons.add_a_photo, color: Colors.lightBlue,), title: Text("Schéma", style: TextStyle(fontSize: Config.fontSize,color:Colors.indigo ),)),
-            BubbleBottomBarItem(backgroundColor: Colors.green, icon: Icon(Icons.new_releases, color: Colors.black,), activeIcon: Icon(Icons.new_releases, color: Colors.green,), title: Text("Anomalies",  style: TextStyle(fontSize: Config.fontSize,color:Colors.green ),))],
+            BubbleBottomBarItem(backgroundColor: Colors.red, icon: Icon(Icons.map, color: Colors.black,), activeIcon: Icon(Icons.map, color: Colors.red,), title: Text("Localisation", style: TextStyle(fontSize: Config.fontSize/1.5,color:Colors.red ),),),
+            BubbleBottomBarItem(backgroundColor: Colors.deepPurple, icon: Icon(Icons.assignment, color: Colors.black,), activeIcon: Icon(Icons.assignment, color: Colors.deepPurple,), title: Text("Caractéristiques", style: TextStyle(fontSize: Config.fontSize/1.5,color:Colors.deepPurple ),)),
+            BubbleBottomBarItem(backgroundColor: Colors.lightBlue, icon: Icon(Icons.add_a_photo, color: Colors.black,), activeIcon: Icon(Icons.add_a_photo, color: Colors.lightBlue,), title: Text("Schéma", style: TextStyle(fontSize: Config.fontSize/1.5,color:Colors.indigo ),)),
+            BubbleBottomBarItem(backgroundColor: Colors.green, icon: Icon(Icons.new_releases, color: Colors.black,), activeIcon: Icon(Icons.new_releases, color: Colors.green,), title: Text("Anomalies",  style: TextStyle(fontSize: Config.fontSize/1.5,color:Colors.green ),))],
         onTap: (newIndex) {
             setState(() {
               currentIndex= newIndex;
