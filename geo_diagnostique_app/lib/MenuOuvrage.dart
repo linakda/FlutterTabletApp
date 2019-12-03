@@ -168,6 +168,15 @@ class MenuOuvrageState extends State<MenuOuvrage> {
                                       listOuvrage[index])));
                         },
                       ),
+<<<<<<< HEAD
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FeuilleOuvrage(listOuvrage[index], widget.selectedNumeroAffaire)));
+                      },
+=======
+>>>>>>> develop
                     ),
                   );
                 },
