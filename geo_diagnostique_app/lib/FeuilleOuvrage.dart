@@ -200,17 +200,11 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
                       widget.selectedOuvrage.presenceH2S +
                       ',' +
                       widget.selectedOuvrage.observationsAnomalies;
-                  storage.writeData(ouvrageData, widget.selectedNumeroAffaire.numeroAffaire,widget.selectedOuvrage.refOuvrage);
-                  final snackBar = SnackBar(
-                    duration: new Duration(seconds: 3),
-                    backgroundColor: Config.color,
-                    content: Text(
-                      'Ajouter avec Succés !',
-                      style: TextStyle(fontSize: Config.fontSize / 2),
-                    ),
-                  );
-                  _scaffoldKey.currentState.showSnackBar(snackBar);
-                  Navigator.of(context).pop();
+                  storage.writeData(
+                      ouvrageData,
+                      widget.selectedNumeroAffaire.numeroAffaire,
+                      widget.selectedOuvrage.refOuvrage);
+                  Navigator.of(context).popUntil((route) => route.isFirst);
                 },
               )
             ],
@@ -223,15 +217,11 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
     return new Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-          backgroundColor: Colors.green,
-          title: Text(widget.selectedOuvrage.refOuvrage),
-          centerTitle: true,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).popUntil((route) => route.isFirst);
-            },
-          )),
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.green,
+        title: Text(widget.selectedOuvrage.refOuvrage),
+        centerTitle: true,
+      ),
       body: [
         Localisation(widget.selectedOuvrage),
         Caractere(widget.selectedOuvrage),

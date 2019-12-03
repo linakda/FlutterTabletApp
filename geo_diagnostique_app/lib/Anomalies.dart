@@ -111,7 +111,6 @@ class AnomalieState extends State<Anomalie> {
 
   @override
   Widget build(BuildContext context) {
-    print(stringlist[3] + "," + boolList[4].toString());
     Config().init(context);
     return new Scaffold(
       body: Builder(

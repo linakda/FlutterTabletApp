@@ -17,11 +17,11 @@ class MenuOuvrage extends StatefulWidget {
 
 class MenuOuvrageState extends State<MenuOuvrage> {
   List<Ouvrage> listOuvrage = new List<Ouvrage>();
-  
+
   @override
   void initState() {
     super.initState();
-    listOuvrage = widget.selectedCommune.listOuvrage.reversed.toList();
+    listOuvrage = widget.selectedCommune.listOuvrage;
   }
 
   @override
@@ -60,119 +60,118 @@ class MenuOuvrageState extends State<MenuOuvrage> {
                 textCapitalization: TextCapitalization.characters,
               )),
           Expanded(
-            child: ListView.builder(
-              itemCount: listOuvrage.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Dismissible(
-                  key:
-                      Key(listOuvrage[index].refOuvrage),
-                  background: Container(
-                    alignment: Alignment.centerLeft,
-                    color: Config.color,
-                    child: Padding(
-                        padding: EdgeInsets.only(left: Config.screenPadding),
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: ListView.builder(
+                reverse: true,
+                shrinkWrap: true,
+                itemCount: listOuvrage.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Dismissible(
+                    key: Key(listOuvrage[index].refOuvrage),
+                    background: Container(
+                      color: Colors.white,
+                    ),
+                    secondaryBackground: Container(
+                      alignment: Alignment.centerRight,
+                      color: Colors.redAccent,
+                      child: Padding(
+                        padding: EdgeInsets.only(right: Config.screenPadding),
                         child: Icon(
-                          Icons.edit,
+                          Icons.delete,
                           color: Colors.white,
                           size: Config.fontSize,
-                        )),
-                  ),
-                  secondaryBackground: Container(
-                    alignment: Alignment.centerRight,
-                    color: Colors.redAccent,
-                    child: Padding(
-                      padding: EdgeInsets.only(right: Config.screenPadding),
-                      child: Icon(
-                        Icons.delete,
-                        color: Colors.white,
-                        size: Config.fontSize,
-                      ),
-                    ),
-                  ),
-                  confirmDismiss: (direction) async {
-                    if (direction == DismissDirection.endToStart) {
-                      final bool res = await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: new Text(
-                                "Confirmation de suppression :",
-                                style:
-                                    TextStyle(fontSize: Config.fontSize / 1.3),
-                              ),
-                              content: new Text(
-                                "Etes-vous sûr de vouloir supprimer la REFOuvrage ?",
-                                style:
-                                    TextStyle(fontSize: Config.fontSize / 1.3),
-                              ),
-                              actions: <Widget>[
-                                new FlatButton(
-                                    child: new Text(
-                                      "Annuler",
-                                      style: TextStyle(
-                                          fontSize: Config.fontSize / 1.5),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    }),
-                                new FlatButton(
-                                    child: new Text(
-                                      "Supprimer",
-                                      style: TextStyle(
-                                          color: Colors.redAccent,
-                                          fontSize: Config.fontSize / 1.3),
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        storage.deleteOuvrage(
-                                            widget.selectedNumeroAffaire,
-                                            widget.selectedCommune,
-                                            index,
-                                            context);
-                                        Navigator.of(context).pop();
-                                      });
-                                    })
-                              ],
-                            );
-                          });
-                          return res;
-                    }
-                    return null;
-                  },
-                  child: new Card(
-                    elevation: 10,
-                    color: Config.textColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    margin: new EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 6.0),
-                    child: new ListTile(
-                      leading: Container(
-                        padding: EdgeInsets.only(right: 12.0),
-                        child: Icon(
-                          Icons.account_circle,
-                          color: Colors.white,
-                          size: Config.fontSize * 1.5,
                         ),
                       ),
-                      title: Text(
-                        listOuvrage[index].refOuvrage,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: Config.fontSize * 1.5),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FeuilleOuvrage(widget.selectedNumeroAffaire,widget.selectedCommune,listOuvrage[index])));
-                      },
                     ),
-                  ),
-                );
-              },
+                    confirmDismiss: (direction) async {
+                      if (direction == DismissDirection.endToStart) {
+                        final bool res = await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: new Text(
+                                  "Confirmation de suppression :",
+                                  style: TextStyle(
+                                      fontSize: Config.fontSize / 1.3),
+                                ),
+                                content: new Text(
+                                  "Etes-vous sûr de vouloir supprimer la REFOuvrage ?",
+                                  style: TextStyle(
+                                      fontSize: Config.fontSize / 1.3),
+                                ),
+                                actions: <Widget>[
+                                  new FlatButton(
+                                      child: new Text(
+                                        "Annuler",
+                                        style: TextStyle(
+                                            fontSize: Config.fontSize / 1.5),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      }),
+                                  new FlatButton(
+                                      child: new Text(
+                                        "Supprimer",
+                                        style: TextStyle(
+                                            color: Colors.redAccent,
+                                            fontSize: Config.fontSize / 1.3),
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          storage.deleteOuvrage(
+                                              widget.selectedNumeroAffaire,
+                                              widget.selectedCommune,
+                                              listOuvrage[index].refOuvrage,
+                                              context);
+                                          Navigator.of(context).pop();
+                                        });
+                                      })
+                                ],
+                              );
+                            });
+                        return res;
+                      }
+                      return null;
+                    },
+                    child: new Card(
+                      elevation: 10,
+                      color: Config.textColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      margin: new EdgeInsets.symmetric(
+                          horizontal: 10.0, vertical: 6.0),
+                      child: new ListTile(
+                        leading: Container(
+                          padding: EdgeInsets.only(right: 12.0),
+                          child: Icon(
+                            Icons.account_circle,
+                            color: Colors.white,
+                            size: Config.fontSize * 1.5,
+                          ),
+                        ),
+                        title: Text(
+                          listOuvrage[index].refOuvrage,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: Config.fontSize * 1.5),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FeuilleOuvrage(
+                                      widget.selectedNumeroAffaire,
+                                      widget.selectedCommune,
+                                      listOuvrage[index])));
+                        },
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
           )
         ],

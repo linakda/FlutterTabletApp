@@ -4,6 +4,8 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Config.dart';
+import 'package:geo_diagnostique_app/FeuilleOuvrage.dart';
+import 'package:geo_diagnostique_app/Ouvrage.dart';
 import 'package:geo_diagnostique_app/main.dart';
 
 class CreationREF extends StatefulWidget {
@@ -272,7 +274,12 @@ class _CreationREFState extends State<CreationREF> {
                   onPressed: () {
                     if (testREFvalidate(formKeylist)) {
                       storage.addREFOuvrage(controllerList[0].text,controllerList[1].text,controllerList[2].text,controllerList[3].text);
-                      Navigator.pop(context);
+                      storage.writeData(controllerList[0].text+','+controllerList[3].text+','+controllerList[1].text, controllerList[0].text, controllerList[3].text);
+                      NumeroAffaire numAffaireCreated =actuelNumAffaire(listNumeroAffaire);
+                      int indexOfCommuneCreated = storage.communeIndex(numAffaireCreated.listCommune,controllerList[1].text);
+                      Commune communeCreated = numAffaireCreated.listCommune[indexOfCommuneCreated];
+                      Ouvrage ouvrageCreated = communeCreated.listOuvrage[storage.refOuvrageIndex(communeCreated.listOuvrage, controllerList[3].text)];
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => FeuilleOuvrage(numAffaireCreated,communeCreated,ouvrageCreated)));
                     }
                   },
                   child: Text('Ajouter la Réf.', style: textSize),
