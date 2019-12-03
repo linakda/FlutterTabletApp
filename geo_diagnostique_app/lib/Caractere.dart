@@ -18,33 +18,123 @@ class CaractereState extends State<Caractere> {
   Color color = Colors.teal[700];
   EdgeInsetsGeometry textPadding = EdgeInsets.all(Config.screenPadding);
   int navigationIndex;
-  TextEditingController typeControler = TextEditingController();
-  TextEditingController obsControler = TextEditingController();
-  TextEditingController fermetureControler = TextEditingController();
-  TextEditingController dimensionControler = TextEditingController();
-  TextEditingController natureControler = TextEditingController();
+  List<TextEditingController> controllerList = new List(11);
   final int currentIndex = 1;
-  final List<String> listString = new List<String>(6);
+  /*
+   * controller :
+   *  0 -> type list (1)
+   *  1 -> type text (1)
+   *  2 -> observation text (2)
+   *  3 -> dispositif fermeture list (3)
+   *  4 -> dispositif fermeture text (3)
+   *  5 -> section cheminé text (4)
+   *  6 -> nature cheminé list (5)
+   *  7 -> nature cheminé text (5)
+   *  8 -> dimension text (6)
+   *  9 -> dispositif acces list (7)
+   *  10 -> dispositif text  (8)
+   */
+  String getElement(int index,){
+    switch(index){
+      case 1:
+        return widget.selectedOuvrage.type ;
+        break;
+      case 2:
+        return widget.selectedOuvrage.observationCaracteristiques;
+        break;
+      case 3:
+        return widget.selectedOuvrage.dispositifFermeture;
+        break;
+      case 4:
+        return widget.selectedOuvrage.section;
+        break;
+      case 5:
+        return widget.selectedOuvrage.nature;
+        break;
+      case 6:
+        return widget.selectedOuvrage.dimension;
+        break;
+      case 7:
+        return widget.selectedOuvrage.dispositifAcces;
+        break;
+      case 8:
+        return widget.selectedOuvrage.cunette;
+        break;
+      default:
+      return null;
+        break;    
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    for (var i = 0; i < listString.length; i++) {
-      listString[i] = "Selectionner";
+    for (var i = 0; i < controllerList.length; i++) {
+      controllerList[i] = new TextEditingController();
+    }
+    controllerList[0].text = "Sélectionner";
+    controllerList[3].text = "Sélectionner";
+    controllerList[5].text = "Sélectionner";
+    controllerList[6].text = "Sélectionner";
+    controllerList[9].text = "Sélectionner";
+    editControllerlist(<String>['regard','regard avaloir','avaloir','grille','boîte de branchement',''], 0, 1, 1);
+    if(getElement(2)!="") controllerList[2].text=getElement(2);
+    editControllerlist(<String>['fonte','béton',''], 3, 4, 3);
+    if(getElement(4)!="") controllerList[5].text = getElement(4);
+    editControllerlist(<String>['préfabriquée','maçonnée','PVC',''], 6, 7, 5);
+    if(getElement(6)!="") controllerList[8].text=getElement(6);
+    if(getElement(7)!="") controllerList[9].text=getElement(7);
+    if(getElement(8)!="") controllerList[10].text=getElement(8);
+  }
+  
+  void editControllerlist(List<String> list,int indexController1,int indexController2, int indexParameter){
+    if(list.indexOf(getElement(indexParameter))==-1){
+      controllerList[indexController1].text = 'autre : ';
+      controllerList[indexController2].text = getElement(indexParameter);
+    }
+    else if(getElement(indexParameter)!='') controllerList[indexController1].text = getElement(indexParameter);
+  }
+  void setElement(int index,String value){
+    switch(index){
+      case 1:
+        widget.selectedOuvrage.type = value;
+        break;
+      case 2:
+        widget.selectedOuvrage.observationCaracteristiques = value;
+        break;
+      case 3:
+        widget.selectedOuvrage.dispositifFermeture = value;
+        break;
+      case 4:
+        widget.selectedOuvrage.section = value;
+        break;
+      case 5:
+        widget.selectedOuvrage.nature = value;
+        break;
+      case 6:
+        widget.selectedOuvrage.dimension = value;
+        break;
+      case 7:
+        widget.selectedOuvrage.dispositifAcces = value;
+        break;
+      case 8:
+        widget.selectedOuvrage.cunette = value;
+        break;
+      default:
+        break;    
     }
   }
 
-  Padding dropDownList(int index, List<String> list, String elementOuvrage,
-      TextEditingController controller) {
+  Padding dropDownList(int indexController,int indexParameter, List<String> list) {
     return Padding(
       padding: EdgeInsets.all(Config.screenPadding),
       child: DropdownButton<String>(
         hint: SizedBox(
-          width: listString[index] == "autre : "
+          width: controllerList[indexController].text == "autre : "
               ? Config.screenWidth / 4
               : Config.screenWidth / 1.5,
           child: Text(
-            listString[index],
+            controllerList[indexController].text,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: Config.fontSize, color: Colors.black),
           ),
@@ -53,7 +143,7 @@ class CaractereState extends State<Caractere> {
         items: list.map((String value) {
           return new DropdownMenuItem<String>(
             child: SizedBox(
-              width: listString[index] == "autre : "
+              width: controllerList[indexController].text == "autre : "
                   ? Config.screenWidth / 4
                   : Config.screenWidth / 1.5,
               child: Text(
@@ -66,28 +156,22 @@ class CaractereState extends State<Caractere> {
         }).toList(),
         onChanged: (String newValue) {
           setState(() {
-            listString[index] = newValue;
-            if (listString[index] != 'autre : ') {
-              elementOuvrage = newValue;
-              if (controller != null) {
-                controller.text = "";
-              }
-            }
+            controllerList[indexController].text = newValue;
+            if (controllerList[indexController].text != 'autre : ')
+              setElement(indexParameter, newValue);
           });
-        },
+        }
       ),
     );
   }
 
-  Expanded expandedTextField(String labelText, String elementOuvrage,
-      TextEditingController controller) {
+  Expanded expandedTextField(int indexController,int indexParameter) {
     return Expanded(
       child: Padding(
         padding: EdgeInsets.all(Config.screenPadding),
         child: TextField(
-          controller: controller,
+          controller: controllerList[indexController],
           decoration: InputDecoration(
-            labelText: labelText,
             labelStyle: TextStyle(color: Config.textColor),
             focusColor: Config.color,
             fillColor: Colors.white,
@@ -101,7 +185,7 @@ class CaractereState extends State<Caractere> {
           ),
           onChanged: (String text) {
             setState(() {
-              elementOuvrage = text;
+              setElement(indexParameter, text);
             });
           },
         ),
@@ -123,113 +207,103 @@ class CaractereState extends State<Caractere> {
                     children: <Widget>[
                       Text("Type :"),
                       dropDownList(
-                          0,
-                          <String>[
-                            'regard',
-                            'regard avaloir',
-                            'avaloir',
-                            'grille',
-                            'boîte de branchement',
-                            'autre : '
-                          ],
-                          widget.selectedOuvrage.type,
-                          typeControler),
+                        0,
+                        1,
+                        <String>[
+                          'regard',
+                          'regard avaloir',
+                          'avaloir',
+                          'grille',
+                          'boîte de branchement',
+                          'autre : '
+                        ],
+                      ),
                       Visibility(
-                        child: expandedTextField('Type de l\'ouvrage',
-                            widget.selectedOuvrage.type, typeControler),
-                        visible: listString[0] == "autre : ",
+                        child: expandedTextField(1,1),
+                        visible: controllerList[0].text == "autre : ",
                       )
                     ],
                   ),
                   Row(
                     children: <Widget>[
                       Text("Observation :"),
-                      expandedTextField(
-                          'Observations',
-                          widget.selectedOuvrage.observationCaracteristiques,
-                          null),
+                      expandedTextField(2,2),
                     ],
                   ),
                   Row(
                     children: <Widget>[
                       Text("Dispositif de fermeture : "),
                       dropDownList(
-                          1,
-                          <String>[
-                            'fonte',
-                            'béton',
-                            'autre : ',
-                          ],
-                          widget.selectedOuvrage.dispositifFermeture,
-                          fermetureControler),
+                        3,
+                        3,
+                        <String>[
+                          'fonte',
+                          'béton',
+                          'autre : ',
+                        ],
+                      ),
                       Visibility(
-                        child: expandedTextField(
-                            'Type de fermeture',
-                            widget.selectedOuvrage.dispositifFermeture,
-                            fermetureControler),
-                        visible: listString[1] == 'autre : ',
+                        child: expandedTextField(4,3),
+                        visible: controllerList[3].text == 'autre : ',
                       ),
                     ],
                   ),
                   Row(
                     children: <Widget>[
                       Text("Section (Cheminée) :"),
-                      dropDownList(2, <String>['circulaire', 'rectangulaire'],
-                          widget.selectedOuvrage.section, null),
+                      dropDownList(5,4, <String>['circulaire', 'rectangulaire']),
                     ],
                   ),
                   Row(
                     children: <Widget>[
                       Text("Nature (Cheminée) :"),
                       dropDownList(
-                          3,
-                          <String>[
-                            'préfabriquée',
-                            'maçonnée',
-                            'PVC',
-                            'autre : '
-                          ],
-                          widget.selectedOuvrage.nature,
-                          natureControler),
+                        6,
+                        5,
+                        <String>[
+                          'préfabriquée',
+                          'maçonnée',
+                          'PVC',
+                          'autre : '
+                        ],
+                      ),
                       Visibility(
-                        child: expandedTextField('Nature de la cheminée',
-                            widget.selectedOuvrage.nature, natureControler),
-                        visible: listString[3] == 'autre : ',
+                        child: expandedTextField(7,5),
+                        visible: controllerList[6].text == 'autre : ',
                       ),
                     ],
                   ),
                   Row(
                     children: <Widget>[
                       Text("Dimension (cheminée) : "),
-                      expandedTextField('Dimension (cheminée)',
-                          widget.selectedOuvrage.dimension, null),
+                      expandedTextField(8,6),
                     ],
                   ),
                   Row(
                     children: <Widget>[
                       Text("Dispositif d'accès :"),
                       dropDownList(
-                          4,
-                          <String>[
-                            'présence d\'échelons',
-                            'présence d\'une crosse'
-                          ],
-                          widget.selectedOuvrage.dispositifAcces,
-                          null),
+                        9,
+                        7,
+                        <String>[
+                          'présence d\'échelons',
+                          'présence d\'une crosse'
+                        ],
+                      ),
                     ],
                   ),
                   Row(
                     children: <Widget>[
                       Text("Cunette"),
                       dropDownList(
-                          5,
-                          <String>[
-                            'préfabriquée',
-                            'maçonnée',
-                            'absence de cunette'
-                          ],
-                          widget.selectedOuvrage.cunette,
-                          null),
+                        10,
+                        8,
+                        <String>[
+                          'préfabriquée',
+                          'maçonnée',
+                          'absence de cunette'
+                        ],
+                      ),
                     ],
                   ),
                 ], //Children

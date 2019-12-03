@@ -181,8 +181,6 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
                       ',' +
                       widget.selectedOuvrage.defautEtancheite +
                       ',' +
-                      widget.selectedOuvrage.defautEtancheite +
-                      ',' +
                       widget.selectedOuvrage.tracesInfiltration +
                       ',' +
                       widget.selectedOuvrage.branchementNonEtanche +

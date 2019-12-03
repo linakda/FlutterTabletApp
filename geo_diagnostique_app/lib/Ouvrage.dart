@@ -4,6 +4,7 @@ import 'dart:io';
 class Ouvrage {
   String refOuvrage;
   List<CaracteristiqueCanalisation> listCanalisation = new List(6);
+  
   Ouvrage(String refOuvrage){
     this.refOuvrage = refOuvrage;
     for(int i=0;i<6;i++){

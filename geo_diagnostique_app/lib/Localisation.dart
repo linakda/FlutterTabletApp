@@ -1,3 +1,4 @@
+import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/rendering.dart';
@@ -16,14 +17,24 @@ class LocalisationState extends State<Localisation> {
   Config size = new Config();
   TextStyle textSize = new TextStyle(fontSize: Config.fontSize);
   EdgeInsetsGeometry textPadding = EdgeInsets.all(Config.screenPadding);
-  int navigationIndex;
-  final int currentIndex = 0;
-  TextEditingController communeController = TextEditingController();
-  TextEditingController rueController = TextEditingController();
-  TextEditingController typeDeReseau = TextEditingController();
-  String dropdownValueImplantation = "Sélectionner";
-  String dropdownValueReseau = "Sélectionner";
- 
+  List<TextEditingController> controllerList = new List(4);
+  @override
+  void initState(){
+    super.initState();
+    for(int i=0;i<controllerList.length;i++){
+      controllerList[i] = new TextEditingController();
+    }
+    controllerList[1].text = "Sélectionner";
+    if(widget.selectedOuvrage.implantation!="") controllerList[1].text = widget.selectedOuvrage.implantation;
+    controllerList[2].text = "Sélectionner";
+    if(widget.selectedOuvrage.nomRue != "") controllerList[0].text = widget.selectedOuvrage.nomRue;
+    if(widget.selectedOuvrage.typeReseau!='séparatif EU'&& widget.selectedOuvrage.typeReseau.isNotEmpty &&
+    widget.selectedOuvrage.typeReseau!='séparatif EP'&&widget.selectedOuvrage.typeReseau!='unitaire'){
+      controllerList[3].text=widget.selectedOuvrage.typeReseau;
+      controllerList[2].text = 'autre : ';
+    }
+    else if(widget.selectedOuvrage.typeReseau != "") controllerList[2].text = widget.selectedOuvrage.typeReseau;
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -43,7 +54,7 @@ class LocalisationState extends State<Localisation> {
                       child: Padding(
                         padding: EdgeInsets.all(Config.screenPadding),
                         child: TextField(
-                          controller: rueController,
+                          controller: controllerList[0],
                           decoration: InputDecoration(
                             labelText: 'Nom de la rue',
                             labelStyle: TextStyle(color: Config.textColor),
@@ -57,11 +68,11 @@ class LocalisationState extends State<Localisation> {
                               borderRadius: BorderRadius.circular(25.0),
                             ),
                           ),
-                          onChanged: (String value) {
+                          onChanged:(String text){ 
                             setState(() {
-                              widget.selectedOuvrage.nomRue = value;
+                              widget.selectedOuvrage.nomRue = text;
                             });
-                          },
+                          }
                         ),
                       ),
                     ),
@@ -76,14 +87,13 @@ class LocalisationState extends State<Localisation> {
                         hint: SizedBox(
                           width: 320.0,
                           child: Text(
-                            dropdownValueImplantation,
+                            controllerList[1].text,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: Config.fontSize, color: Colors.black),
                           ),
                         ),
-                        style: TextStyle(
-                            fontSize: Config.fontSize, color: Colors.black),
+                        style: TextStyle(fontSize: Config.fontSize, color: Colors.black),
                         items: <String>[
                           'chaussée',
                           'trottoir',
@@ -98,19 +108,17 @@ class LocalisationState extends State<Localisation> {
                               child: Text(
                                 value,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: Config.fontSize,
-                                    color: Colors.black),
+                                style: TextStyle(fontSize: Config.fontSize,color: Colors.black),
                               ),
                             ),
                           );
                         }).toList(),
                         onChanged: (String newValue) {
                           setState(() {
-                            dropdownValueImplantation = newValue;
+                            controllerList[1].text=newValue;
                             widget.selectedOuvrage.implantation = newValue;
                           });
-                        },
+                        }
                       ),
                     ),
                   ],
@@ -124,7 +132,7 @@ class LocalisationState extends State<Localisation> {
                         hint: SizedBox(
                           width: 320.0,
                           child: Text(
-                            dropdownValueReseau,
+                            controllerList[2].text,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: Config.fontSize, color: Colors.black),
@@ -154,10 +162,9 @@ class LocalisationState extends State<Localisation> {
                         }).toList(),
                         onChanged: (String newValue) {
                           setState(() {
-                            dropdownValueReseau = newValue;
-                            if (dropdownValueReseau != 'autre : ') {
-                              widget.selectedOuvrage.typeReseau = newValue;
-                              typeDeReseau.text = "";
+                            controllerList[2].text = newValue;
+                            if (controllerList[2].text != 'autre : ') {
+                             widget.selectedOuvrage.typeReseau = newValue;
                             }
                           });
                         },
@@ -168,8 +175,7 @@ class LocalisationState extends State<Localisation> {
                         child: Padding(
                           padding: EdgeInsets.all(Config.screenPadding),
                           child: TextField(
-                            controller: typeDeReseau,
-                            enabled: dropdownValueReseau == 'autre : ',
+                            controller: controllerList[3],
                             decoration: InputDecoration(
                               labelText: 'Type de Reseau',
                               labelStyle: TextStyle(color: Config.textColor),
@@ -183,15 +189,15 @@ class LocalisationState extends State<Localisation> {
                                 borderRadius: BorderRadius.circular(25.0),
                               ),
                             ),
-                            onChanged: (String text) {
+                            onChanged: (String text){
                               setState(() {
-                                widget.selectedOuvrage.typeReseau = text;
+                                widget.selectedOuvrage.typeReseau=text;
                               });
                             },
                           ),
                         ),
                       ),
-                      visible: dropdownValueReseau == 'autre : ',
+                      visible:  controllerList[2].text == 'autre : ',
                     ),
                   ],
                 ),
