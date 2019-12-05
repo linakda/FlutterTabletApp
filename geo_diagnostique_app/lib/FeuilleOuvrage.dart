@@ -223,7 +223,7 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
       body: [
         Localisation(widget.selectedOuvrage),
         Caractere(widget.selectedOuvrage),
-        LandingScreen(widget.selectedOuvrage, widget.selectNumeroAffaire),
+        LandingScreen(widget.selectedOuvrage, widget.selectedNumeroAffaire),
         Anomalie(widget.selectedOuvrage),
       ].elementAt(currentIndex),
       floatingActionButton: FloatingActionButton(
