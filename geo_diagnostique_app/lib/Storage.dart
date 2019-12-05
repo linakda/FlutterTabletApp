@@ -31,7 +31,7 @@ class Storage {
   }
 
   void writeData(
-      String data, String fileName, String refOuvrageSelected) async {
+    String data, String fileName, String refOuvrageSelected) async {
     File file = new File('${myDir.path}/$fileName.txt');
     List<String> lines;
     List<String> parameters;
@@ -457,6 +457,9 @@ class Storage {
       numeroAffaireSelected.listCommune
           .removeAt(numeroAffaireSelected.listCommune.indexOf(communeSelected));
       Navigator.pop(context);
+    }
+    if(numeroAffaireSelected.listCommune.length == 0) {
+      listNumeroAffaire.removeAt(listNumeroAffaire.indexOf(numeroAffaireSelected));
     }
   }
 }

@@ -38,7 +38,7 @@ class _CreationREFState extends State<CreationREF> {
            if (derniereCommune!=null) {controllerList[i].text=derniereCommune.nomCommune;}
           break;
         case 2 :
-          if(derniereCommune!=null){
+          if(derniereCommune!=null && listNumeroAffaire.isNotEmpty){
             int index = derniereCommune.listOuvrage.length -1;
             if(derniereCommune.listOuvrage[index].refOuvrage.isNotEmpty){
               controllerList[i].text = derniereCommune.refCommune +nextRefOuvrage(derniereCommune);
