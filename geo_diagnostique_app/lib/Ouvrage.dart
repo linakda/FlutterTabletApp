@@ -43,7 +43,6 @@ class Ouvrage {
   String genieCivilFissure="";
   String deboitement="";
   String defautFermeture="";
-  String tamponNonAccessible="";
   String tamponDeteriore="";
   String presenceH2S="";
   String observationsAnomalies="";

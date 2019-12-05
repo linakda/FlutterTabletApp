@@ -19,10 +19,10 @@ class _CreationREFState extends State<CreationREF> {
   final EdgeInsetsGeometry textPadding = EdgeInsets.all(Config.screenPadding);
   //Le controller avec le text
   final List<TextEditingController> controllerList =
-      new List<TextEditingController>(4);
+      new List<TextEditingController>(3);
   //La clé d'état de chaque TextFormField
   final List<GlobalKey<FormState>> formKeylist =
-      new List<GlobalKey<FormState>>(4);
+      new List<GlobalKey<FormState>>(3);
 
   //AutoCompletion
   @override
@@ -38,9 +38,6 @@ class _CreationREFState extends State<CreationREF> {
            if (derniereCommune!=null) {controllerList[i].text=derniereCommune.nomCommune;}
           break;
         case 2 :
-          if (derniereCommune!=null) {controllerList[i].text=derniereCommune.refCommune;}
-          break;
-        case 3 :
           if(derniereCommune!=null){
             int index = derniereCommune.listOuvrage.length -1;
             if(derniereCommune.listOuvrage[index].refOuvrage.isNotEmpty){
@@ -76,11 +73,11 @@ class _CreationREFState extends State<CreationREF> {
               if (value.isEmpty) {
                 return 'Veuillez entrer un champ';
               }
-              else if(index==3 && _isOuvrageExist(controllerList[0].text,controllerList[1].text,value)){
+              else if(index==2 && _isOuvrageExist(controllerList[0].text,controllerList[1].text,value)){
                 return 'Reférence ouvrage déja existante';
               }
-              else if (index==3 && _isREFOuvrageValid(value,controllerList[2].text)){
-                return 'La référence ouvrage n\'est pas valide (min. 3 chiffres)';
+              else if (index==2 && _isREFOuvrageValid(value,getREFCommune(value))){
+                return 'La référence ouvrage n\'est pas valide (max. 5 chiffres)';
               }
               return null;
             },
@@ -91,10 +88,6 @@ class _CreationREFState extends State<CreationREF> {
                 setState(() {
                   if(index==1){
                    showFirst3Letters(controllerList[1],controllerList[2]);
-                   showFirst3Letters(controllerList[2], controllerList[3]);
-                  }
-                  else if (index==2){
-                   showFirst3Letters(controllerList[2], controllerList[3]);
                   }
                 });        
               },
@@ -124,7 +117,6 @@ class _CreationREFState extends State<CreationREF> {
               case 1:
                   return filtreSuggestion(pattern, communeList(actuelNumAffaire(
               listNumeroAffaire))) ;
-              
                 break;
               default :
               return null;
@@ -144,10 +136,6 @@ class _CreationREFState extends State<CreationREF> {
             this.controllerList[index].text = suggestion;
             if(index==1){
              showFirst3Letters(controllerList[1],controllerList[2]);
-             showFirst3Letters(controllerList[2], controllerList[3]);
-            }
-            else if (index==2){
-             showFirst3Letters(controllerList[2], controllerList[3]);
             }
           },
           ),
@@ -158,6 +146,7 @@ class _CreationREFState extends State<CreationREF> {
   bool testREFvalidate(List<GlobalKey<FormState>> formKeylist) {
     bool validate = true;
     for (var i = 0; i < formKeylist.length; i++) {
+      print(formKeylist.length);
       if (!formKeylist[i].currentState.validate()) {
         validate = false;
       }
@@ -189,13 +178,24 @@ class _CreationREFState extends State<CreationREF> {
     return false;
   } 
 
-  //Méthode pour vérifier que l'utilisateur a entré 3 chiffre à la fin de la refOuvrage
+  //Méthode pour vérifier que l'utilisateur a entré 5 chiffres à la fin de la refOuvrage
   bool _isREFOuvrageValid(String refOuvrage,String refCommune){
       int refCommuneLength = refCommune.length;
-      if(refOuvrage.substring(refCommuneLength).length==3 && int.parse(refOuvrage.substring(refCommuneLength)) is int){
+      if(refOuvrage.substring(refCommuneLength).length<=5 && refOuvrage.substring(refCommuneLength).isNotEmpty && int.tryParse(refOuvrage.substring(refCommuneLength)) is int){
         return false;
       }
       return true;
+  }
+
+  //Méthode pour renvoie de la REFCommune
+  String getREFCommune(String refOuvrage){
+    String refCommune="";
+    for(var i=refOuvrage.length-1;i>=0;i--){
+      if(!(int.tryParse(refOuvrage[i]) is int)){
+        refCommune+=refOuvrage[i];
+      }
+    }
+    return refCommune;
   }
   
   //Méthode qui à partir de la liste des numéros d'affaires, nous donnes une liste des noms des numéros d'affaires
@@ -261,8 +261,7 @@ class _CreationREFState extends State<CreationREF> {
             children: <Widget>[
               textformREF('N° Affaire', 0),
               textformREF('Commune', 1),
-              textformREF('Réf. Commune', 2),
-              textformREF('Réf. Ouvrage', 3),
+              textformREF('Réf. Ouvrage', 2),
               Padding(
                 padding: textPadding,
                 child: RaisedButton(
@@ -273,12 +272,12 @@ class _CreationREFState extends State<CreationREF> {
                   textColor: Colors.white,
                   onPressed: () {
                     if (testREFvalidate(formKeylist)) {
-                      storage.addREFOuvrage(controllerList[0].text,controllerList[1].text,controllerList[2].text,controllerList[3].text);
-                      storage.writeData(controllerList[0].text+','+controllerList[3].text+','+controllerList[1].text, controllerList[0].text, controllerList[3].text);
+                      storage.addREFOuvrage(controllerList[0].text,controllerList[1].text,getREFCommune(controllerList[2].text),controllerList[2].text);
+                      storage.writeData(controllerList[0].text+','+controllerList[2].text+','+controllerList[1].text, controllerList[0].text, controllerList[2].text);
                       NumeroAffaire numAffaireCreated =actuelNumAffaire(listNumeroAffaire);
                       int indexOfCommuneCreated = storage.communeIndex(numAffaireCreated.listCommune,controllerList[1].text);
                       Commune communeCreated = numAffaireCreated.listCommune[indexOfCommuneCreated];
-                      Ouvrage ouvrageCreated = communeCreated.listOuvrage[storage.refOuvrageIndex(communeCreated.listOuvrage, controllerList[3].text)];
+                      Ouvrage ouvrageCreated = communeCreated.listOuvrage[storage.refOuvrageIndex(communeCreated.listOuvrage, controllerList[2].text)];
                       Navigator.push(context, MaterialPageRoute(builder: (context) => FeuilleOuvrage(numAffaireCreated,communeCreated,ouvrageCreated)));
                     }
                   },

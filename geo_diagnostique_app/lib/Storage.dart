@@ -368,7 +368,6 @@ class Storage {
     selectedOuvrage.deboitement = deboitement;
     selectedOuvrage.defautFermeture = defautFermeture;
     selectedOuvrage.tamponDeteriore = tamponDeteriore;
-    selectedOuvrage.tamponNonAccessible = tamponNonAccessible;
     selectedOuvrage.presenceH2S = presenceH2S;
     selectedOuvrage.observationsAnomalies = observationsAnomalies;
   }
