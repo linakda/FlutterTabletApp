@@ -28,6 +28,11 @@ class MenuOuvrageState extends State<MenuOuvrage> {
     Config().init(context);
     return new Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.home),
+            onPressed: () {
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            }),
         backgroundColor: Config.color,
         title: Text(
           widget.selectedCommune.nomCommune,
@@ -42,7 +47,8 @@ class MenuOuvrageState extends State<MenuOuvrage> {
                 widget.selectedNumeroAffaire.numeroAffaire,
                 widget.selectedCommune.nomCommune,
                 widget.selectedCommune.refCommune,
-                widget.selectedCommune.refCommune + storage.nextRefOuvrage(widget.selectedCommune));
+                widget.selectedCommune.refCommune +
+                    storage.nextRefOuvrage(widget.selectedCommune));
           });
         },
         backgroundColor: Config.buttonColor,

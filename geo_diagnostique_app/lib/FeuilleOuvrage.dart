@@ -7,6 +7,7 @@ import 'package:geo_diagnostique_app/Anomalies.dart';
 import 'package:geo_diagnostique_app/Caractere.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Localisation.dart';
+import 'package:geo_diagnostique_app/MenuOuvrage.dart';
 import 'package:geo_diagnostique_app/Ouvrage.dart';
 import 'package:geo_diagnostique_app/Schema.dart';
 import 'package:geo_diagnostique_app/Config.dart';
@@ -202,7 +203,7 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
                       ouvrageData,
                       widget.selectedNumeroAffaire.numeroAffaire,
                       widget.selectedOuvrage.refOuvrage);
-                  Navigator.of(context).popUntil((route) => route.isFirst);
+                  Navigator.push(context, MaterialPageRoute (builder: (context)=> MenuOuvrage(widget.selectedNumeroAffaire,widget.selectedCommune)));
                 },
               )
             ],
