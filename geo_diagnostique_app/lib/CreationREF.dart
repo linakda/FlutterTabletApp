@@ -10,10 +10,10 @@ import 'package:geo_diagnostique_app/main.dart';
 
 class CreationREF extends StatefulWidget {
   @override
-  _CreationREFState createState() => _CreationREFState();
+  CreationREFState createState() => CreationREFState();
 } 
 
-class _CreationREFState extends State<CreationREF> {
+class CreationREFState extends State<CreationREF> {
   
   final TextStyle textSize = new TextStyle(fontSize: Config.fontSize);
   final EdgeInsetsGeometry textPadding = EdgeInsets.all(Config.screenPadding);
@@ -41,7 +41,7 @@ class _CreationREFState extends State<CreationREF> {
           if(derniereCommune!=null && listNumeroAffaire.isNotEmpty){
             int index = derniereCommune.listOuvrage.length -1;
             if(derniereCommune.listOuvrage[index].refOuvrage.isNotEmpty){
-              controllerList[i].text = derniereCommune.refCommune +nextRefOuvrage(derniereCommune);
+              controllerList[i].text = derniereCommune.refCommune +storage.nextRefOuvrage(derniereCommune);
             }
           }
         break;
@@ -52,16 +52,6 @@ class _CreationREFState extends State<CreationREF> {
     super.initState();
   }
 
-  //Méthode qui renvoi la prochaine reférence d'ouvrage
-  String nextRefOuvrage(Commune dernierCommune){
-    if(derniereCommune.listOuvrage.isNotEmpty){
-      int index = derniereCommune.listOuvrage.length -1;
-      int refCommuneLength = derniereCommune.refCommune.length;
-      int nextRefOuvrage = int.parse(derniereCommune.listOuvrage[index].refOuvrage.substring(refCommuneLength))+1;
-      return nextRefOuvrage.toString().padLeft(3,'0');
-    }
-    return null;
-  }
   //Méthode pour créer les TextForms
   Padding textformREF(String label, int index) {
     return Padding(
@@ -146,7 +136,6 @@ class _CreationREFState extends State<CreationREF> {
   bool testREFvalidate(List<GlobalKey<FormState>> formKeylist) {
     bool validate = true;
     for (var i = 0; i < formKeylist.length; i++) {
-      print(formKeylist.length);
       if (!formKeylist[i].currentState.validate()) {
         validate = false;
       }
@@ -187,15 +176,15 @@ class _CreationREFState extends State<CreationREF> {
       return true;
   }
 
-  //Méthode pour renvoie de la REFCommune
+  //Méthode qui renvoie la REFCommune
   String getREFCommune(String refOuvrage){
-    String refCommune="";
+    int indexWhereToSub=refOuvrage.length;
     for(var i=refOuvrage.length-1;i>=0;i--){
       if(!(int.tryParse(refOuvrage[i]) is int)){
-        refCommune+=refOuvrage[i];
+        indexWhereToSub--;
       }
     }
-    return refCommune;
+    return refOuvrage.substring(0,indexWhereToSub);
   }
   
   //Méthode qui à partir de la liste des numéros d'affaires, nous donnes une liste des noms des numéros d'affaires

@@ -439,6 +439,17 @@ class Storage {
     }
   }
 
+  //Méthode qui renvoi la prochaine reférence d'ouvrage
+  String nextRefOuvrage(Commune dernierCommune){
+    if(derniereCommune.listOuvrage.isNotEmpty){
+      int index = derniereCommune.listOuvrage.length -1;
+      int refCommuneLength = derniereCommune.refCommune.length;
+      int nextRefOuvrage = int.parse(derniereCommune.listOuvrage[index].refOuvrage.substring(refCommuneLength))+1;
+      return nextRefOuvrage.toString().padLeft(3,'0');
+    }
+    return null;
+  }
+
   //Méthode pour supprimer un Ouvrage dans l'appli et dans le fichier .csv
   void deleteOuvrage(
       NumeroAffaire numeroAffaireSelected,

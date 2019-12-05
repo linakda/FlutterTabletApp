@@ -17,7 +17,6 @@ class MenuOuvrage extends StatefulWidget {
 
 class MenuOuvrageState extends State<MenuOuvrage> {
   List<Ouvrage> listOuvrage = new List<Ouvrage>();
-
   @override
   void initState() {
     super.initState();
@@ -31,10 +30,25 @@ class MenuOuvrageState extends State<MenuOuvrage> {
       appBar: AppBar(
         backgroundColor: Config.color,
         title: Text(
-          widget.selectedNumeroAffaire.numeroAffaire,
+          widget.selectedCommune.nomCommune,
           style: TextStyle(fontSize: Config.fontSize),
         ),
         centerTitle: true,
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          setState(() {
+            storage.addREFOuvrage(
+                widget.selectedNumeroAffaire.numeroAffaire,
+                widget.selectedCommune.nomCommune,
+                widget.selectedCommune.refCommune,
+                widget.selectedCommune.refCommune + storage.nextRefOuvrage(widget.selectedCommune));
+          });
+        },
+        backgroundColor: Config.buttonColor,
+        splashColor: Config.splashColor,
+        tooltip: 'Image',
+        label: Icon(Icons.plus_one),
       ),
       body: Column(
         children: <Widget>[
