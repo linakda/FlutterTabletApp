@@ -49,7 +49,6 @@ class LocalisationState extends State<Localisation> {
               children: [
                 Row(
                   children: <Widget>[
-                    Text("Nom de la rue :"),
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.all(Config.screenPadding),

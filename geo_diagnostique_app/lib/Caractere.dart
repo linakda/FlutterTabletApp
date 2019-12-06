@@ -18,7 +18,7 @@ class CaractereState extends State<Caractere> {
   Color color = Colors.teal[700];
   EdgeInsetsGeometry textPadding = EdgeInsets.all(Config.screenPadding);
   int navigationIndex;
-  List<TextEditingController> controllerList = new List(11);
+  List<TextEditingController> controllerList = new List(12);
   final int currentIndex = 1;
   /*
    * controller :
@@ -31,8 +31,9 @@ class CaractereState extends State<Caractere> {
    *  6 -> nature cheminé list (5)
    *  7 -> nature cheminé text (5)
    *  8 -> dimension text (6)
+   *  11 -> dimension text (6) si rectangulaire
    *  9 -> dispositif acces list (7)
-   *  10 -> dispositif text  (8)
+   *  10 -> cunette  (8)
    */
   String getElement(int index,){
     switch(index){
@@ -77,12 +78,20 @@ class CaractereState extends State<Caractere> {
     controllerList[5].text = "Sélectionner";
     controllerList[6].text = "Sélectionner";
     controllerList[9].text = "Sélectionner";
+    controllerList[10].text= "Sélectionner";
     editControllerlist(<String>['regard','regard avaloir','avaloir','grille','boîte de branchement',''], 0, 1, 1);
     if(getElement(2)!="") controllerList[2].text=getElement(2);
     editControllerlist(<String>['fonte','béton',''], 3, 4, 3);
     if(getElement(4)!="") controllerList[5].text = getElement(4);
     editControllerlist(<String>['préfabriquée','maçonnée','PVC',''], 6, 7, 5);
-    if(getElement(6)!="") controllerList[8].text=getElement(6);
+    if(getElement(6)!=""){
+      if(testDimensionFormat().length==1)
+        controllerList[8].text=getElement(6);
+      else{
+        controllerList[8].text = testDimensionFormat()[0];
+        controllerList[11].text= testDimensionFormat()[1];
+      }
+    }
     if(getElement(7)!="") controllerList[9].text=getElement(7);
     if(getElement(8)!="") controllerList[10].text=getElement(8);
   }
@@ -165,13 +174,16 @@ class CaractereState extends State<Caractere> {
     );
   }
 
-  Expanded expandedTextField(int indexController,int indexParameter) {
+  Expanded expandedTextField(int indexController,int indexParameter,String labelText) {
     return Expanded(
       child: Padding(
         padding: EdgeInsets.all(Config.screenPadding),
         child: TextField(
           controller: controllerList[indexController],
+          keyboardType: indexController==11 || indexController==8 ?TextInputType.number:TextInputType.text,
+          textAlign: TextAlign.left,
           decoration: InputDecoration(
+            labelText: labelText,
             labelStyle: TextStyle(color: Config.textColor),
             focusColor: Config.color,
             fillColor: Colors.white,
@@ -185,14 +197,20 @@ class CaractereState extends State<Caractere> {
           ),
           onChanged: (String text) {
             setState(() {
-              setElement(indexParameter, text);
+              if(indexController == 11)
+                setElement(indexParameter, controllerList[8].text+':'+text);
+              else
+                setElement(indexParameter, text);
             });
           },
         ),
       ),
     );
   }
-
+  List<String> testDimensionFormat(){
+    String value = getElement(6);
+    return value.split(":");
+  }
   Widget build(BuildContext context) {
     Config().init(context);
     return new Scaffold(
@@ -219,15 +237,14 @@ class CaractereState extends State<Caractere> {
                         ],
                       ),
                       Visibility(
-                        child: expandedTextField(1,1),
+                        child: expandedTextField(1,1,"Type de l'ouvrage"),
                         visible: controllerList[0].text == "autre : ",
                       )
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Text("Observation :"),
-                      expandedTextField(2,2),
+                      expandedTextField(2,2,"Observations"),
                     ],
                   ),
                   Row(
@@ -243,7 +260,7 @@ class CaractereState extends State<Caractere> {
                         ],
                       ),
                       Visibility(
-                        child: expandedTextField(4,3),
+                        child: expandedTextField(4,3,"Dispositif de fermeture"),
                         visible: controllerList[3].text == 'autre : ',
                       ),
                     ],
@@ -268,7 +285,7 @@ class CaractereState extends State<Caractere> {
                         ],
                       ),
                       Visibility(
-                        child: expandedTextField(7,5),
+                        child: expandedTextField(7,5,"Nature de la cheminée"),
                         visible: controllerList[6].text == 'autre : ',
                       ),
                     ],
@@ -276,7 +293,10 @@ class CaractereState extends State<Caractere> {
                   Row(
                     children: <Widget>[
                       Text("Dimension (cheminée) : "),
-                      expandedTextField(8,6),
+                      expandedTextField(8,6,controllerList[5].text == 'circulaire'?"Diamètre (en cm)":"Longueur (en cm)"),
+                      controllerList[5].text == 'circulaire'
+                      ?Padding(padding: EdgeInsets.all(1),)
+                      :expandedTextField(11,6,"Largeur (en cm)")
                     ],
                   ),
                   Row(

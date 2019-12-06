@@ -15,15 +15,11 @@ class Anomalie extends StatefulWidget {
 class AnomalieState extends State<Anomalie> {
   TextStyle textStyle =
       new TextStyle(fontSize: Config.fontSize, fontWeight: FontWeight.bold);
-  EdgeInsetsGeometry textPadding = EdgeInsets.all(Config.screenPadding);
-  final int currentIndex = 0;
-  List<TextEditingController> controllerList = new List(15);
-  List<bool> boolList = new List();
-  double widthRadio3 = Config.screenWidth / 3 - Config.screenWidth / 75;
-  double widthRadio2 = Config.screenWidth / 2 - Config.screenWidth / 150;
-  
-  String getElement(int index){
-    switch(index){
+  TextStyle choiceTextStyle = new TextStyle(fontSize: Config.fontSize);
+  List<TextEditingController> controllerList = new List(29);
+
+  String getElement(int index) {
+    switch (index) {
       case 1:
         return widget.selectedOuvrage.tracesCharge;
         break;
@@ -62,12 +58,13 @@ class AnomalieState extends State<Anomalie> {
         break;
       case 13:
         return widget.selectedOuvrage.observationsAnomalies;
-        break; 
+        break;
       default:
-      return null;
-        break;    
+        return null;
+        break;
     }
   }
+
   /*
    * controller :
    *   0 -> tracescharges switch (1)
@@ -75,13 +72,17 @@ class AnomalieState extends State<Anomalie> {
    *   2 -> perturbationécoulement switch (2)
    *   3 -> perturbationécoulement text (3)
    *   4 -> étanchéité switch (4)
-   *   5 -> étanchéité choix 1 (5)
-   *   6 -> étanchéité choix 2 (6)
+   *   5 -> étanchéité choix branchement non étanche (5)
+   *   15 -> étanchéité traces infiltration sélectioné (6)
+   *   6 -> étanchéité choix traces infiltration (6)
    *   7 -> structure switch (7)
-   *   8 -> structure choix 1 (8)
-   *   9 -> structure choix 2 (9)
-   *   10 -> fermeture choix 1 (10)
-   *   11 -> fermeture choix 2 (11)
+   *   17 -> switch génie civil
+   *   18 -> switch déboitement
+   *   8 -> structure choix génie civil (9)
+   *   9 -> structure text déboitement (8)
+   *   10 -> switch tampon détérioré (10)
+   *   19 ->switch tampon non accessible
+   *   11 -> choix tampon non accessible (11)
    *   12 -> h2s switch (12)
    *   13 -> H2S choix (12)
    *   14 -> observations (13)
@@ -92,46 +93,67 @@ class AnomalieState extends State<Anomalie> {
     for (var i = 0; i < controllerList.length; i++) {
       controllerList[i] = new TextEditingController();
     }
-    if(getElement(1)=="")setElement(1, 'non');
-    if(getElement(1)=="")setElement(2, 'non');
-    if(getElement(1)=="")setElement(4, 'non');
-    if(getElement(1)=="")setElement(7, 'non');
-    if(getElement(1)=="")setElement(12,'non');
-    editControllerlist(<String>['faible', 'moyenne','importante','','non'], 0,1, 1);
-    controllerList[2].text=getElement(2);
-    controllerList[3].text=getElement(3);
-    controllerList[4].text=getElement(4);
-    controllerList[5].text=getElement(5);
-    controllerList[6].text=getElement(6);
-    controllerList[7].text=getElement(7);
-    controllerList[8].text=getElement(8);
-    if(getElement(8)=="") controllerList[8].text="Sélectionner";
-    controllerList[9].text=getElement(9);
+    for (int i in [1, 2, 4, 7, 12]) {
+      //set switch false
+      if (getElement(i) == "") {setElement(i, 'non');print("element $i set false");}
+    }
+    controllerList[0].text = getElement(1);
+
+    if (controllerList[0].text == "non") {
+      controllerList[1].text = "Sélectionner";
+    } else {
+      controllerList[0].text = "oui";
+      controllerList[1].text = getElement(1);
+    }
+    controllerList[2].text = getElement(2);
+    controllerList[3].text = getElement(3);
+    controllerList[4].text = getElement(4);
+    controllerList[16].text = "";
+    controllerList[6].text = "Sélectionner";
+    controllerList[5].text="";
+    print("element 4 = ${getElement(4)}");
+    if (getElement(4) == "oui") {
+      controllerList[5].text = getElement(5);
+      if (getElement(6) != "") {
+        print("pass");
+        controllerList[16].text = "traces d'infiltration";
+        controllerList[6].text = getElement(6);
+      }
+    } 
+    controllerList[7].text = getElement(7);
+    controllerList[8].text = getElement(8);
+
+    if (controllerList[7].text == "non") {
+      controllerList[17].text = "";
+      controllerList[18].text = "";
+      controllerList[9].text = "Sélectionner";
+    } else {
+      controllerList[9].text = getElement(9);
+      if (controllerList[9].text != "")
+        controllerList[17].text = "génie civil fissuré";
+      if (controllerList[8].text != "") controllerList[18].text = "déboitement";
+    }
     controllerList[10].text = getElement(10);
-    if(getElement(10)==''){
-      controllerList[10].text="Sélectionner";
+    controllerList[11].text = getElement(11);
+    if (getElement(11) == "") {
+      controllerList[19].text = "";
+      controllerList[11].text = "Sélectionner";
+    } else {
+      controllerList[11].text = getElement(11);
+      controllerList[19].text = "tampon non accessible";
     }
-    else if(getElement(10)=="tampon non accessible"){
-      controllerList[11].text=getElement(11);
+    controllerList[12].text = getElement(12);
+    if (getElement(12) == "non") {
+      controllerList[13].text = "Sélectionner";
+    } else {
+      controllerList[12].text = "oui";
+      controllerList[13].text = getElement(12);
     }
-    controllerList[11].text=getElement(11);
-    editControllerlist(<String>['faible', 'moyenne','importante','','non'], 12, 13, 12);
-    controllerList[14].text=getElement(13);
-  }
-  
-  void editControllerlist(List<String> list,int indexController1,int indexController2, int indexParameter){
-    if(list.indexOf(getElement(indexParameter))!=-1){
-      //switch == non
-      controllerList[indexController1].text = getElement(indexParameter);
-    }
-    else {
-      controllerList[indexController1].text = 'oui';
-      controllerList[indexController2].text = getElement(indexParameter);
-    }
+    controllerList[14].text = getElement(13);
   }
 
-  void setElement(int index,String value){
-    switch(index){
+  void setElement(int index, String value) {
+    switch (index) {
       case 1:
         widget.selectedOuvrage.tracesCharge = value;
         break;
@@ -170,13 +192,14 @@ class AnomalieState extends State<Anomalie> {
         break;
       case 13:
         widget.selectedOuvrage.observationsAnomalies = value;
-        break; 
+        break;
       default:
-        break;    
+        break;
     }
   }
 
-  Padding dropDownList(List<String> list, int indexParameter, int indexController) {
+  Padding dropDownList(
+      List<String> list, int indexParameter, int indexController) {
     return Padding(
       padding: EdgeInsets.all(Config.screenPadding),
       child: DropdownButton<String>(
@@ -211,31 +234,42 @@ class AnomalieState extends State<Anomalie> {
     );
   }
 
-  Switch _switch(int indexParameter,int indexController) {
-    return Switch(
-      value: controllerList[indexController].text=='oui',
-      onChanged: (value) {
-        setState(() {
-          if(value){
-            controllerList[indexController].text ='oui';
-            setElement(indexParameter, 'oui');
-          }
-          else {
-            controllerList[indexController].text = 'non';
-            setElement(indexParameter, 'non');
-          }
-        });
-      },
+  Padding _switch(int indexParameter, int indexController, String texttrue,
+      String textfalse) {
+    return Padding(
+      padding: EdgeInsets.all(Config.screenPadding),
+      child: Transform.scale(
+        scale: 2.0,
+        child: Switch(
+          value: controllerList[indexController].text == texttrue,
+          onChanged: (value) {
+            setState(() {
+              if (value) {
+                controllerList[indexController].text = texttrue;
+                if (indexParameter != null)
+                  print("element is set true");
+                  setElement(indexParameter, texttrue);
+              } else {
+                controllerList[indexController].text = textfalse;
+                if (indexParameter != null)
+                  setElement(indexParameter, textfalse);
+              }
+            });
+          },
+        ),
+      ),
     );
   }
 
-  Expanded expandedTextField(int indexParameter,int indexController) {
+  Expanded expandedTextField(
+      int indexParameter, int indexController, String text) {
     return Expanded(
       child: Padding(
         padding: EdgeInsets.all(Config.screenPadding),
         child: TextField(
           controller: controllerList[indexController],
           decoration: InputDecoration(
+            labelText: text,
             labelStyle: TextStyle(color: Config.textColor),
             focusColor: Config.color,
             fillColor: Colors.white,
@@ -270,112 +304,157 @@ class AnomalieState extends State<Anomalie> {
                 children: [
                   Row(
                     children: <Widget>[
-                      Text("Traces de mise en charge : ", style: textStyle),
-                      _switch(1,0),
-                      Text(controllerList[0].text == 'oui' ? "oui" : "non"),
+                      Text("Traces de mise en charge :", style: textStyle),
+                      _switch(null, 0, "oui", "non"),
+                      Text(
+                        controllerList[0].text == 'oui' ? "oui" : "non",
+                        style: choiceTextStyle,
+                      ),
                       controllerList[0].text == 'oui'
-                          ? dropDownList(
-                              <String>[
-                                'faible',
-                                'moyenne',
-                                'importante',
-                              ],
-                              1,1)
+                          ? dropDownList(<String>[
+                              'faible',
+                              'moyenne',
+                              'importante',
+                            ], 1, 1)
                           : Padding(padding: EdgeInsets.all(1)),
                     ],
                   ),
                   Row(
                     children: <Widget>[
                       Text("Perturbation de l'écoulement :", style: textStyle),
-                      _switch(2,2),
+                      _switch(2, 2, "oui", "non"),
                       Text(controllerList[2].text == 'oui' ? "oui" : "non"),
                       controllerList[2].text == 'oui'
-                          ? expandedTextField(3,3)
+                          ? expandedTextField(3, 3, "Préciser")
                           : Padding(padding: EdgeInsets.all(1)),
                     ],
                   ),
                   Row(
                     children: <Widget>[
                       Text("Défaut d'étanchéité :", style: textStyle),
-                      _switch(4,4),
+                      _switch(4, 4, "oui", "non"),
                       Text(controllerList[4].text == 'oui' ? "oui" : "non"),
-                      controllerList[4].text == 'oui'
-                          ? dropDownList(
-                              <String>[
-                                "traces d'infiltration",
-                                "branchement non étanche"
-                              ],
-                              5,5)
-                          : Padding(padding: EdgeInsets.all(1)),
-                      controllerList[5].text == "traces d'infiltration"
-                          ? dropDownList(
-                              <String>[
-                                'faible',
-                                'moyenne',
-                                'importante',
-                              ],
-                              6,6)
-                          : Padding(padding: EdgeInsets.all(1))
+                      Expanded(
+                        child: controllerList[4].text == 'oui'
+                            ? Column(children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    _switch(
+                                        null, 16, "traces d'infiltration", ""),
+                                    Text("traces d'infiltration"),
+                                    Visibility(
+                                      visible: controllerList[16].text ==
+                                          "traces d'infiltration",
+                                      child: dropDownList(<String>[
+                                        'faible',
+                                        'moyenne',
+                                        'importante',
+                                      ], 6, 6),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    _switch(
+                                        null, 5, "branchement non étanche", ""),
+                                    Text("branchement non étanche")
+                                  ],
+                                ),
+                              ])
+                            : Padding(padding: EdgeInsets.all(1)),
+                      ),
                     ],
                   ),
                   Row(
                     children: <Widget>[
                       Text(
-                        "Défaut de structure",
+                        "Défaut de structure :",
                         style: textStyle,
                       ),
-                      _switch(7,7),
-                      Text(controllerList[7].text=='oui' ? "oui" : "non"),
-                      controllerList[7].text=='oui'
-                          ? dropDownList(
-                              <String>["Genie civil fissuré", "déboitement"],
-                              8,8)
-                          : Padding(padding: EdgeInsets.all(1)),
-                      Visibility(
-                        visible: controllerList[7].text=='oui',
-                        child: controllerList[8].text == "Genie civil fissuré"
-                            ? dropDownList(
-                                <String>[
-                                  'léger',
-                                  'lourd',
-                                ],
-                                9,9)
-                            : expandedTextField(8,8),
-                      )
+                      _switch(7, 7, "oui", "non"),
+                      Text(controllerList[7].text == 'oui' ? "oui" : "non"),
+                      Expanded(
+                        child: controllerList[7].text == 'oui'
+                            ? Column(children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    _switch(
+                                        null, 17, "génie civil fissuré", ""),
+                                    Text("génie civil fissuré"),
+                                    Visibility(
+                                      visible: controllerList[17].text ==
+                                          'génie civil fissuré',
+                                      child: dropDownList(<String>[
+                                        'léger',
+                                        'lourd',
+                                      ], 9, 9),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    _switch(null, 18, "déboitement", ""),
+                                    Text("déboitement"),
+                                    Visibility(
+                                      visible: controllerList[18].text ==
+                                          "déboitement",
+                                      child:
+                                          expandedTextField(8, 9, "précisions"),
+                                    )
+                                  ],
+                                ),
+                              ])
+                            : Padding(padding: EdgeInsets.all(1)),
+                      ),
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Text("Défaut de fermeture", style: textStyle),
-                      dropDownList(<String>["tampon non accessible","tampon détérioré"], 10, 10),
-                      controllerList[10].text == 'tampon non accessible'
-                          ? dropDownList(
-                              <String>[
-                                'sous enrobé',
-                                'sous véhicule',
+                      Text("Défaut de fermeture :", style: textStyle),
+                      Expanded(
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                _switch(null, 19, "tampon non accessible", ""),
+                                Text("tampon non accessible"),
+                                Visibility(
+                                  visible: controllerList[19].text ==
+                                      'tampon non accessible',
+                                  child: dropDownList(<String>[
+                                    'sous enrobé',
+                                    'sous véhicule',
+                                  ], 11, 11),
+                                )
                               ],
-                              11,11)
-                          : Padding(padding: EdgeInsets.all(1))
+                            ),
+                            Row(
+                              children: <Widget>[
+                                _switch(null, 10, "tampon détérioré", ""),
+                                Text("tampon détérioré")
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Text("Présence d'H2S", style: textStyle),
-                      _switch(12,12),
-                      Text(controllerList[12].text=='oui' ? "oui" : "non"),
-                      controllerList[12].text=='oui'
-                          ? dropDownList(
-                              <String>[
-                                'faible',
-                                'moyenne',
-                                'importante',
-                              ],
-                              12,13)
+                      Text("Présence d'H2S :", style: textStyle),
+                      _switch(12, 12, "oui", "non"),
+                      Text(controllerList[12].text == 'oui' ? "oui" : "non"),
+                      controllerList[12].text == 'oui'
+                          ? dropDownList(<String>[
+                              'faible',
+                              'moyenne',
+                              'importante',
+                            ], 12, 13)
                           : Padding(padding: EdgeInsets.all(1))
                     ],
                   ),
                   Row(children: <Widget>[
-                    expandedTextField(13,14),
+                    expandedTextField(13, 14, "Autres observations"),
                   ])
                 ],
               ),
