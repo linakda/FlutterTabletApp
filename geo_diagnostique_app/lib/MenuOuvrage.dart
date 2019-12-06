@@ -24,18 +24,19 @@ class MenuOuvrageState extends State<MenuOuvrage> {
     super.initState();
     listOuvrage = widget.selectedCommune.listOuvrage;
     colors = [Colors.brown, Colors.blue, Colors.green, Config.textColor];
-    listTypeOuvrage = <String>['séparatif EU','séparatif EP','unitaire','autre : '];
+    listTypeOuvrage = <String>['séparatif EU','séparatif EP','unitaire','autre :'];
   }
-
+  Color switchColor(String typeOuvrage){
+        int index = listTypeOuvrage.indexOf(typeOuvrage);
+        if(index==-1) return Colors.grey;
+        else return colors[index];
+  }
   @override
   Widget build(BuildContext context) {
      //Method qui permet de trouver l'indice de l'ouvrage
-
-//  Color switchColor(String typeOuvrage){
-//        int index = listTypeOuvrage.indexOf(typeOuvrage);
-//        return colors[index];
-//     }
-
+    listOuvrage = widget.selectedCommune.listOuvrage;
+    print("taille = ${listOuvrage.length}");
+  
     Config().init(context);
     return new Scaffold(
       appBar: AppBar(
@@ -167,7 +168,7 @@ class MenuOuvrageState extends State<MenuOuvrage> {
                     },
                     child: new Card(
                       elevation: 10,
-                      color: Config.textColor,//switchColor(listOuvrage[index].typeReseau),
+                      color: switchColor(listOuvrage[index].typeReseau),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                       ),
