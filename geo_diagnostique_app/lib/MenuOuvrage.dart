@@ -17,14 +17,25 @@ class MenuOuvrage extends StatefulWidget {
 
 class MenuOuvrageState extends State<MenuOuvrage> {
   List<Ouvrage> listOuvrage = new List<Ouvrage>();
+  List<String> listTypeOuvrage;
+  List colors, fermeture; 
   @override
   void initState() {
     super.initState();
     listOuvrage = widget.selectedCommune.listOuvrage;
+    colors = [Colors.brown, Colors.blue, Colors.green, Config.textColor];
+    listTypeOuvrage = <String>['séparatif EU','séparatif EP','unitaire','autre : '];
   }
 
   @override
   Widget build(BuildContext context) {
+     //Method qui permet de trouver l'indice de l'ouvrage
+
+//  Color switchColor(String typeOuvrage){
+//        int index = listTypeOuvrage.indexOf(typeOuvrage);
+//        return colors[index];
+//     }
+
     Config().init(context);
     return new Scaffold(
       appBar: AppBar(
@@ -156,7 +167,7 @@ class MenuOuvrageState extends State<MenuOuvrage> {
                     },
                     child: new Card(
                       elevation: 10,
-                      color: Config.textColor,
+                      color: Config.textColor,//switchColor(listOuvrage[index].typeReseau),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                       ),
