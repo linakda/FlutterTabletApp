@@ -13,8 +13,8 @@ class Anomalie extends StatefulWidget {
 }
 
 class AnomalieState extends State<Anomalie> {
-  TextStyle textStyle =
-      new TextStyle(fontSize: Config.fontSize, fontWeight: FontWeight.bold);
+  TextStyle textStyle = new TextStyle(fontSize: Config.fontSize, fontWeight: FontWeight.bold);
+
   TextStyle choiceTextStyle = new TextStyle(fontSize: Config.fontSize/1.3);
   List<TextEditingController> controllerList = new List(29);
 
@@ -258,6 +258,7 @@ class AnomalieState extends State<Anomalie> {
       ),
     );
   }
+  
   void resetParameter(List<int> listParameter,List<int> listController){
     for(int i in listParameter){
       setElement(i, "");
@@ -268,6 +269,7 @@ class AnomalieState extends State<Anomalie> {
     }
 
   }
+  
   Expanded expandedTextField(
       int indexParameter, int indexController, String text) {
     return Expanded(
@@ -330,7 +332,7 @@ class AnomalieState extends State<Anomalie> {
                     children: <Widget>[
                       Text("Perturbation de l'écoulement :", style: textStyle),
                       _switch(2, 2, "oui", "non",[3],[3]),
-                      Text(controllerList[2].text == 'oui' ? "oui" : "non"),
+                      Text(controllerList[2].text == 'oui' ? "oui" : "non",style: choiceTextStyle,),
                       controllerList[2].text == 'oui'
                           ? expandedTextField(3, 3, "Préciser")
                           : Padding(padding: EdgeInsets.all(1)),
@@ -340,14 +342,14 @@ class AnomalieState extends State<Anomalie> {
                     children: <Widget>[
                       Text("Défaut d'étanchéité :", style: textStyle),
                       _switch(4, 4, "oui", "non",[5,6],[5,6,16]),
-                      Text(controllerList[4].text == 'oui' ? "oui" : "non"),
+                      Text(controllerList[4].text == 'oui' ? "oui" : "non",style: choiceTextStyle,),
                       Expanded(
                         child: controllerList[4].text == 'oui'
                             ? Column(children: <Widget>[
                                 Row(
                                   children: <Widget>[
                                     _switch( null, 16, "traces d'infiltration", "",[6],[6]),
-                                    Text("traces d'infiltration"),
+                                    Text("traces d'infiltration",style: choiceTextStyle,),
                                     Visibility(
                                       visible: controllerList[16].text ==
                                           "traces d'infiltration",
@@ -362,7 +364,7 @@ class AnomalieState extends State<Anomalie> {
                                 Row(
                                   children: <Widget>[
                                     _switch(5, 5, "branchement non étanche", "",[],[]),
-                                    Text("branchement non étanche")
+                                    Text("branchement non étanche",style: choiceTextStyle,)
                                   ],
                                 ),
                               ])
@@ -377,14 +379,14 @@ class AnomalieState extends State<Anomalie> {
                         style: textStyle,
                       ),
                       _switch(7, 7, "oui", "non",[8,9],[8,9,17,18]),
-                      Text(controllerList[7].text == 'oui' ? "oui" : "non"),
+                      Text(controllerList[7].text == 'oui' ? "oui" : "non",style: choiceTextStyle,),
                       Expanded(
                         child: controllerList[7].text == 'oui'
                             ? Column(children: <Widget>[
                                 Row(
                                   children: <Widget>[
                                     _switch(null, 17, "génie civil fissuré", "",[9],[9]),
-                                    Text("génie civil fissuré"),
+                                    Text("génie civil fissuré",style: choiceTextStyle,),
                                     Visibility(
                                       visible: controllerList[17].text ==
                                           'génie civil fissuré',
@@ -398,7 +400,7 @@ class AnomalieState extends State<Anomalie> {
                                 Row(
                                   children: <Widget>[
                                     _switch(null, 18, "déboitement", "",[8],[8]),
-                                    Text("déboitement"),
+                                    Text("déboitement",style: choiceTextStyle,),
                                     Visibility(
                                       visible: controllerList[18].text ==
                                           "déboitement",
@@ -421,7 +423,7 @@ class AnomalieState extends State<Anomalie> {
                             Row(
                               children: <Widget>[
                                 _switch(null, 19, "tampon non accessible", "",[11],[11]),
-                                Text("tampon non accessible"),
+                                Text("tampon non accessible",style: choiceTextStyle,),
                                 Visibility(
                                   visible: controllerList[19].text ==
                                       'tampon non accessible',
@@ -435,7 +437,7 @@ class AnomalieState extends State<Anomalie> {
                             Row(
                               children: <Widget>[
                                 _switch(10, 10, "tampon détérioré", "",[],[]),
-                                Text("tampon détérioré")
+                                Text("tampon détérioré",style: choiceTextStyle,)
                               ],
                             )
                           ],
@@ -447,7 +449,7 @@ class AnomalieState extends State<Anomalie> {
                     children: <Widget>[
                       Text("Présence d'H2S :", style: textStyle),
                       _switch(null, 12, "oui", "non",[12],[13]),
-                      Text(controllerList[12].text == 'oui' ? "oui" : "non"),
+                      Text(controllerList[12].text == 'oui' ? "oui" : "non",style: choiceTextStyle,),
                       controllerList[12].text == 'oui'
                           ? dropDownList(<String>[
                               'faible',

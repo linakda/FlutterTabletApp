@@ -12,14 +12,9 @@ class Caractere extends StatefulWidget {
 }
 
 class CaractereState extends State<Caractere> {
-  Ouvrage ouvrage;
-  Config size = new Config();
-  TextStyle textSize = new TextStyle(fontSize: Config.fontSize);
-  Color color = Colors.teal[700];
-  EdgeInsetsGeometry textPadding = EdgeInsets.all(Config.screenPadding);
-  int navigationIndex;
-  List<TextEditingController> controllerList = new List(12);
-  final int currentIndex = 1;
+  TextStyle textStyle =
+      new TextStyle(fontSize: Config.fontSize, fontWeight: FontWeight.bold);
+  List<TextEditingController> controllerList = new List(14);
   /*
    * controller :
    *  0 -> type list (1)
@@ -34,11 +29,15 @@ class CaractereState extends State<Caractere> {
    *  11 -> dimension text (6) si rectangulaire
    *  9 -> dispositif acces list (7)
    *  10 -> cunette  (8)
+   *  12 -> profondeur cunnette (9)
+   *  13 -> côte tn (10)
    */
-  String getElement(int index,){
-    switch(index){
+  String getElement(
+    int index,
+  ) {
+    switch (index) {
       case 1:
-        return widget.selectedOuvrage.type ;
+        return widget.selectedOuvrage.type;
         break;
       case 2:
         return widget.selectedOuvrage.observationCaracteristiques;
@@ -61,9 +60,15 @@ class CaractereState extends State<Caractere> {
       case 8:
         return widget.selectedOuvrage.cunette;
         break;
+      case 9:
+        return widget.selectedOuvrage.profondeurRadier;
+        break;
+      case 10:
+       return widget.selectedOuvrage.coteTN;
+       break;
       default:
-      return null;
-        break;    
+        return null;
+        break;
     }
   }
 
@@ -78,33 +83,45 @@ class CaractereState extends State<Caractere> {
     controllerList[5].text = "Sélectionner";
     controllerList[6].text = "Sélectionner";
     controllerList[9].text = "Sélectionner";
-    controllerList[10].text= "Sélectionner";
-    editControllerlist(<String>['regard','regard avaloir','avaloir','grille','boîte de branchement',''], 0, 1, 1);
-    if(getElement(2)!="") controllerList[2].text=getElement(2);
-    editControllerlist(<String>['fonte','béton',''], 3, 4, 3);
-    if(getElement(4)!="") controllerList[5].text = getElement(4);
-    editControllerlist(<String>['préfabriquée','maçonnée','PVC',''], 6, 7, 5);
-    if(getElement(6)!=""){
-      if(testDimensionFormat().length==1)
-        controllerList[8].text=getElement(6);
-      else{
+    controllerList[10].text = "Sélectionner";
+    editControllerlist(<String>[
+      'regard',
+      'regard avaloir',
+      'avaloir',
+      'grille',
+      'boîte de branchement',
+      ''
+    ], 0, 1, 1);
+    if (getElement(2) != "") controllerList[2].text = getElement(2);
+    editControllerlist(<String>['fonte', 'béton', ''], 3, 4, 3);
+    if (getElement(4) != "") controllerList[5].text = getElement(4);
+    editControllerlist(
+        <String>['préfabriquée', 'maçonnée', 'PVC', ''], 6, 7, 5);
+    if (getElement(6) != "") {
+      if (testDimensionFormat().length == 1)
+        controllerList[8].text = getElement(6);
+      else {
         controllerList[8].text = testDimensionFormat()[0];
-        controllerList[11].text= testDimensionFormat()[1];
+        controllerList[11].text = testDimensionFormat()[1];
       }
     }
-    if(getElement(7)!="") controllerList[9].text=getElement(7);
-    if(getElement(8)!="") controllerList[10].text=getElement(8);
+    if (getElement(7) != "") controllerList[9].text = getElement(7);
+    if (getElement(8) != "") controllerList[10].text = getElement(8);
+    if(getElement(9)!="") controllerList[12].text;
+    if(getElement(10)!="") controllerList[13].text;
   }
-  
-  void editControllerlist(List<String> list,int indexController1,int indexController2, int indexParameter){
-    if(list.indexOf(getElement(indexParameter))==-1){
+
+  void editControllerlist(List<String> list, int indexController1,
+      int indexController2, int indexParameter) {
+    if (list.indexOf(getElement(indexParameter)) == -1) {
       controllerList[indexController1].text = 'autre : ';
       controllerList[indexController2].text = getElement(indexParameter);
-    }
-    else if(getElement(indexParameter)!='') controllerList[indexController1].text = getElement(indexParameter);
+    } else if (getElement(indexParameter) != '')
+      controllerList[indexController1].text = getElement(indexParameter);
   }
-  void setElement(int index,String value){
-    switch(index){
+
+  void setElement(int index, String value) {
+    switch (index) {
       case 1:
         widget.selectedOuvrage.type = value;
         break;
@@ -129,58 +146,67 @@ class CaractereState extends State<Caractere> {
       case 8:
         widget.selectedOuvrage.cunette = value;
         break;
+      case 9:
+        widget.selectedOuvrage.profondeurRadier=value;
+        break;
+      case 10:
+        widget.selectedOuvrage.coteTN=value;
+        break;
       default:
-        break;    
+        break;
     }
   }
 
-  Padding dropDownList(int indexController,int indexParameter, List<String> list) {
+  Padding dropDownList(
+      int indexController, int indexParameter, List<String> list) {
     return Padding(
       padding: EdgeInsets.all(Config.screenPadding),
       child: DropdownButton<String>(
-        hint: SizedBox(
-          width: controllerList[indexController].text == "autre : "
-              ? Config.screenWidth / 4
-              : Config.screenWidth / 1.5,
-          child: Text(
-            controllerList[indexController].text,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: Config.fontSize, color: Colors.black),
-          ),
-        ),
-        style: TextStyle(fontSize: Config.fontSize, color: Colors.black),
-        items: list.map((String value) {
-          return new DropdownMenuItem<String>(
-            child: SizedBox(
-              width: controllerList[indexController].text == "autre : "
-                  ? Config.screenWidth / 4
-                  : Config.screenWidth / 1.5,
-              child: Text(
-                value,
-                textAlign: TextAlign.left,
-              ),
+          hint: SizedBox(
+            width: controllerList[indexController].text == "autre : "
+                ? Config.screenWidth / 4
+                : Config.screenWidth / 2,
+            child: Text(
+              controllerList[indexController].text,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: Config.fontSize, color: Colors.black),
             ),
-            value: value,
-          );
-        }).toList(),
-        onChanged: (String newValue) {
-          setState(() {
-            controllerList[indexController].text = newValue;
-            if (controllerList[indexController].text != 'autre : ')
-              setElement(indexParameter, newValue);
-          });
-        }
-      ),
+          ),
+          style: TextStyle(fontSize: Config.fontSize, color: Colors.black),
+          items: list.map((String value) {
+            return new DropdownMenuItem<String>(
+              child: SizedBox(
+                width: controllerList[indexController].text == "autre : "
+                    ? Config.screenWidth / 4
+                    : Config.screenWidth / 2,
+                child: Text(
+                  value,
+                  textAlign: TextAlign.left,
+                ),
+              ),
+              value: value,
+            );
+          }).toList(),
+          onChanged: (String newValue) {
+            setState(() {
+              controllerList[indexController].text = newValue;
+              if (controllerList[indexController].text != 'autre : ')
+                setElement(indexParameter, newValue);
+            });
+          }),
     );
   }
 
-  Expanded expandedTextField(int indexController,int indexParameter,String labelText) {
+  Expanded expandedTextField(
+      int indexController, int indexParameter, String labelText) {
     return Expanded(
       child: Padding(
         padding: EdgeInsets.all(Config.screenPadding),
         child: TextField(
           controller: controllerList[indexController],
-          keyboardType: indexController==11 || indexController==8 ?TextInputType.number:TextInputType.text,
+          keyboardType: <int>[11,8,12,13].contains(indexController)
+              ? TextInputType.number
+              : TextInputType.text,
           textAlign: TextAlign.left,
           decoration: InputDecoration(
             labelText: labelText,
@@ -197,8 +223,8 @@ class CaractereState extends State<Caractere> {
           ),
           onChanged: (String text) {
             setState(() {
-              if(indexController == 11)
-                setElement(indexParameter, controllerList[8].text+':'+text);
+              if (indexController == 11)
+                setElement(indexParameter, controllerList[8].text + ':' + text);
               else
                 setElement(indexParameter, text);
             });
@@ -207,23 +233,25 @@ class CaractereState extends State<Caractere> {
       ),
     );
   }
-  List<String> testDimensionFormat(){
+
+  List<String> testDimensionFormat() {
     String value = getElement(6);
     return value.split(":");
   }
+
   Widget build(BuildContext context) {
     Config().init(context);
     return new Scaffold(
       body: Builder(
         builder: (context) => SingleChildScrollView(
           child: Padding(
-            padding:EdgeInsets.all(Config.screenPadding),
+            padding: EdgeInsets.all(Config.screenPadding),
             child: Center(
               child: Column(
                 children: [
                   Row(
                     children: <Widget>[
-                      Text("Type :"),
+                      Text("Type :", style: textStyle),
                       dropDownList(
                         0,
                         1,
@@ -237,71 +265,75 @@ class CaractereState extends State<Caractere> {
                         ],
                       ),
                       Visibility(
-                        child: expandedTextField(1,1,"Type de l'ouvrage"),
+                        child: expandedTextField(1, 1, "Type de l'ouvrage"),
                         visible: controllerList[0].text == "autre : ",
                       )
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      expandedTextField(2,2,"Observations"),
+                      expandedTextField(2, 2, "Observations"),
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Text("Dispositif de fermeture : "),
+                      Text("Dispositif de fermeture : ", style: textStyle),
                       dropDownList(
-                        3,
-                        3,
-                        <String>[
-                          'fonte',
-                          'béton',
-                          'autre : ',
-                        ],
-                      ),
+                          3,
+                          3,
+                          <String>[
+                            'fonte',
+                            'béton',
+                            'autre : ',
+                          ],
+                        ),
                       Visibility(
-                        child: expandedTextField(4,3,"Dispositif de fermeture"),
+                        child:
+                            expandedTextField(4, 3, "Dispositif de fermeture"),
                         visible: controllerList[3].text == 'autre : ',
                       ),
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Text("Section (Cheminée) :"),
-                      dropDownList(5,4, <String>['circulaire', 'rectangulaire']),
+                      Text("Section (Cheminée) :", style: textStyle),
+                      dropDownList(
+                            5, 4, <String>['circulaire', 'rectangulaire']),
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Text("Nature (Cheminée) :"),
+                      Text("Nature (Cheminée) :", style: textStyle),
                       dropDownList(
-                        6,
-                        5,
-                        <String>[
-                          'préfabriquée',
-                          'maçonnée',
-                          'PVC',
-                          'autre : '
-                        ],
-                      ),
+                          6,
+                          5,
+                          <String>['préfabriquée', 'maçonnée', 'PVC', 'autre : '],
+                        ),
                       Visibility(
-                        child: expandedTextField(7,5,"Nature de la cheminée"),
+                        child: expandedTextField(7, 5, "Nature de la cheminée"),
                         visible: controllerList[6].text == 'autre : ',
                       ),
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Text("Dimension (cheminée) : "),
-                      expandedTextField(8,6,controllerList[5].text == 'circulaire'?"Diamètre (en cm)":"Longueur (en cm)"),
+                      Text("Dimension (cheminée) : ", style: textStyle),
+                      expandedTextField(
+                          8,
+                          6,
+                          controllerList[5].text == 'circulaire'
+                              ? "Diamètre (en cm)"
+                              : "Longueur (en cm)"),
                       controllerList[5].text == 'circulaire'
-                      ?Padding(padding: EdgeInsets.all(1),)
-                      :expandedTextField(11,6,"Largeur (en cm)")
+                          ? Padding(
+                              padding: EdgeInsets.all(1),
+                            )
+                          : expandedTextField(11, 6, "Largeur (en cm)")
                     ],
                   ),
                   Row(
                     children: <Widget>[
-                      Text("Dispositif d'accès :"),
+                      Text("Dispositif d'accès :", style: textStyle),
                       dropDownList(
                         9,
                         7,
@@ -314,7 +346,7 @@ class CaractereState extends State<Caractere> {
                   ),
                   Row(
                     children: <Widget>[
-                      Text("Cunette"),
+                      Text("Cunette :", style: textStyle),
                       dropDownList(
                         10,
                         8,
@@ -326,6 +358,16 @@ class CaractereState extends State<Caractere> {
                       ),
                     ],
                   ),
+                  Row(
+                    children: <Widget>[
+                      Text("Profondeur radier en l'abscence de cunette :",style: textStyle,),
+                      expandedTextField(12, 9, "Profondeur (en cm)")
+                  ],),
+                  Row(
+                    children: <Widget>[
+                      Text("Côte tn :",style: textStyle,),
+                      expandedTextField(13, 10, "Côte (en cm)")
+                  ],)
                 ], //Children
               ),
             ),

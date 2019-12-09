@@ -16,7 +16,8 @@ class Localisation extends StatefulWidget {
 class LocalisationState extends State<Localisation> {
   Ouvrage ouvrage;
   Config size = new Config();
-  TextStyle textSize = new TextStyle(fontSize: Config.fontSize);
+  TextStyle textStyle =
+      new TextStyle(fontSize: Config.fontSize, fontWeight: FontWeight.bold);
   EdgeInsetsGeometry textPadding = EdgeInsets.all(Config.screenPadding);
   List<TextEditingController> controllerList = new List(4);
   Position _currentPosition = new Position();
@@ -89,7 +90,7 @@ class LocalisationState extends State<Localisation> {
                 ),
                 Row(
                   children: <Widget>[
-                    Text("Implantation :"),
+                    Text("Implantation :",style: textStyle,),
                     Padding(
                       padding: EdgeInsets.all(Config.screenPadding),
                       child: DropdownButton<String>(
@@ -137,7 +138,7 @@ class LocalisationState extends State<Localisation> {
                 ),
                 Row(
                   children: <Widget>[
-                    Text("Type de réseau"),
+                    Text("Type de réseau",style: textStyle,),
                     Padding(
                       padding: EdgeInsets.all(Config.screenPadding),
                       child: DropdownButton<String>(

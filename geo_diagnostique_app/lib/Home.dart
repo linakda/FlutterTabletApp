@@ -13,11 +13,19 @@ class SplashScreen extends StatefulWidget {
   }
 }
 
-class SplashScreenState extends State<SplashScreen> {
+class SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+  Animation _animation;
+  AnimationController _animationController;
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 5), () async{
+    _animationController = AnimationController(
+      vsync:this,
+      duration: Duration(seconds: 2) 
+    );
+    _animation = CurvedAnimation(parent: _animationController,curve: Curves.easeIn);
+
+    Future.delayed(Duration(seconds: 10), () async{
       await storage.readAndUpdateList();
       Navigator.pushReplacement(
           context,
@@ -49,17 +57,10 @@ class SplashScreenState extends State<SplashScreen> {
           children: <Widget>[
             Center(
               child: new Container(
-                padding: new EdgeInsets.all(90.0),
-                child: new DelayedDisplay(
-                  delay: Duration(seconds: 1),
-                  fadingDuration: Duration(seconds: 2),
-                  child: FadeInImage.assetNetwork(
-                    fadeInDuration: const Duration(seconds: 3),
-                    height: 150.0,
-                    width: 100.0,
-                    placeholder: 'assets/size2.png',
-                    image: 'assets/size2.png',
-                  ),
+                padding: new EdgeInsets.all(20.0),
+                child: FadeTransition(
+                  opacity: _animation,
+                  child: Image.asset('assets/size2.png'),
                 ),
               ),
             ),
