@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:geo_diagnostique_app/Ouvrage.dart';
 import 'package:geo_diagnostique_app/Config.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 
 class Localisation extends StatefulWidget {
   final Ouvrage selectedOuvrage;
@@ -222,12 +223,43 @@ class LocalisationState extends State<Localisation> {
                     ),
                   ],
                 ),
-                FlatButton(
-                  child: Icon(Icons.location_on),
-                  onPressed: _getCurrentLocation,
+                InkWell(
+                  child: Icon(
+                    Icons.location_on,
+                    size: Config.fontSize * 2,
+                  ),
+                  onTap: () {
+                      _getCurrentLocation();
+                  },
+                  onLongPress: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Ouvrir Maps ?"),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text("Annuler"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              FlatButton(
+                                child: Text("Ouvrir dans Maps"),
+                                onPressed: () {
+                                  MapsLauncher.launchCoordinates(
+                                      _currentPosition.latitude,
+                                      _currentPosition.longitude);
+                                },
+                              ),
+                            ],
+                          );
+                        });
+                  },
                 ),
                 Text(
-                    "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
+                    "Latitude : ${_currentPosition.latitude}, Longitude : ${_currentPosition.longitude}, Altitude : ${_currentPosition.altitude}",
+                    style: TextStyle(fontSize: Config.fontSize)),
               ], //Children
             ),
           ),

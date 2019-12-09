@@ -33,6 +33,7 @@ dependencies:
   path_provider: ^1.4.0
   image: ^2.1.8
   geolocator: ^5.1.5
+  maps_launcher: ^1.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
