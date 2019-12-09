@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/rendering.dart';
 import 'package:geo_diagnostique_app/Affaire.dart';
-import 'package:image/image.dart' as IMG;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geo_diagnostique_app/Config.dart';
@@ -12,7 +10,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math' as Math;
 import 'package:path/path.dart' as p;
-import 'package:path_provider/path_provider.dart';
 
 class LandingScreen extends StatefulWidget {
   final Ouvrage selectedOuvrage;

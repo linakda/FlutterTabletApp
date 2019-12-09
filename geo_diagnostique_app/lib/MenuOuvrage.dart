@@ -35,7 +35,6 @@ class MenuOuvrageState extends State<MenuOuvrage> {
   Widget build(BuildContext context) {
      //Method qui permet de trouver l'indice de l'ouvrage
     listOuvrage = widget.selectedCommune.listOuvrage;
-    print("taille = ${listOuvrage.length}");
   
     Config().init(context);
     return new Scaffold(

@@ -10,7 +10,7 @@ import 'main.dart';
 
 class Storage {
   Future<String> get localPath async {
-    final dir = await getExternalStorageDirectory();
+    final dir = await getApplicationDocumentsDirectory();
     return dir.path;
   }
 

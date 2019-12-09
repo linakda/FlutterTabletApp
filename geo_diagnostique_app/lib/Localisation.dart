@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/rendering.dart';
 import 'package:geo_diagnostique_app/Ouvrage.dart';
 import 'package:geo_diagnostique_app/Config.dart';
+import 'package:geolocator/geolocator.dart';
 
 class Localisation extends StatefulWidget {
   final Ouvrage selectedOuvrage;
@@ -18,24 +19,34 @@ class LocalisationState extends State<Localisation> {
   TextStyle textSize = new TextStyle(fontSize: Config.fontSize);
   EdgeInsetsGeometry textPadding = EdgeInsets.all(Config.screenPadding);
   List<TextEditingController> controllerList = new List(4);
+  Position _currentPosition = new Position();
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    for(int i=0;i<controllerList.length;i++){
+    _getCurrentLocation();
+    for (int i = 0; i < controllerList.length; i++) {
       controllerList[i] = new TextEditingController();
     }
     controllerList[1].text = "Sélectionner";
-    if(widget.selectedOuvrage.implantation!="") controllerList[1].text = widget.selectedOuvrage.implantation;
+    if (widget.selectedOuvrage.implantation != "")
+      controllerList[1].text = widget.selectedOuvrage.implantation;
     controllerList[2].text = "Sélectionner";
-    if(widget.selectedOuvrage.nomRue != "") controllerList[0].text = widget.selectedOuvrage.nomRue;
-    if(widget.selectedOuvrage.typeReseau!='séparatif EU'&& widget.selectedOuvrage.typeReseau.isNotEmpty &&
-    widget.selectedOuvrage.typeReseau!='séparatif EP'&&widget.selectedOuvrage.typeReseau!='unitaire'){
-      controllerList[3].text=widget.selectedOuvrage.typeReseau;
+    if (widget.selectedOuvrage.nomRue != "")
+      controllerList[0].text = widget.selectedOuvrage.nomRue;
+    if (widget.selectedOuvrage.typeReseau != 'séparatif EU' &&
+        widget.selectedOuvrage.typeReseau.isNotEmpty &&
+        widget.selectedOuvrage.typeReseau != 'séparatif EP' &&
+        widget.selectedOuvrage.typeReseau != 'unitaire') {
+      controllerList[3].text = widget.selectedOuvrage.typeReseau;
       controllerList[2].text = 'autre : ';
-    }
-    else if(widget.selectedOuvrage.typeReseau != "") controllerList[2].text = widget.selectedOuvrage.typeReseau;
+    } else if (widget.selectedOuvrage.typeReseau != "")
+      controllerList[2].text = widget.selectedOuvrage.typeReseau;
   }
-  
+
+  _getCurrentLocation()async {
+    _currentPosition= await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  }
+
   @override
   Widget build(BuildContext context) {
     Config().init(context);
@@ -53,26 +64,25 @@ class LocalisationState extends State<Localisation> {
                       child: Padding(
                         padding: EdgeInsets.all(Config.screenPadding),
                         child: TextField(
-                          controller: controllerList[0],
-                          decoration: InputDecoration(
-                            labelText: 'Nom de la rue',
-                            labelStyle: TextStyle(color: Config.textColor),
-                            focusColor: Config.color,
-                            fillColor: Colors.white,
-                            focusedBorder: new OutlineInputBorder(
-                              borderRadius: new BorderRadius.circular(25.0),
-                              borderSide: new BorderSide(color: Config.color),
+                            controller: controllerList[0],
+                            decoration: InputDecoration(
+                              labelText: 'Nom de la rue',
+                              labelStyle: TextStyle(color: Config.textColor),
+                              focusColor: Config.color,
+                              fillColor: Colors.white,
+                              focusedBorder: new OutlineInputBorder(
+                                borderRadius: new BorderRadius.circular(25.0),
+                                borderSide: new BorderSide(color: Config.color),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
                             ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(25.0),
-                            ),
-                          ),
-                          onChanged:(String text){ 
-                            setState(() {
-                              widget.selectedOuvrage.nomRue = text;
-                            });
-                          }
-                        ),
+                            onChanged: (String text) {
+                              setState(() {
+                                widget.selectedOuvrage.nomRue = text;
+                              });
+                            }),
                       ),
                     ),
                   ],
@@ -83,42 +93,45 @@ class LocalisationState extends State<Localisation> {
                     Padding(
                       padding: EdgeInsets.all(Config.screenPadding),
                       child: DropdownButton<String>(
-                        hint: SizedBox(
-                          width: 320.0,
-                          child: Text(
-                            controllerList[1].text,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: Config.fontSize, color: Colors.black),
-                          ),
-                        ),
-                        style: TextStyle(fontSize: Config.fontSize, color: Colors.black),
-                        items: <String>[
-                          'chaussée',
-                          'trottoir',
-                          'accotement',
-                          'terrain naturel',
-                          'domaine privé'
-                        ].map((String value) {
-                          return new DropdownMenuItem<String>(
-                            value: value,
-                            child: SizedBox(
-                              width: 320.0,
-                              child: Text(
-                                value,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: Config.fontSize,color: Colors.black),
-                              ),
+                          hint: SizedBox(
+                            width: 320.0,
+                            child: Text(
+                              controllerList[1].text,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: Config.fontSize,
+                                  color: Colors.black),
                             ),
-                          );
-                        }).toList(),
-                        onChanged: (String newValue) {
-                          setState(() {
-                            controllerList[1].text=newValue;
-                            widget.selectedOuvrage.implantation = newValue;
-                          });
-                        }
-                      ),
+                          ),
+                          style: TextStyle(
+                              fontSize: Config.fontSize, color: Colors.black),
+                          items: <String>[
+                            'chaussée',
+                            'trottoir',
+                            'accotement',
+                            'terrain naturel',
+                            'domaine privé'
+                          ].map((String value) {
+                            return new DropdownMenuItem<String>(
+                              value: value,
+                              child: SizedBox(
+                                width: 320.0,
+                                child: Text(
+                                  value,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: Config.fontSize,
+                                      color: Colors.black),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (String newValue) {
+                            setState(() {
+                              controllerList[1].text = newValue;
+                              widget.selectedOuvrage.implantation = newValue;
+                            });
+                          }),
                     ),
                   ],
                 ),
@@ -163,7 +176,7 @@ class LocalisationState extends State<Localisation> {
                           setState(() {
                             controllerList[2].text = newValue;
                             if (controllerList[2].text != 'autre : ') {
-                             widget.selectedOuvrage.typeReseau = newValue;
+                              widget.selectedOuvrage.typeReseau = newValue;
                             }
                           });
                         },
@@ -188,18 +201,19 @@ class LocalisationState extends State<Localisation> {
                                 borderRadius: BorderRadius.circular(25.0),
                               ),
                             ),
-                            onChanged: (String text){
+                            onChanged: (String text) {
                               setState(() {
-                                widget.selectedOuvrage.typeReseau=text;
+                                widget.selectedOuvrage.typeReseau = text;
                               });
                             },
                           ),
                         ),
                       ),
-                      visible:  controllerList[2].text == 'autre : ',
+                      visible: controllerList[2].text == 'autre : ',
                     ),
                   ],
                 ),
+                Text("LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
               ], //Children
             ),
           ),
