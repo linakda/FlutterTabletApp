@@ -241,12 +241,14 @@ class LocalisationState extends State<Localisation> {
                               FlatButton(
                                 child: Text("Annuler"),
                                 onPressed: () {
+                                  _getCurrentLocation();
                                   Navigator.of(context).pop();
                                 },
                               ),
                               FlatButton(
                                 child: Text("Ouvrir dans Maps"),
                                 onPressed: () {
+                                  _getCurrentLocation();
                                   MapsLauncher.launchCoordinates(
                                       _currentPosition.latitude,
                                       _currentPosition.longitude);
@@ -258,7 +260,7 @@ class LocalisationState extends State<Localisation> {
                   },
                 ),
                 Text(
-                    "Latitude : ${_currentPosition.latitude}, Longitude : ${_currentPosition.longitude}, Altitude : ${_currentPosition.altitude}",
+                    "Latitude : ${_currentPosition.latitude}, Longitude : ${_currentPosition.longitude}",
                     style: TextStyle(fontSize: Config.fontSize)),
               ], //Children
             ),
