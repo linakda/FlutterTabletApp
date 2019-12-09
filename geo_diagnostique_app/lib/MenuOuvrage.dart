@@ -23,8 +23,8 @@ class MenuOuvrageState extends State<MenuOuvrage> {
   void initState() {
     super.initState();
     listOuvrage = widget.selectedCommune.listOuvrage;
-    colors = [Colors.brown, Colors.blue, Colors.green, Config.textColor];
-    listTypeOuvrage = <String>['séparatif EU','séparatif EP','unitaire','autre :'];
+    colors = [Colors.brown, Colors.blue, Colors.green, Config.textColor, Colors.redAccent, Colors.redAccent];
+    listTypeOuvrage = <String>['séparatif EU','séparatif EP','unitaire','autre :','sous enrobé', 'sous véhicule'];
   }
   Color switchColor(String typeOuvrage){
         int index = listTypeOuvrage.indexOf(typeOuvrage);
@@ -168,7 +168,7 @@ class MenuOuvrageState extends State<MenuOuvrage> {
                     },
                     child: new Card(
                       elevation: 10,
-                      color: switchColor(listOuvrage[index].typeReseau),
+                      color: listOuvrage[index].defautFermeture!="" ?Colors.red :switchColor(listOuvrage[index].typeReseau),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                       ),
