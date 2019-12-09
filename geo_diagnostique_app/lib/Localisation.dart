@@ -24,7 +24,6 @@ class LocalisationState extends State<Localisation> {
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
     for (int i = 0; i < controllerList.length; i++) {
       controllerList[i] = new TextEditingController();
     }
@@ -44,8 +43,11 @@ class LocalisationState extends State<Localisation> {
       controllerList[2].text = widget.selectedOuvrage.typeReseau;
   }
 
-  _getCurrentLocation()async {
-    _currentPosition= await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  void _getCurrentLocation() async {
+    _currentPosition = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+        setState(() {
+        });
   }
 
   @override
@@ -90,7 +92,10 @@ class LocalisationState extends State<Localisation> {
                 ),
                 Row(
                   children: <Widget>[
-                    Text("Implantation :",style: textStyle,),
+                    Text(
+                      "Implantation :",
+                      style: textStyle,
+                    ),
                     Padding(
                       padding: EdgeInsets.all(Config.screenPadding),
                       child: DropdownButton<String>(
@@ -138,7 +143,10 @@ class LocalisationState extends State<Localisation> {
                 ),
                 Row(
                   children: <Widget>[
-                    Text("Type de réseau",style: textStyle,),
+                    Text(
+                      "Type de réseau",
+                      style: textStyle,
+                    ),
                     Padding(
                       padding: EdgeInsets.all(Config.screenPadding),
                       child: DropdownButton<String>(
@@ -214,7 +222,12 @@ class LocalisationState extends State<Localisation> {
                     ),
                   ],
                 ),
-                Text("LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
+                FlatButton(
+                  child: Icon(Icons.location_on),
+                  onPressed: _getCurrentLocation,
+                ),
+                Text(
+                    "LAT: ${_currentPosition.latitude}, LNG: ${_currentPosition.longitude}"),
               ], //Children
             ),
           ),
