@@ -5,13 +5,16 @@ import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Ouvrage.dart';
 import 'package:geo_diagnostique_app/main.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:path_provider_ex/path_provider_ex.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'main.dart';
 
 class Storage {
   Future<String> get localPath async { 
-    final dir = await getExternalStorageDirectory();
-    return dir.path;
+    Map<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.storage]);
+    final dir = await PathProviderEx.getStorageInfo();
+    for(StorageInfo tmp in dir) print(tmp.appFilesDir);
+    return dir[1].appFilesDir;
   }
 
   Future<File> get localFile async {

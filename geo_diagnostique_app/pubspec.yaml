@@ -31,9 +31,11 @@ dependencies:
   stack_overlay: ^0.1.1
   delayed_display: ^1.0.1
   path_provider: ^1.4.0
+  path_provider_ex: ^1.0.1
   image: ^2.1.8
   geolocator: ^5.1.5
   maps_launcher: ^1.0.1
+  permission_handler: '^4.0.0'
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -59,7 +61,6 @@ flutter:
       - assets/cercle1.png
       - assets/fleche.png
       - assets/cercle.png
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

@@ -16,12 +16,9 @@ Directory myDir;
 main()async{
   SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft,DeviceOrientation.landscapeRight]);
   String path = await storage.localPath;
-  print(path);
+  print(path+"fiches");
   myDir = new Directory(path+"/fiches");
-  myDir.create()
-    // The created directory is returned as a Future.
-    .then((Directory directory) {
-  });
+  myDir.create();
   runApp(App());
 }
 
