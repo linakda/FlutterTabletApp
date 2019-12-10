@@ -13,8 +13,7 @@ class Storage {
   Future<String> get localPath async { 
     Map<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.storage]);
     final dir = await PathProviderEx.getStorageInfo();
-    for(StorageInfo tmp in dir) print(tmp.appFilesDir);
-    return dir[1].appFilesDir;
+    return dir.last.appFilesDir;
   }
 
   Future<File> get localFile async {

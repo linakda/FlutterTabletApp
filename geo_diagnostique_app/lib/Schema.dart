@@ -120,7 +120,6 @@ class _LandingScreenState extends State<LandingScreen> {
       previous.deleteSync();
       File picture1 = picture.renameSync(
           newdir.path + '/' + widget.selectedOuvrage.refOuvrage + '.png');
-      widget.selectedOuvrage.photoOuvrage = widget.selectedOuvrage.refOuvrage + '.png';
       imageFile = picture1;
     });
   } //opengallery
@@ -175,6 +174,8 @@ class _LandingScreenState extends State<LandingScreen> {
               height: schemSize,
               width: schemSize,
               decoration: BoxDecoration(
+                border: Border.all(
+                    color: Colors.blue, width: 3, style: BorderStyle.solid),
                 image: DecorationImage(
                   image: AssetImage('assets/cercle1.png'),
                   fit: BoxFit.fill,
@@ -216,8 +217,8 @@ class _LandingScreenState extends State<LandingScreen> {
               turns: AlwaysStoppedAnimation(
                   i != 1 ? -(i + 8) * 30 / 360 : -(i - 10) * 30 / 360),
               child: Container(
-                height: Config.screenWidth / 15,
-                width: Config.screenWidth / 15,
+                height: Config.screenWidth / 20,
+                width: Config.screenWidth / 20,
                 child: affArrow[i - 1]
                     ? Image.asset('assets/Image2.png', fit: BoxFit.fill)
                     : Image.asset('assets/fleche.png', fit: BoxFit.fill),
@@ -624,11 +625,14 @@ class _LandingScreenState extends State<LandingScreen> {
           widget.selectedOuvrage.listCanalisation[i].observations.split("£");
       for (int j = 0; j < listController[i].length; j++) {
         listController[i][j][0].text = "Sélectionner";
+        print(j);
+        print(listRole[j]);
         if (listRole[j] != "") listController[i][j][0].text = listRole[j];
         listController[i][j][1].text = "Sélectionner";
-        if (listGeometrie[j] != "")
-          listController[i][j][1].text = listGeometrie[j];
+        print(listGeometrie[j]);
+        if (listGeometrie[j] != "") listController[i][j][1].text = listGeometrie[j];
         listController[i][j][2].text = "";
+        print(listDimension[j]);
         if (listDimension[j] != "")
           listController[i][j][2].text = listDimension[j];
         listController[i][j][3].text = "Sélectionner";
@@ -664,11 +668,8 @@ class _LandingScreenState extends State<LandingScreen> {
               Container(
                 height: Config.screenHeight - 150,
                 width: Config.screenWidth / 2,
-                child: Padding(
-                  padding: EdgeInsets.all(Config.screenWidth / 35),
-                  child: Stack(
-                    children: _cliclableArrayGenerator(),
-                  ),
+                child: Stack(
+                  children: _cliclableArrayGenerator(),
                 ),
               ),
               Expanded(

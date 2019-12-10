@@ -16,7 +16,6 @@ Directory myDir;
 main()async{
   SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft,DeviceOrientation.landscapeRight]);
   String path = await storage.localPath;
-  print(path+"fiches");
   myDir = new Directory(path+"/fiches");
   myDir.create();
   runApp(App());
