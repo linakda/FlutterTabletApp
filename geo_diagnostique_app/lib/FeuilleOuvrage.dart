@@ -64,6 +64,10 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
                       ',' +
                       widget.selectedOuvrage.typeReseau +
                       ',' +
+                      widget.selectedOuvrage.latitude +
+                      ',' +
+                      widget.selectedOuvrage.longitude +
+                      ',' +
                       widget.selectedOuvrage.type +
                       ',' +
                       widget.selectedOuvrage.observationCaracteristiques +
@@ -203,7 +207,12 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
                       ouvrageData,
                       widget.selectedNumeroAffaire.numeroAffaire,
                       widget.selectedOuvrage.refOuvrage);
-                  Navigator.push(context, MaterialPageRoute (builder: (context)=> MenuOuvrage(widget.selectedNumeroAffaire,widget.selectedCommune)));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MenuOuvrage(
+                              widget.selectedNumeroAffaire,
+                              widget.selectedCommune)));
                 },
               )
             ],
@@ -242,7 +251,7 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
           backgroundColor: Config.bottomBarColor,
           opacity: .2,
           borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-          elevation: 8,
+          elevation: 2,
           fabLocation: BubbleBottomBarFabLocation.end, //new
           hasNotch: true, //new
           hasInk: true, //new, gives a cute ink effect

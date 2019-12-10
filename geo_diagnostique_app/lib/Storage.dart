@@ -10,6 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'main.dart';
 
 class Storage {
+<<<<<<< Updated upstream
   Future<String> get localPath async { 
     Map<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.storage]);
     final dir = await PathProviderEx.getStorageInfo();
@@ -33,8 +34,8 @@ class Storage {
   }
 
   void writeData(
-    String data, String fileName, String refOuvrageSelected) async {
-    File file = new File('${myDir.path}/$fileName.txt');
+      String data, String fileName, String refOuvrageSelected) async {
+    File file = new File('${myDir.path}/$fileName.csv');
     List<String> lines;
     List<String> parameters;
     int index = 1;
@@ -57,7 +58,7 @@ class Storage {
         index = lines.length;
       }
       lines[0] =
-          "Numéro d'Affaire,Référence de l\'ouvrage,Commune,Nom de la rue,Implantation,Type de réseau,Type d'ouvrage,Observation,Dispositif de fermeture,Section,Nature,Dimension,Dispositif d'accés,Cunette,Photo,Côte tn,Profondeur radier,Rôle(fs),Géométrie(fs),Dimension(fs),Nature(fs),Profondeur(fs),Observation(fs),Rôle(f1),Géométrie(f1),Dimension(f1),Nature(f1),Profondeur(f1),Angle(f1),Observation(f1),Rôle(f2),Géométrie(f2),Dimension(f2),Nature(f2),Profondeur(f2),Angle(f2),Observation(f2),Rôle(f3),Géométrie(f3),Dimension(f3),Nature(f3),Profondeur(f3),Angle(f3),Observation(f3),Rôle(f4),Géométrie(f4),Dimension(f4),Nature(f4),Profondeur(f4),Angle(f4),Observation(f4),Rôle(f5),Géométrie(f5),Dimension(f5),Nature(f5),Profondeur(f5),Angle(f5),Observation(f5),Traces de mises en charge,Perturbation de l'écoulement,Précision,Défaut d\'étanchéité,Traces d'infiltration,Branchement non étanche,Défaut de structure,Génie civil fissuré,Déboitement,Défaut de fermeture,Tampon détérioré,Présence d\'H2S,Autres observations,$index";
+          "Numéro d'Affaire,Référence de l\'ouvrage,Commune,Nom de la rue,Implantation,Type de réseau,Latitude,Longitude,Type d'ouvrage,Observation,Dispositif de fermeture,Section,Nature,Dimension,Dispositif d'accés,Cunette,Photo,Côte tn,Profondeur radier,Rôle(fs),Géométrie(fs),Dimension(fs),Nature(fs),Profondeur(fs),Observation(fs),Rôle(f1),Géométrie(f1),Dimension(f1),Nature(f1),Profondeur(f1),Angle(f1),Observation(f1),Rôle(f2),Géométrie(f2),Dimension(f2),Nature(f2),Profondeur(f2),Angle(f2),Observation(f2),Rôle(f3),Géométrie(f3),Dimension(f3),Nature(f3),Profondeur(f3),Angle(f3),Observation(f3),Rôle(f4),Géométrie(f4),Dimension(f4),Nature(f4),Profondeur(f4),Angle(f4),Observation(f4),Rôle(f5),Géométrie(f5),Dimension(f5),Nature(f5),Profondeur(f5),Angle(f5),Observation(f5),Traces de mises en charge,Perturbation de l'écoulement,Précision,Défaut d\'étanchéité,Traces d'infiltration,Branchement non étanche,Défaut de structure,Génie civil fissuré,Déboitement,Défaut de fermeture,Tampon détérioré,Présence d\'H2S,Autres observations,Latitude,Longitude,$index";
       await file.writeAsString("${lines[0]}");
       for (var i = 1; i < lines.length; i++) {
         await file.writeAsString("\n${lines[i]}",
@@ -68,7 +69,7 @@ class Storage {
       }
     } else {
       await file.writeAsString(
-          "Numéro d'Affaire,Référence de l'ouvrage,Commune,Nom de la rue,Implantation,Type de réseau,Type d'ouvrage,Observation,Dispositif de fermeture,Section,Nature,Dimension,Dispositif d'accés,Cunette,Photo,Côte tn,Profondeur radier,Rôle(fs),Géométrie(fs),Dimension(fs),Nature(fs),Profondeur(fs),Observation(fs),Rôle(f1),Géométrie(f1),Dimension(f1),Nature(f1),Profondeur(f1),Angle(f1),Observation(f1),Rôle(f2),Géométrie(f2),Dimension(f2),Nature(f2),Profondeur(f2),Angle(f2),Observation(f2),Rôle(f3),Géométrie(f3),Dimension(f3),Nature(f3),Profondeur(f3),Angle(f3),Observation(f3),Rôle(f4),Géométrie(f4),Dimension(f4),Nature(f4),Profondeur(f4),Angle(f4),Observation(f4),Rôle(f5),Géométrie(f5),Dimension(f5),Nature(f5),Profondeur(f5),Angle(f5),Observation(f5),Traces de mises en charge,Perturbation de l'écoulement,Précision,Défaut d'étanchéité,Traces d'infiltration,Branchement non étanche,Défaut de structure,Génie civil fissuré,Déboitement,Défaut de fermeture,Tampon détérioré,Présence d'H2S,Autres observations,$index");
+          "Numéro d'Affaire,Référence de l'ouvrage,Commune,Nom de la rue,Implantation,Type de réseau,Latitude,Longitude,Type d'ouvrage,Observation,Dispositif de fermeture,Section,Nature,Dimension,Dispositif d'accés,Cunette,Photo,Côte tn,Profondeur radier,Rôle(fs),Géométrie(fs),Dimension(fs),Nature(fs),Profondeur(fs),Observation(fs),Rôle(f1),Géométrie(f1),Dimension(f1),Nature(f1),Profondeur(f1),Angle(f1),Observation(f1),Rôle(f2),Géométrie(f2),Dimension(f2),Nature(f2),Profondeur(f2),Angle(f2),Observation(f2),Rôle(f3),Géométrie(f3),Dimension(f3),Nature(f3),Profondeur(f3),Angle(f3),Observation(f3),Rôle(f4),Géométrie(f4),Dimension(f4),Nature(f4),Profondeur(f4),Angle(f4),Observation(f4),Rôle(f5),Géométrie(f5),Dimension(f5),Nature(f5),Profondeur(f5),Angle(f5),Observation(f5),Traces de mises en charge,Perturbation de l'écoulement,Précision,Défaut d'étanchéité,Traces d'infiltration,Branchement non étanche,Défaut de structure,Génie civil fissuré,Déboitement,Défaut de fermeture,Tampon détérioré,Présence d'H2S,Autres observations,$index");
       await file.writeAsString("\n$data", mode: FileMode.writeOnlyAppend);
     }
   }
@@ -166,7 +167,10 @@ class Storage {
                 textSplit[66],
                 textSplit[67],
                 textSplit[68],
-                textSplit[69]);
+                textSplit[69],
+                textSplit[70],
+                textSplit[71],
+                textSplit[72]);
           }
         }
       }
@@ -232,6 +236,8 @@ class Storage {
       String nomRue,
       String implantation,
       String typeReseau,
+      String latitude,
+      String longitude,
       String type,
       String observationCaracteristiques,
       String dispositifFermeture,
@@ -240,8 +246,8 @@ class Storage {
       String dimensionCaracteristique,
       String dispositifAcces,
       String cunette,
-      /*File photoOuvrage,File photoCroquis à remplacer par les noms des photos */ String
-          coteTN,
+      String photoOuvrage,
+      String coteTN,
       String profondeurRadier,
       String rolefs,
       String geometriefs,
@@ -297,7 +303,7 @@ class Storage {
       String tamponDeteriore,
       String tamponNonAccessible,
       String presenceH2S,
-      String observationsAnomalies) async {
+      String observationsAnomalies,) {
 //Localisation---------------
     selectedOuvrage.nomRue = nomRue;
     selectedOuvrage.implantation = implantation;
@@ -312,10 +318,11 @@ class Storage {
     selectedOuvrage.dispositifAcces = dispositifAcces;
     selectedOuvrage.cunette = cunette;
 //Schema------------
-    //selectedOuvrage.photoCroquis = photoCroquis;
-    //selectedOuvrage.photoOuvrage = photoOuvrage;
+    selectedOuvrage.photoOuvrage = photoOuvrage;
     selectedOuvrage.coteTN = coteTN;
     selectedOuvrage.profondeurRadier = profondeurRadier;
+    selectedOuvrage.latitude = latitude;
+    selectedOuvrage.longitude = longitude;
     //Caracteristique canalisation---------
     selectedOuvrage.listCanalisation[0].role = rolefs;
     selectedOuvrage.listCanalisation[0].geometrie = geometriefs;
@@ -387,16 +394,17 @@ class Storage {
   }
 
   //Méthode qui renvoie l'index d'une REFOuvrage qui existe déjà
-  int refOuvrageIndex(List<Ouvrage> listOuvrage,String refOuvrageSelected){
-    if(listOuvrage.isNotEmpty){
-      for(int index=0; index<listOuvrage.length;index++){
-        if(listOuvrage[index].refOuvrage==refOuvrageSelected){
+  int refOuvrageIndex(List<Ouvrage> listOuvrage, String refOuvrageSelected) {
+    if (listOuvrage.isNotEmpty) {
+      for (int index = 0; index < listOuvrage.length; index++) {
+        if (listOuvrage[index].refOuvrage == refOuvrageSelected) {
           return index;
         }
       }
     }
     return null;
   }
+
   //Méthode qui renvoie l'index d'une commune qui existe déjà
   int communeIndex(List<Commune> listCommune, String nomCommune) {
     if (listCommune.isNotEmpty) {
@@ -412,7 +420,7 @@ class Storage {
   //Supprime la ligne dans le fichier .csv selectionné
   void deleteSelectedOuvrageLine(
       String numeroAffaire, String ouvrageSelected) async {
-    File file = new File('${myDir.path}/$numeroAffaire.txt');
+    File file = new File('${myDir.path}/$numeroAffaire.csv');
     List<String> lines;
     List<String> parameters;
     if (await file.exists()) {
@@ -431,7 +439,7 @@ class Storage {
       } else {
         var index = lines.length - 1;
         lines[0] =
-            "Numéro d'Affaire,Référence de l\'ouvrage,Commune,Nom de la rue,Implantation,Type de réseau,Type d'ouvrage,Observation,Dispositif de fermeture,Section,Nature,Dimension,Dispositif d'accés,Cunette,Photo,Côte tn,Profondeur radier,Rôle(fs),Géométrie(fs),Dimension(fs),Nature(fs),Profondeur(fs),Observation(fs),Rôle(f1),Géométrie(f1),Dimension(f1),Nature(f1),Profondeur(f1),Angle(f1),Observation(f1),Rôle(f2),Géométrie(f2),Dimension(f2),Nature(f2),Profondeur(f2),Angle(f2),Observation(f2),Rôle(f3),Géométrie(f3),Dimension(f3),Nature(f3),Profondeur(f3),Angle(f3),Observation(f3),Rôle(f4),Géométrie(f4),Dimension(f4),Nature(f4),Profondeur(f4),Angle(f4),Observation(f4),Rôle(f5),Géométrie(f5),Dimension(f5),Nature(f5),Profondeur(f5),Angle(f5),Observation(f5),Traces de mises en charge,Perturbation de l'écoulement,Précision,Défaut d\'étanchéité,Traces d'infiltration,Branchement non étanche,Défaut de structure,Génie civil fissuré,Déboitement,Défaut de fermeture,Tampon détérioré,Présence d\'H2S,Autres observations,$index";
+            "Numéro d'Affaire,Référence de l\'ouvrage,Commune,Nom de la rue,Implantation,Type de réseau,Latitude,Longitude,Type d'ouvrage,Observation,Dispositif de fermeture,Section,Nature,Dimension,Dispositif d'accés,Cunette,Photo,Côte tn,Profondeur radier,Rôle(fs),Géométrie(fs),Dimension(fs),Nature(fs),Profondeur(fs),Observation(fs),Rôle(f1),Géométrie(f1),Dimension(f1),Nature(f1),Profondeur(f1),Angle(f1),Observation(f1),Rôle(f2),Géométrie(f2),Dimension(f2),Nature(f2),Profondeur(f2),Angle(f2),Observation(f2),Rôle(f3),Géométrie(f3),Dimension(f3),Nature(f3),Profondeur(f3),Angle(f3),Observation(f3),Rôle(f4),Géométrie(f4),Dimension(f4),Nature(f4),Profondeur(f4),Angle(f4),Observation(f4),Rôle(f5),Géométrie(f5),Dimension(f5),Nature(f5),Profondeur(f5),Angle(f5),Observation(f5),Traces de mises en charge,Perturbation de l'écoulement,Précision,Défaut d\'étanchéité,Traces d'infiltration,Branchement non étanche,Défaut de structure,Génie civil fissuré,Déboitement,Défaut de fermeture,Tampon détérioré,Présence d\'H2S,Autres observations,$index";
         await file.writeAsString("${lines[0]}");
         for (var i = 1; i < lines.length; i++) {
           await file.writeAsString("\n${lines[i]}",
@@ -442,12 +450,15 @@ class Storage {
   }
 
   //Méthode qui renvoi la prochaine reférence d'ouvrage
-  String nextRefOuvrage(Commune dernierCommune){
-    if(derniereCommune.listOuvrage.isNotEmpty){
-      int index = derniereCommune.listOuvrage.length -1;
+  String nextRefOuvrage(Commune dernierCommune) {
+    if (derniereCommune.listOuvrage.isNotEmpty) {
+      int index = derniereCommune.listOuvrage.length - 1;
       int refCommuneLength = derniereCommune.refCommune.length;
-      int nextRefOuvrage = int.parse(derniereCommune.listOuvrage[index].refOuvrage.substring(refCommuneLength))+1;
-      return nextRefOuvrage.toString().padLeft(3,'0');
+      int nextRefOuvrage = int.parse(derniereCommune
+              .listOuvrage[index].refOuvrage
+              .substring(refCommuneLength)) +
+          1;
+      return nextRefOuvrage.toString().padLeft(3, '0');
     }
     return null;
   }
@@ -471,8 +482,9 @@ class Storage {
           .removeAt(numeroAffaireSelected.listCommune.indexOf(communeSelected));
       Navigator.pop(context);
     }
-    if(numeroAffaireSelected.listCommune.length == 0) {
-      listNumeroAffaire.removeAt(listNumeroAffaire.indexOf(numeroAffaireSelected));
+    if (numeroAffaireSelected.listCommune.length == 0) {
+      listNumeroAffaire
+          .removeAt(listNumeroAffaire.indexOf(numeroAffaireSelected));
     }
   }
 }

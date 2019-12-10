@@ -1,5 +1,4 @@
 import 'dart:core';
-import 'dart:io';
 
 class Ouvrage {
   String refOuvrage;
@@ -15,6 +14,8 @@ class Ouvrage {
   String nomRue = "";
   String implantation="";
   String typeReseau="";
+  String latitude="";
+  String longitude="";
 
   // --- Caractéristique de l'ouvrage -- \\
   String type="";
@@ -27,8 +28,7 @@ class Ouvrage {
   String cunette="";
 
   // --- Schéma de l'ouvrage --- \\
-  File photoOuvrage;
-  File photoCroquis;
+  String photoOuvrage="";
   String coteTN=""; //en m
   String profondeurRadier="";// en m
 

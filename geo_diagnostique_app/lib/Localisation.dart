@@ -20,7 +20,7 @@ class LocalisationState extends State<Localisation> {
   TextStyle textStyle =
       new TextStyle(fontSize: Config.fontSize, fontWeight: FontWeight.bold);
   EdgeInsetsGeometry textPadding = EdgeInsets.all(Config.screenPadding);
-  List<TextEditingController> controllerList = new List(4);
+  List<TextEditingController> controllerList = new List(6);
   Position _currentPosition = new Position();
   @override
   void initState() {
@@ -32,6 +32,11 @@ class LocalisationState extends State<Localisation> {
     if (widget.selectedOuvrage.implantation != "")
       controllerList[1].text = widget.selectedOuvrage.implantation;
     controllerList[2].text = "Sélectionner";
+    if (widget.selectedOuvrage.latitude.isNotEmpty &&
+        widget.selectedOuvrage.longitude.isNotEmpty) {
+      controllerList[4].text = widget.selectedOuvrage.latitude;
+      controllerList[5].text = widget.selectedOuvrage.longitude;
+    }
     if (widget.selectedOuvrage.nomRue != "")
       controllerList[0].text = widget.selectedOuvrage.nomRue;
     if (widget.selectedOuvrage.typeReseau != 'séparatif EU' &&
@@ -47,8 +52,12 @@ class LocalisationState extends State<Localisation> {
   void _getCurrentLocation() async {
     _currentPosition = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-        setState(() {
-        });
+    setState(() {
+      controllerList[4].text = _currentPosition.latitude.toString();
+      controllerList[5].text = _currentPosition.longitude.toString();
+      widget.selectedOuvrage.latitude = _currentPosition.latitude.toString();
+      widget.selectedOuvrage.longitude = _currentPosition.longitude.toString();
+    });
   }
 
   @override
@@ -223,45 +232,107 @@ class LocalisationState extends State<Localisation> {
                     ),
                   ],
                 ),
-                InkWell(
-                  child: Icon(
-                    Icons.location_on,
-                    size: Config.fontSize * 2,
-                  ),
-                  onTap: () {
-                      _getCurrentLocation();
-                  },
-                  onLongPress: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text("Ouvrir Maps ?"),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: Text("Annuler"),
-                                onPressed: () {
-                                  _getCurrentLocation();
-                                  Navigator.of(context).pop();
-                                },
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.all(Config.screenPadding),
+                        child: TextField(
+                            controller: controllerList[4],
+                            decoration: InputDecoration(
+                              labelText: 'Latitude',
+                              labelStyle: TextStyle(color: Config.textColor),
+                              focusColor: Config.color,
+                              fillColor: Colors.white,
+                              focusedBorder: new OutlineInputBorder(
+                                borderRadius: new BorderRadius.circular(25.0),
+                                borderSide: new BorderSide(color: Config.color),
                               ),
-                              FlatButton(
-                                child: Text("Ouvrir dans Maps"),
-                                onPressed: () {
-                                  _getCurrentLocation();
-                                  MapsLauncher.launchCoordinates(
-                                      _currentPosition.latitude,
-                                      _currentPosition.longitude);
-                                },
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0),
                               ),
-                            ],
-                          );
-                        });
-                  },
+                            ),
+                            onChanged: (String text) {
+                              setState(() {
+                                widget.selectedOuvrage.latitude =
+                                    controllerList[4].text;
+                              });
+                            }),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.all(Config.screenPadding),
+                        child: TextField(
+                            controller: controllerList[5],
+                            decoration: InputDecoration(
+                              labelText: 'Longitude',
+                              labelStyle: TextStyle(color: Config.textColor),
+                              focusColor: Config.color,
+                              fillColor: Colors.white,
+                              focusedBorder: new OutlineInputBorder(
+                                borderRadius: new BorderRadius.circular(25.0),
+                                borderSide: new BorderSide(color: Config.color),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                              ),
+                            ),
+                            onChanged: (String text) {
+                              setState(() {
+                                widget.selectedOuvrage.longitude =
+                                    controllerList[5].text;
+                              });
+                            }),
+                      ),
+                    ),
+                    InkWell(
+                      child: Container(
+                        width: Config.fontSize*2,
+                        height: Config.fontSize*2,
+                        decoration: BoxDecoration(
+                          color: Config.splashColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.location_on,
+                          color: Colors.white,
+                          size: Config.fontSize,
+                        ),
+                      ),
+                      onTap: () {
+                        _getCurrentLocation();
+                      },
+                      onLongPress: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("Ouvrir Maps ?"),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text("Annuler"),
+                                    onPressed: () {
+                                      _getCurrentLocation();
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  FlatButton(
+                                    child: Text("Ouvrir dans Maps"),
+                                    onPressed: () {
+                                      _getCurrentLocation();
+                                      MapsLauncher.launchCoordinates(
+                                          _currentPosition.latitude,
+                                          _currentPosition.longitude);
+                                    },
+                                  ),
+                                ],
+                              );
+                            });
+                      },
+                    ),
+                  ],
                 ),
-                Text(
-                    "Latitude : ${_currentPosition.latitude}, Longitude : ${_currentPosition.longitude}",
-                    style: TextStyle(fontSize: Config.fontSize)),
               ], //Children
             ),
           ),
