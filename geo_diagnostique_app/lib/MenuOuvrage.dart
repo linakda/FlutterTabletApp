@@ -18,24 +18,57 @@ class MenuOuvrage extends StatefulWidget {
 class MenuOuvrageState extends State<MenuOuvrage> {
   List<Ouvrage> listOuvrage = new List<Ouvrage>();
   List<String> listTypeOuvrage;
-  List colors, fermeture; 
+  List colors;
+  List<Ouvrage> _searchOuvragelist = new List<Ouvrage>();
+  bool _searchMode = false;
   @override
   void initState() {
     super.initState();
     listOuvrage = widget.selectedCommune.listOuvrage;
-    colors = [Colors.brown, Colors.blue, Colors.green, Config.textColor, Colors.redAccent, Colors.redAccent];
-    listTypeOuvrage = <String>['séparatif EU','séparatif EP','unitaire','autre :','sous enrobé', 'sous véhicule'];
+    colors = [
+      Colors.brown,
+      Colors.blue,
+      Colors.green,
+      Config.textColor,
+      Colors.redAccent,
+      Colors.redAccent
+    ];
+    listTypeOuvrage = <String>[
+      'séparatif EU',
+      'séparatif EP',
+      'unitaire',
+      'autre :',
+      'sous enrobé',
+      'sous véhicule'
+    ];
   }
-  Color switchColor(String typeOuvrage){
-        int index = listTypeOuvrage.indexOf(typeOuvrage);
-        if(index==-1) return Colors.grey;
-        else return colors[index];
+
+  Color switchColor(String typeOuvrage) {
+    int index = listTypeOuvrage.indexOf(typeOuvrage);
+    if (index == -1)
+      return Colors.grey;
+    else
+      return colors[index];
   }
+
+  //Creér une nouvelle liste suite à la recherche d'une commune ou d'un numéro d'affaire
+  void _updateSearcOuvrageList(String searchElement) {
+    _searchOuvragelist = new List<Ouvrage>();
+    for (int i = 0; i < listOuvrage.length; i++) {
+      if (listOuvrage[i].refOuvrage.contains(searchElement)) {
+        _searchOuvragelist.add(listOuvrage[i]);
+        print(listOuvrage[i].refOuvrage);
+      }
+    }
+    print("taille de ma list de recherche = ${_searchOuvragelist.length}");
+  }
+
   @override
   Widget build(BuildContext context) {
-     //Method qui permet de trouver l'indice de l'ouvrage
+
+    //Method qui permet de trouver l'indice de l'ouvrage
     listOuvrage = widget.selectedCommune.listOuvrage;
-  
+
     Config().init(context);
     return new Scaffold(
       appBar: AppBar(
@@ -89,6 +122,17 @@ class MenuOuvrageState extends State<MenuOuvrage> {
                   ),
                 ),
                 textCapitalization: TextCapitalization.characters,
+                onChanged: (String text) {
+                  if (listOuvrage.isNotEmpty) {
+                    setState(() {
+                      _searchMode = true;
+                      _updateSearcOuvrageList(text);
+                    });
+                    if (text == "") {
+                      _searchMode = false;
+                    }
+                  }
+                },
               )),
           Expanded(
             child: Align(
@@ -96,7 +140,9 @@ class MenuOuvrageState extends State<MenuOuvrage> {
               child: ListView.builder(
                 reverse: true,
                 shrinkWrap: true,
-                itemCount: listOuvrage.length,
+                itemCount: !_searchMode
+                    ? listOuvrage.length
+                    : _searchOuvragelist.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Dismissible(
                     key: Key(listOuvrage[index].refOuvrage),
@@ -167,7 +213,9 @@ class MenuOuvrageState extends State<MenuOuvrage> {
                     },
                     child: new Card(
                       elevation: 10,
-                      color: listOuvrage[index].defautFermeture!="" ?Colors.red :switchColor(listOuvrage[index].typeReseau),
+                      color: listOuvrage[index].defautFermeture != ""
+                          ? Colors.red
+                          : switchColor(listOuvrage[index].typeReseau),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                       ),
@@ -183,7 +231,9 @@ class MenuOuvrageState extends State<MenuOuvrage> {
                           ),
                         ),
                         title: Text(
-                          listOuvrage[index].refOuvrage,
+                          !_searchMode
+                              ? listOuvrage[index].refOuvrage
+                              : _searchOuvragelist[index].refOuvrage,
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -194,9 +244,12 @@ class MenuOuvrageState extends State<MenuOuvrage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => FeuilleOuvrage(
-                                      widget.selectedNumeroAffaire,
-                                      widget.selectedCommune,
-                                      listOuvrage[index])));
+                                        widget.selectedNumeroAffaire,
+                                        widget.selectedCommune,
+                                        !_searchMode
+                                            ? listOuvrage[index]
+                                            : _searchOuvragelist[index],
+                                      )));
                         },
                       ),
                     ),
