@@ -98,7 +98,6 @@ class AnomalieState extends State<Anomalie> {
       //set switch false
       if (getElement(i) == "") {
         setElement(i, 'non');
-        print("element $i set false");
       }
     }
     controllerList[0].text = getElement(1);

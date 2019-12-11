@@ -107,8 +107,8 @@ class CaractereState extends State<Caractere> {
     }
     if (getElement(7) != "") controllerList[9].text = getElement(7);
     if (getElement(8) != "") controllerList[10].text = getElement(8);
-    if(getElement(9)!="") controllerList[12].text;
-    if(getElement(10)!="") controllerList[13].text;
+    if(getElement(9)!="") controllerList[12].text = getElement(9);
+    if(getElement(10)!="") controllerList[13].text = getElement(10);
   }
 
   void editControllerlist(List<String> list, int indexController1,

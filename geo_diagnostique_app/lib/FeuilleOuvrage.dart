@@ -84,7 +84,7 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
                       ',' +
                       widget.selectedOuvrage.cunette +
                       ',' +
-                      widget.selectedOuvrage.refOuvrage +
+                      widget.selectedOuvrage.photoOuvrage +
                       ',' +
                       widget.selectedOuvrage.coteTN.toString() +
                       ',' +

@@ -25,7 +25,7 @@ class SplashScreenState extends State<SplashScreen> with SingleTickerProviderSta
     );
     _animation = CurvedAnimation(parent: _animationController,curve: Curves.easeIn);
 
-    Future.delayed(Duration(seconds: 10), () async{
+    Future.delayed(Duration(seconds: 2), () async{
       await storage.readAndUpdateList();
       Navigator.pushReplacement(
           context,

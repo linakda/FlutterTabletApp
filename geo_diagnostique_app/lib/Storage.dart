@@ -11,8 +11,7 @@ import 'main.dart';
 
 class Storage {
   Future<String> get localPath async {
-    Map<PermissionGroup, PermissionStatus> permissions =
-        await PermissionHandler().requestPermissions([PermissionGroup.storage]);
+    await PermissionHandler().requestPermissions([PermissionGroup.storage]);
     final dir = await PathProviderEx.getStorageInfo();
     return dir.last.appFilesDir;
   }
@@ -35,7 +34,7 @@ class Storage {
 
   void writeData(
       String data, String fileName, String refOuvrageSelected) async {
-    File file = new File('${myDir.path}/$fileName.csv');
+    File file = new File('${myDir.path}/$fileName.txt');
     List<String> lines;
     List<String> parameters;
     int index = 1;
@@ -72,7 +71,7 @@ class Storage {
           "Numéro d'Affaire,Référence de l'ouvrage,Commune,Nom de la rue,Implantation,Type de réseau,Latitude,Longitude,Type d'ouvrage,Observation,Dispositif de fermeture,Section,Nature,Dimension,Dispositif d'accés,Cunette,Photo,Côte tn,Profondeur radier,Rôle(fs),Géométrie(fs),Dimension(fs),Nature(fs),Profondeur(fs),Observation(fs),Rôle(f1),Géométrie(f1),Dimension(f1),Nature(f1),Profondeur(f1),Angle(f1),Observation(f1),Rôle(f2),Géométrie(f2),Dimension(f2),Nature(f2),Profondeur(f2),Angle(f2),Observation(f2),Rôle(f3),Géométrie(f3),Dimension(f3),Nature(f3),Profondeur(f3),Angle(f3),Observation(f3),Rôle(f4),Géométrie(f4),Dimension(f4),Nature(f4),Profondeur(f4),Angle(f4),Observation(f4),Rôle(f5),Géométrie(f5),Dimension(f5),Nature(f5),Profondeur(f5),Angle(f5),Observation(f5),Traces de mises en charge,Perturbation de l'écoulement,Précision,Défaut d'étanchéité,Traces d'infiltration,Branchement non étanche,Défaut de structure,Génie civil fissuré,Déboitement,Défaut de fermeture,Tampon détérioré,Présence d'H2S,Autres observations,$index");
       await file.writeAsString("\n$data", mode: FileMode.writeOnlyAppend);
     }
-  }
+  }   
 
   //ajoute un ouvrage avec si besoin un numéro d'affaire et/ou une commune
   Future readAndUpdateList() async {
@@ -293,6 +292,7 @@ class Storage {
     String observationsf5,
     String tracesCharge,
     String perturbationEcoulement,
+    String precisionPerturbationEcoulement,
     String defautEtancheite,
     String tracesInfiltration,
     String branchementNonEtanche,
@@ -301,7 +301,6 @@ class Storage {
     String deboitement,
     String defautFermeture,
     String tamponDeteriore,
-    String tamponNonAccessible,
     String presenceH2S,
     String observationsAnomalies,
   ) {
@@ -370,6 +369,7 @@ class Storage {
 //Anomalies observees------------
     selectedOuvrage.tracesCharge = tracesCharge;
     selectedOuvrage.perturbationEcoulement = perturbationEcoulement;
+    selectedOuvrage.precisionPerturbationEcoulement = precisionPerturbationEcoulement;
     selectedOuvrage.defautEtancheite = defautEtancheite;
     selectedOuvrage.tracesInfiltration = tracesInfiltration;
     selectedOuvrage.branchementNonEtanche = branchementNonEtanche;
@@ -421,7 +421,7 @@ class Storage {
   //Supprime la ligne dans le fichier .csv selectionné
   void deleteSelectedOuvrageLine(
       String numeroAffaire, String ouvrageSelected) async {
-    File file = new File('${myDir.path}/$numeroAffaire.csv');
+    File file = new File('${myDir.path}/$numeroAffaire.txt');
     List<String> lines;
     List<String> parameters;
     if (await file.exists()) {
