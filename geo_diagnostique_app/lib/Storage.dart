@@ -34,7 +34,7 @@ class Storage {
 
   void writeData(
       String data, String fileName, String refOuvrageSelected) async {
-    File file = new File('${myDir.path}/$fileName.txt');
+    File file = new File('${myDir.path}/$fileName.csv');
     List<String> lines;
     List<String> parameters;
     int index = 1;
@@ -421,7 +421,7 @@ class Storage {
   //Supprime la ligne dans le fichier .csv selectionné
   void deleteSelectedOuvrageLine(
       String numeroAffaire, String ouvrageSelected) async {
-    File file = new File('${myDir.path}/$numeroAffaire.txt');
+    File file = new File('${myDir.path}/$numeroAffaire.csv');
     List<String> lines;
     List<String> parameters;
     if (await file.exists()) {

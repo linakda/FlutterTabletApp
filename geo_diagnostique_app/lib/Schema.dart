@@ -22,35 +22,15 @@ class LandingScreen extends StatefulWidget {
 class _LandingScreenState extends State<LandingScreen> {
   Image image;
   File imageFile;
-  List<int> selectedArrow = [-1, -1, -1, -1, -1, -1];
+  List<int> selectedArrow = List.filled(6, -1);
   String _imageString = "";
   String dropdownValueReference = "fs";
   int selectedOutput = 0;
   List<String> listOutput = ['fs', 'fe1', 'fe2', 'fe3', 'fe4', 'fe5'];
-  List<bool> affArrow = [
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-    true
-  ];
+  List<bool> affArrow = List.filled(12, true);
   List<bool> existenceThread = [true, false, false, false, false, false];
-  List<List<List<TextEditingController>>> listController = [
-    [new List(6)],
-    [new List(6)],
-    [new List(6)],
-    [new List(6)],
-    [new List(6)],
-    [new List(6)]
-  ];
-  List<String> nameOutput = ["", "", "", "", "", "", "", "", "", "", "", ""];
+  List<List<List<TextEditingController>>> listController = List.filled(6, new List(6));
+  List<String> nameOutput = List.filled(12, "");
   List<String> convertAngle = [
     "0",
     "330",
@@ -66,13 +46,14 @@ class _LandingScreenState extends State<LandingScreen> {
     "30"
   ];
 
-  void _openCamera(BuildContext context) async {
+//Open camera
+  _openCamera(BuildContext context) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
     Navigator.of(context).pop();
     setState(() {
       _saveImage(picture, true);
     });
-  } //opencamera
+  }
 
   void _openGallery(BuildContext context) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
@@ -110,18 +91,16 @@ class _LandingScreenState extends State<LandingScreen> {
       return "";
   }
 
+//Afficher l'image
   Widget showImage(String stringImg) {
-    //permet d'afficher l'image
     if (stringImg != "") {
       return Container(
           decoration: BoxDecoration(
               image: DecorationImage(
                   image: ExactAssetImage(stringImg), fit: BoxFit.cover)),
           child: Image.file(imageFile));
-      //child: Image.memory(base64.decode(stringImg)));
     } else {
       return Container(
-        //color: Colors.grey,
         padding: EdgeInsets.all(Config.screenPadding * 8),
       );
     }
@@ -140,7 +119,7 @@ class _LandingScreenState extends State<LandingScreen> {
         height: schemSize,
         width: schemSize,
         child: imageFile != null
-            ? Image.file(imageFile, fit: BoxFit.cover) //fill;cover;scaledown
+            ? Image.file(imageFile, fit: BoxFit.cover)
             : Padding(padding: EdgeInsets.all(1)),
       )),
     );
@@ -241,6 +220,7 @@ class _LandingScreenState extends State<LandingScreen> {
     return clickableSchema;
   }
 
+  //Dialogue pour le choix de la prise de la photo (soit en gallerie, soit l'appareil photo)
   Future<void> _showChoiceDialog(BuildContext context) {
     return showDialog(
         context: context,
@@ -568,16 +548,9 @@ class _LandingScreenState extends State<LandingScreen> {
   void initState() {
     super.initState();
     for (int i = 0; i < listController.length; i++) {
-      int loop = 0;
-      var target = widget.selectedOuvrage.listCanalisation[i].role != null
-          ? widget.selectedOuvrage.listCanalisation[i].role
-          : " ";
-      for (int c = 0; c < target.length; c++) {
-        if (target[c] == '£') {
-          loop++;
-        }
-      }
-      
+      var target = widget.selectedOuvrage.listCanalisation[i].role;
+      List<String> roleSuperposedPipes = target.split('£');
+      listController[i]
       for (int n = 0; n < loop; n++) {
         listController[i].add(new List(6));
       }
