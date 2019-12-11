@@ -26,32 +26,6 @@ class _LandingScreenState extends State<LandingScreen> {
   String _imageString = "";
   String dropdownValueReference = "fs";
   int selectedOutput = 0;
-  String dropdownValueRole = "Rôle";
-  String dropdownValueGeometrie = "Géométrie";
-  String dropdownValueNature = "Nature";
-  TextEditingController profondeurController = TextEditingController();
-  String dropdownValueRole1 = "Rôle";
-  String dropdownValueGeometrie1 = "Géométrie";
-  String dropdownValueNature1 = "Nature";
-  TextEditingController profondeurController1 = TextEditingController();
-  String dropdownValueRole2 = "Rôle";
-  String dropdownValueGeometrie2 = "Géométrie";
-  String dropdownValueNature2 = "Nature";
-  TextEditingController profondeurController2 = TextEditingController();
-  String dropdownValueRole3 = "Rôle";
-  String dropdownValueGeometrie3 = "Géométrie";
-  String dropdownValueNature3 = "Nature";
-  TextEditingController profondeurController3 = TextEditingController();
-  String dropdownValueRole4 = "Rôle";
-  String dropdownValueGeometrie4 = "Géométrie";
-  String dropdownValueNature4 = "Nature";
-  TextEditingController profondeurController4 = TextEditingController();
-  String dropdownValueRole5 = "Rôle";
-  String dropdownValueGeometrie5 = "Géométrie";
-  String dropdownValueNature5 = "Nature";
-  TextEditingController profondeurController5 = TextEditingController();
-  TextEditingController test = TextEditingController();
-  String testpath = "test";
   List<String> listOutput = ['fs', 'fe1', 'fe2', 'fe3', 'fe4', 'fe5'];
   List<bool> affArrow = [
     true,
@@ -92,37 +66,41 @@ class _LandingScreenState extends State<LandingScreen> {
     "30"
   ];
 
-  _openCamera(BuildContext context) async {
+  void _openCamera(BuildContext context) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
     Navigator.of(context).pop();
     setState(() {
-      String dir = p.dirname(picture.path);
-      Directory newdir =
-          new Directory(dir + '/' + widget.selectNumeroAffaire.numeroAffaire);
-      newdir.createSync();
-      File picture1 = picture.renameSync(
-          newdir.path + '/' + widget.selectedOuvrage.refOuvrage + '.png');
-      imageFile = picture1;
+      _saveImage(picture, true);
     });
   } //opencamera
 
-  _openGallery(BuildContext context) async {
+  void _openGallery(BuildContext context) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
     Navigator.of(context).pop();
     setState(() {
       image = Image.file(imageFile);
-      String dir = p.dirname(picture.path);
-      Directory newdir =
-          new Directory(dir + '/' + widget.selectNumeroAffaire.numeroAffaire);
-      newdir.createSync();
+      _saveImage(picture, false);
+    });
+  } //opengallery
+
+  void _saveImage(File picture,bool isFromCamera){
+    String dir = p.dirname(picture.path);
+    Directory newdir = new Directory(dir + '/' + widget.selectNumeroAffaire.numeroAffaire);
+    newdir.createSync();
+    if(isFromCamera){
+      File picture1 = picture.renameSync(
+          newdir.path + '/' + widget.selectedOuvrage.refOuvrage + '.png');
+      imageFile = picture1;
+    }
+    else{
       File previous =
           File(newdir.path + '/' + widget.selectedOuvrage.refOuvrage + '.png');
       previous.deleteSync();
       File picture1 = picture.renameSync(
           newdir.path + '/' + widget.selectedOuvrage.refOuvrage + '.png');
       imageFile = picture1;
-    });
-  } //opengallery
+    }
+  }
 
   String setImage() {
     if (imageFile != null) {
@@ -257,7 +235,7 @@ class _LandingScreenState extends State<LandingScreen> {
                     ? 270 / 360
                     : i < 8 ? -(i + 8) * 30 / 360 : -(i - 6 + 8) * 30 / 360),
                 child: Text(nameOutput[i - 1],
-                    style: TextStyle(color: Colors.white)))));
+                    style: TextStyle(color: Colors.blue)))));
       }
     }
     return clickableSchema;
@@ -303,7 +281,8 @@ class _LandingScreenState extends State<LandingScreen> {
       children: colum,
     );
   }
-
+  
+  //ajoute les éléments d'éditions, multiple si sorties superposées
   Widget showCanalisation(int i, int j) {
     List<Widget> colum = [];
     colum.add(Divider(
@@ -598,7 +577,7 @@ class _LandingScreenState extends State<LandingScreen> {
           loop++;
         }
       }
-      widget.selectedOuvrage.listCanalisation[0].role.length;
+      
       for (int n = 0; n < loop; n++) {
         listController[i].add(new List(6));
       }
@@ -625,14 +604,10 @@ class _LandingScreenState extends State<LandingScreen> {
           widget.selectedOuvrage.listCanalisation[i].observations.split("£");
       for (int j = 0; j < listController[i].length; j++) {
         listController[i][j][0].text = "Sélectionner";
-        print(j);
-        print(listRole[j]);
         if (listRole[j] != "") listController[i][j][0].text = listRole[j];
         listController[i][j][1].text = "Sélectionner";
-        print(listGeometrie[j]);
         if (listGeometrie[j] != "") listController[i][j][1].text = listGeometrie[j];
         listController[i][j][2].text = "";
-        print(listDimension[j]);
         if (listDimension[j] != "")
           listController[i][j][2].text = listDimension[j];
         listController[i][j][3].text = "Sélectionner";
