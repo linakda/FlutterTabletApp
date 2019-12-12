@@ -29,15 +29,14 @@ class _LandingScreenState extends State<LandingScreen> {
   List<String> listOutput = ['fs', 'fe1', 'fe2', 'fe3', 'fe4', 'fe5'];
   List<bool> showArrows = List.filled(12, false);
   List<bool> isPipeExisting = [true, false, false, false, false, false];
-  List<List<List<TextEditingController>>> listController =
-     [
-       [new List(7)],
-       [new List(7)],
-       [new List(7)],
-       [new List(7)],
-       [new List(7)],
-       [new List(7)],
-     ];
+  List<List<List<TextEditingController>>> listController = [
+    [new List(7)],
+    [new List(7)],
+    [new List(7)],
+    [new List(7)],
+    [new List(7)],
+    [new List(7)],
+  ];
   List<String> nameOutput = List.filled(12, "");
   List<String> convertAngle = [
     "0",
@@ -625,7 +624,8 @@ class _LandingScreenState extends State<LandingScreen> {
       }
     }
   }
-  void addNewController(){
+
+  void addNewController(int index) {
     List<TextEditingController> listtmp = new List(7);
     for (int k = 0; k < 7; k++) {
       listtmp[k] = new TextEditingController();
@@ -634,7 +634,15 @@ class _LandingScreenState extends State<LandingScreen> {
       else
         listtmp[k].text = "";
     }
-    listController[selectedOutput].add(listtmp);
+    listController[index].add(listtmp);
+  }
+  void resetController(){
+    for(int i=0;i<isPipeExisting.length;i++){
+      if(i!=0) isPipeExisting[i]=false;
+      listController.removeAt(i);
+      addNewController(i);
+    }
+    
   }
   @override
   Widget build(BuildContext context) {
@@ -694,55 +702,29 @@ class _LandingScreenState extends State<LandingScreen> {
                               });
                             },
                           ),
-                          Padding(
-                            padding: EdgeInsets.all(Config.screenPadding),
-                            child: FlatButton(
-                              onPressed: () {
-                                setState(() {
-                                  addNewController();
-                                  widget
-                                      .selectedOuvrage
-                                      .listCanalisation[selectedOutput]
-                                      .role = compteur(selectedOutput, 0);
-                                  widget
-                                      .selectedOuvrage
-                                      .listCanalisation[selectedOutput]
-                                      .geometrie = compteur(selectedOutput, 1);
-                                  widget
-                                      .selectedOuvrage
-                                      .listCanalisation[selectedOutput]
-                                      .dimension = compteur(selectedOutput, 2);
-                                  widget
-                                      .selectedOuvrage
-                                      .listCanalisation[selectedOutput]
-                                      .nature = compteur(selectedOutput, 3);
-                                  widget
-                                      .selectedOuvrage
-                                      .listCanalisation[selectedOutput]
-                                      .profondeur = compteur(selectedOutput, 4);
-                                  widget
-                                          .selectedOuvrage
-                                          .listCanalisation[selectedOutput]
-                                          .observations =
-                                      compteur(selectedOutput, 5);
-                                });
-                              },
-                              child: Text("+1"),
-                              color: Colors.grey,
-                            ),
-                          ),
                           FlatButton(
                             color: Colors.grey,
                             onPressed: () {
-                              setState(() {
-                                int i = 0;
-                                while (isPipeExisting[i]) {
-                                  i++;
-                                }
-                                isPipeExisting[i] = true;
-                              });
+                              if(isPipeExisting.contains(false)){
+                                setState(() {
+                                  int i = 0;
+                                  while (isPipeExisting[i]) {
+                                    i++;
+                                  }
+                                  isPipeExisting[i] = true;
+                                });
+                              }
                             },
-                            child: Text("+1 fe"),
+                            child: Text("Ajouter une entrée"),
+                          ),
+                          FlatButton(
+                            color: Colors.red,
+                            onPressed: () {
+                                setState(() {
+                                  resetController();
+                                });
+                            },
+                            child: Text("Tout Supprimer"),
                           ),
                         ],
                       ),
@@ -750,7 +732,43 @@ class _LandingScreenState extends State<LandingScreen> {
                     Padding(
                       padding: EdgeInsets.all(Config.screenPadding),
                       child: addSuperposedPipe(selectedOutput),
-                    )
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(Config.screenPadding),
+                      child: FlatButton(
+                        onPressed: () {
+                          setState(() {
+                            addNewController(selectedOutput);
+                            widget
+                                .selectedOuvrage
+                                .listCanalisation[selectedOutput]
+                                .role = compteur(selectedOutput, 0);
+                            widget
+                                .selectedOuvrage
+                                .listCanalisation[selectedOutput]
+                                .geometrie = compteur(selectedOutput, 1);
+                            widget
+                                .selectedOuvrage
+                                .listCanalisation[selectedOutput]
+                                .dimension = compteur(selectedOutput, 2);
+                            widget
+                                .selectedOuvrage
+                                .listCanalisation[selectedOutput]
+                                .nature = compteur(selectedOutput, 3);
+                            widget
+                                .selectedOuvrage
+                                .listCanalisation[selectedOutput]
+                                .profondeur = compteur(selectedOutput, 4);
+                            widget
+                                .selectedOuvrage
+                                .listCanalisation[selectedOutput]
+                                .observations = compteur(selectedOutput, 5);
+                          });
+                        },
+                        child: Text("ajouter tuyau superposé"),
+                        color: Colors.grey,
+                      ),
+                    ),
                   ]),
                 ),
               ),
