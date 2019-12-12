@@ -27,9 +27,9 @@ class _LandingScreenState extends State<LandingScreen> {
   String dropdownValueReference = "fs";
   int selectedOutput = 0;
   List<String> listOutput = ['fs', 'fe1', 'fe2', 'fe3', 'fe4', 'fe5'];
-  List<bool> affArrow = List.filled(12, true);
-  List<bool> existenceThread = [true, false, false, false, false, false];
-  List<List<List<TextEditingController>>> listController = List.filled(6, new List(6));
+  List<bool> notShowArrow = List.filled(12, true);
+  List<bool> isPipeExisting = [true, false, false, false, false, false];
+  List<List<List<TextEditingController>>> listController = List.filled(6, new List.filled(1,new List(7),growable: true));
   List<String> nameOutput = List.filled(12, "");
   List<String> convertAngle = [
     "0",
@@ -176,21 +176,21 @@ class _LandingScreenState extends State<LandingScreen> {
               child: Container(
                 height: Config.screenWidth / 20,
                 width: Config.screenWidth / 20,
-                child: affArrow[i - 1]
+                child: notShowArrow[i - 1]
                     ? Image.asset('assets/Image2.png', fit: BoxFit.fill)
                     : Image.asset('assets/fleche.png', fit: BoxFit.fill),
               ),
             ),
             onTap: () {
               setState(() {
-                if (affArrow[i - 1]) {
+                if (notShowArrow[i - 1]) {
                   if (selectedArrow[selectedOutput] != -1) {
-                    affArrow[selectedArrow[selectedOutput]] = true;
+                    notShowArrow[selectedArrow[selectedOutput]] = true;
                     nameOutput[selectedArrow[selectedOutput]] = "";
                     selectedArrow[selectedOutput] = -1;
                   }
                   selectedArrow[selectedOutput] = i - 1;
-                  affArrow[selectedArrow[selectedOutput]] = false;
+                  notShowArrow[selectedArrow[selectedOutput]] = false;
                   nameOutput[selectedArrow[selectedOutput]] =
                       dropdownValueReference;
                   widget.selectedOuvrage.listCanalisation[selectedOutput]
@@ -252,7 +252,7 @@ class _LandingScreenState extends State<LandingScreen> {
         });
   }
 
-  Widget showCanalisations(int i) {
+  Widget addSuperposedPipe(int i) {
     List<Widget> colum = [];
     for (int j = 0; j < listController[i].length; j++) {
       colum.add(showCanalisation(i, j));
@@ -543,62 +543,43 @@ class _LandingScreenState extends State<LandingScreen> {
     }
     return ret;
   }
-
+  void setControllerList(String caracteristique,int indexCaracteristique, int indexPipe ){
+    //Retourne le nombre de pipe par entrée/sorties
+    List<String> listCaracteristique = caracteristique.split("£");
+    //length représente le nombre de sous tuyaux
+    for(var i=0;i<listCaracteristique.length;i++){
+      listController[indexPipe][i][indexCaracteristique].text=listCaracteristique[i];
+    }
+  }
   @override
   void initState() {
     super.initState();
     for (int i = 0; i < listController.length; i++) {
-      var target = widget.selectedOuvrage.listCanalisation[i].role;
-      List<String> roleSuperposedPipes = target.split('£');
-      listController[i]
-      for (int n = 0; n < loop; n++) {
-        listController[i].add(new List(6));
-      }
-    }
-    for (int i = 0; i < listController.length; i++) {
       for (int j = 0; j < listController[i].length; j++) {
         for (int k = 0; k < listController[i][j].length; k++) {
           listController[i][j][k] = new TextEditingController();
+          if([0,1,3].contains(k)) listController[i][j][k].text = "Séléctionner";
+          else listController[i][j][k].text = "";
         }
       }
     }
+
+    //Parcours chaque entrée/sortie (Les 6 : de fs à fe5)
     for (int i = 0; i < listController.length; i++) {
-      List<String> listRole =
-          widget.selectedOuvrage.listCanalisation[i].role.split("£");
-      List<String> listGeometrie =
-          widget.selectedOuvrage.listCanalisation[i].geometrie.split("£");
-      List<String> listDimension =
-          widget.selectedOuvrage.listCanalisation[i].dimension.split("£");
-      List<String> listNature =
-          widget.selectedOuvrage.listCanalisation[i].nature.split("£");
-      List<String> listProfondeur =
-          widget.selectedOuvrage.listCanalisation[i].profondeur.split("£");
-      List<String> listObservation =
-          widget.selectedOuvrage.listCanalisation[i].observations.split("£");
-      for (int j = 0; j < listController[i].length; j++) {
-        listController[i][j][0].text = "Sélectionner";
-        if (listRole[j] != "") listController[i][j][0].text = listRole[j];
-        listController[i][j][1].text = "Sélectionner";
-        if (listGeometrie[j] != "") listController[i][j][1].text = listGeometrie[j];
-        listController[i][j][2].text = "";
-        if (listDimension[j] != "")
-          listController[i][j][2].text = listDimension[j];
-        listController[i][j][3].text = "Sélectionner";
-        if (listNature[j] != "") listController[i][j][3].text = listNature[j];
-        listController[i][j][4].text = "";
-        if (listProfondeur[j] != "")
-          listController[i][j][4].text = listProfondeur[j];
-        listController[i][j][5].text = "";
-        if (listObservation[j] != "")
-          listController[i][j][5].text = listObservation[j];
-      }
+      setControllerList(widget.selectedOuvrage.listCanalisation[i].role, 0, i);
+      setControllerList(widget.selectedOuvrage.listCanalisation[i].geometrie, 1, i);
+      setControllerList(widget.selectedOuvrage.listCanalisation[i].dimension, 2, i);
+      setControllerList(widget.selectedOuvrage.listCanalisation[i].nature, 3, i);
+      setControllerList(widget.selectedOuvrage.listCanalisation[i].profondeur, 4, i);
+      setControllerList(widget.selectedOuvrage.listCanalisation[i].angle, 5, i);
+      setControllerList(widget.selectedOuvrage.listCanalisation[i].observations, 6, i);
     }
     for (int i = 0; i < widget.selectedOuvrage.listCanalisation.length; i++) {
       int arrow = convertAngle
           .indexOf(widget.selectedOuvrage.listCanalisation[i].angle);
       if (arrow != -1) {
         selectedArrow[i] = arrow;
-        affArrow[i] = false;
+        notShowArrow[i] = false;
         print("i" + i.toString());
         print("arrow" + arrow.toString());
         nameOutput[arrow] = listOutput[i];
@@ -640,7 +621,7 @@ class _LandingScreenState extends State<LandingScreen> {
                             ),
                             style: TextStyle(
                                 fontSize: Config.fontSize, color: Colors.black),
-                            items: output(existenceThread).map((String value) {
+                            items: output(isPipeExisting).map((String value) {
                               return new DropdownMenuItem<String>(
                                 value: value,
                                 child: SizedBox(
@@ -717,10 +698,10 @@ class _LandingScreenState extends State<LandingScreen> {
                             onPressed: () {
                               setState(() {
                                 int i = 0;
-                                while (existenceThread[i]) {
+                                while (isPipeExisting[i]) {
                                   i++;
                                 }
-                                existenceThread[i] = true;
+                                isPipeExisting[i] = true;
                               });
                             },
                             child: Text("+1 fe"),
@@ -730,7 +711,7 @@ class _LandingScreenState extends State<LandingScreen> {
                     ),
                     Padding(
                       padding: EdgeInsets.all(Config.screenPadding),
-                      child: showCanalisations(selectedOutput),
+                      child: addSuperposedPipe(selectedOutput),
                     )
                   ]),
                 ),
