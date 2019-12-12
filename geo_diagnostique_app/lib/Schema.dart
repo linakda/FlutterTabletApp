@@ -30,7 +30,14 @@ class _LandingScreenState extends State<LandingScreen> {
   List<bool> showArrows = List.filled(12, false);
   List<bool> isPipeExisting = [true, false, false, false, false, false];
   List<List<List<TextEditingController>>> listController =
-      List.filled(6, List.filled(1, List(7), growable: true));
+     [
+       [new List(7)],
+       [new List(7)],
+       [new List(7)],
+       [new List(7)],
+       [new List(7)],
+       [new List(7)],
+     ];
   List<String> nameOutput = List.filled(12, "");
   List<String> convertAngle = [
     "0",
@@ -52,7 +59,7 @@ class _LandingScreenState extends State<LandingScreen> {
     for (int i = 0; i < listController.length; i++) {
       for (int j = 0; j < listController[i].length; j++) {
         for (int k = 0; k < listController[i][j].length; k++) {
-          listController[i][j][k] = TextEditingController();
+          listController[i][j][k] = new TextEditingController();
           if ([0, 1, 3].contains(k))
             listController[i][j][k].text = "Séléctionner";
           else
@@ -80,8 +87,8 @@ class _LandingScreenState extends State<LandingScreen> {
     for (int i = 0; i < widget.selectedOuvrage.listCanalisation.length; i++) {
       String angle = widget.selectedOuvrage.listCanalisation[i].angle;
       int positionArrow = convertAngle.indexOf(angle);
-      selectedArrow[i]=positionArrow;
-      if(positionArrow!=-1)showArrows[positionArrow]=true;
+      selectedArrow[i] = positionArrow;
+      if (positionArrow != -1) showArrows[positionArrow] = true;
     }
   }
 
@@ -92,13 +99,15 @@ class _LandingScreenState extends State<LandingScreen> {
     List<String> listCaracteristique = caracteristique.split("£");
     //length représente le nombre de sous tuyaux
     for (var i = 0; i < listCaracteristique.length; i++) {
-      if (caracteristique != "")
+      if (caracteristique != "") {
+        isPipeExisting[indexPipe] = true;
         listController[indexPipe][i][indexCaracteristique].text =
             listCaracteristique[i];
+      }
     }
   }
 
-//Open camera
+  //Ouverture camera
   _openCamera(BuildContext context) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.camera);
     Navigator.of(context).pop();
@@ -107,6 +116,7 @@ class _LandingScreenState extends State<LandingScreen> {
     });
   }
 
+  //Ouverture gallerie
   void _openGallery(BuildContext context) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
     Navigator.of(context).pop();
@@ -116,6 +126,7 @@ class _LandingScreenState extends State<LandingScreen> {
     });
   } //opengallery
 
+  //Sauvegarde de l'image
   void _saveImage(File picture, bool isFromCamera) {
     String dir = p.dirname(picture.path);
     Directory newdir =
@@ -150,6 +161,7 @@ class _LandingScreenState extends State<LandingScreen> {
     }
   }
 
+  //Zone clickable avec photo, boutons,etc....
   List<Positioned> _cliclableArrayGenerator() {
     List<Positioned> clickableSchema = new List<Positioned>();
     double schemSize = Config.screenWidth < Config.screenHeight
@@ -168,96 +180,106 @@ class _LandingScreenState extends State<LandingScreen> {
       )),
     );
     clickableSchema.add(
-          Positioned(
-            child: Container(
-              height: schemSize,
-              width: schemSize,
-              decoration: BoxDecoration(
-                border: Border.all(
-                    color: Colors.blue, width: 3, style: BorderStyle.solid),
-                image: DecorationImage(
-                  image: AssetImage('assets/cercle1.png'),
-                  fit: BoxFit.fill,
-                ),
-              ),
+      Positioned(
+        child: Container(
+          height: schemSize,
+          width: schemSize,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/cercle1.png'),
+              fit: BoxFit.fill,
             ),
           ),
-        );
-        clickableSchema.add(
-          Positioned(
-              child: InkWell(
-            child: Container(
-                width: schemSize,
-                height: schemSize,
-                child: imageFile == null
-                    ? Icon(
-                        Icons.add_a_photo,
-                        size: schemSize / 5,
-                      )
-                    : Padding(
-                        padding: EdgeInsets.all(8.0),
-                      ),
-                alignment: Alignment.center),
-            onTap: () {
-              _showChoiceDialog(context);
-            },
-          )),
-        );
-    for (var i = 0; i < 12; i++) {
-        clickableSchema.add(Positioned(
-          top: dotCenter -
-              radius * Math.sin((i - 1) * Math.pi / 6 + Math.pi / 2) -
-              12,
-          left: dotCenter +
-              radius * Math.cos((i - 1) * Math.pi / 6 + Math.pi / 2) -
-              12,
+        ),
+      ),
+    );
+    clickableSchema.add(
+      Positioned(
           child: InkWell(
-            child: RotationTransition(
-              turns: AlwaysStoppedAnimation(
-                  selectedArrow[0]==i ? -(i + 8) * 30 / 360 : -(i - 10) * 30 / 360),
-              child: Container(
+        child: Container(
+            width: schemSize,
+            height: schemSize,
+            child: imageFile == null
+                ? Icon(
+                    Icons.add_a_photo,
+                    size: schemSize / 5,
+                  )
+                : Padding(
+                    padding: EdgeInsets.all(8.0),
+                  ),
+            alignment: Alignment.center),
+        onTap: () {
+          _showChoiceDialog(context);
+        },
+      )),
+    );
+    for (var i = 0; i < 12; i++) {
+      clickableSchema.add(Positioned(
+        top: dotCenter -
+            radius * Math.sin((i - 1) * Math.pi / 6 + Math.pi / 2) -
+            12,
+        left: dotCenter +
+            radius * Math.cos((i - 1) * Math.pi / 6 + Math.pi / 2) -
+            12,
+        child: InkWell(
+          child: RotationTransition(
+            turns: AlwaysStoppedAnimation(selectedArrow[0] != i
+                ? -(i + 8) * 30 / 360
+                : -(i - 10) * 30 / 360),
+            child: Container(
                 height: Config.screenWidth / 20,
                 width: Config.screenWidth / 20,
                 child: showArrows[i]
                     ? Image.asset('assets/fleche.png', fit: BoxFit.fill)
-                    : Container(decoration: BoxDecoration(shape: BoxShape.circle,color:Config.buttonColor))
-              ),
-            ),
-            onTap: () {
-              setState(() {
-                if (!showArrows[i]) {
-                  if (selectedArrow[selectedOutput] != -1) {
-                    showArrows[selectedArrow[selectedOutput]] = false;
-                    nameOutput[selectedArrow[selectedOutput]] = "";
-                    selectedArrow[selectedOutput] = -1;
-                  }
-                  selectedArrow[selectedOutput] = i;
-                  showArrows[selectedArrow[selectedOutput]] = true;
-                  nameOutput[selectedArrow[selectedOutput]] =
-                      dropdownValueReference;
-                  widget.selectedOuvrage.listCanalisation[selectedOutput]
-                      .angle = convertAngle[selectedArrow[selectedOutput]];
-                }
-              });
-            },
+                    : Container(
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Config.buttonColor))),
           ),
-        ));
-        clickableSchema.add(Positioned(
-            top: dotCenter +
-                30 -
-                (radius + 15) * Math.sin((i - 1) * Math.pi / 6 + Math.pi / 2) -
-                12,
-            left: dotCenter +
-                32 +
-                (radius + 15) * Math.cos((i - 1) * Math.pi / 6 + Math.pi / 2) -
-                12,
-            child: RotationTransition(
-                turns: AlwaysStoppedAnimation(i == 1
-                    ? 270 / 360
-                    : i < 8 ? -(i + 8) * 30 / 360 : -(i - 6 + 8) * 30 / 360),
-                child: Text(nameOutput[i],
-                    style: TextStyle(color: Colors.blue)))));
-      
+          onTap: () {
+            setState(() {
+              if (!showArrows[i]) {
+                if (selectedArrow[selectedOutput] != -1) {
+                  showArrows[selectedArrow[selectedOutput]] = false;
+                  nameOutput[selectedArrow[selectedOutput]] = "";
+                  selectedArrow[selectedOutput] = -1;
+                }
+                selectedArrow[selectedOutput] = i;
+                showArrows[selectedArrow[selectedOutput]] = true;
+                nameOutput[selectedArrow[selectedOutput]] =
+                    dropdownValueReference;
+                widget.selectedOuvrage.listCanalisation[selectedOutput].angle =
+                    convertAngle[selectedArrow[selectedOutput]];
+              }
+            });
+          },
+        ),
+      ));
+      clickableSchema.add(Positioned(
+          top: dotCenter +
+              30 -
+              (radius + 15) * Math.sin((i - 1) * Math.pi / 6 + Math.pi / 2) -
+              12,
+          left: dotCenter +
+              32 +
+              (radius + 15) * Math.cos((i - 1) * Math.pi / 6 + Math.pi / 2) -
+              12,
+          child: showArrows[i]
+              ? Container(
+                  height: Config.fontSize * 1.5,
+                  width: Config.fontSize * 1.5,
+                  alignment: FractionalOffset.center,
+                  child: Text(
+                    nameOutput[i],
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Config.color, fontSize: Config.fontSize / 1.5),
+                  ),
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 2.0, color: Config.color),
+                      shape: BoxShape.circle,
+                      color: Colors.white))
+              : Container()));
     }
     return clickableSchema;
   }
@@ -294,8 +316,10 @@ class _LandingScreenState extends State<LandingScreen> {
         });
   }
 
+  //Ajoute un tuyau supplémentaire
   Widget addSuperposedPipe(int i) {
     List<Widget> colum = [];
+    print(listController[i].length);
     for (int j = 0; j < listController[i].length; j++) {
       colum.add(showCanalisation(i, j));
     }
@@ -354,7 +378,9 @@ class _LandingScreenState extends State<LandingScreen> {
                 }).toList(),
                 onChanged: (String newValue) {
                   setState(() {
+                    print("i=$i et j=$j");
                     listController[i][j][0].text = newValue;
+                    printController();
                     widget.selectedOuvrage.listCanalisation[i].role =
                         compteur(i, 0);
                   });
@@ -422,6 +448,7 @@ class _LandingScreenState extends State<LandingScreen> {
             child: Padding(
               padding: EdgeInsets.all(Config.screenPadding / 2),
               child: TextField(
+                keyboardType: TextInputType.number,
                 controller: listController[i][j][2],
                 decoration: InputDecoration(
                   labelText: 'Dimensions',
@@ -503,6 +530,7 @@ class _LandingScreenState extends State<LandingScreen> {
             child: Padding(
               padding: EdgeInsets.all(Config.screenPadding / 2),
               child: TextField(
+                keyboardType: TextInputType.number,
                 controller: listController[i][j][4],
                 decoration: InputDecoration(
                   labelText: 'Profondeur',
@@ -568,6 +596,7 @@ class _LandingScreenState extends State<LandingScreen> {
     );
   }
 
+  //Concaténation de multiples sorties
   String compteur(int i, int k) {
     String tmp = listController[i][0][k].text;
     for (int j = 1; j < listController[i].length; j++) {
@@ -576,6 +605,7 @@ class _LandingScreenState extends State<LandingScreen> {
     return tmp;
   }
 
+  //Selection de la sortie pour affichage dans DropDownMenu
   List<String> output(List<bool> select) {
     List<String> ret = [];
     for (int i = 0; i < select.length; i++) {
@@ -586,8 +616,30 @@ class _LandingScreenState extends State<LandingScreen> {
     return ret;
   }
 
+  void printController() {
+    for (int i = 0; i < listController.length; i++) {
+      for (int j = 0; j < listController[i].length; j++) {
+        for (int k = 0; k < listController[i][j].length; k++) {
+          //print(listController[i][j][k]);
+        }
+      }
+    }
+  }
+  void addNewController(){
+    List<TextEditingController> listtmp = new List(7);
+    for (int k = 0; k < 7; k++) {
+      listtmp[k] = new TextEditingController();
+      if ([0, 1, 3].contains(k))
+        listtmp[k].text = "Séléctionner";
+      else
+        listtmp[k].text = "";
+    }
+    listController[selectedOutput].add(listtmp);
+  }
   @override
   Widget build(BuildContext context) {
+    //print("build");
+
     return Scaffold(
       body: Builder(
         builder: (context) => Center(
@@ -647,8 +699,7 @@ class _LandingScreenState extends State<LandingScreen> {
                             child: FlatButton(
                               onPressed: () {
                                 setState(() {
-                                  listController[selectedOutput].length++;
-                                  initState();
+                                  addNewController();
                                   widget
                                       .selectedOuvrage
                                       .listCanalisation[selectedOutput]

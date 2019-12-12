@@ -49,7 +49,6 @@ class Ouvrage {
 }
 
 class CaracteristiqueCanalisation{
-  String ref="";
   String role="";
   String geometrie="";
   String dimension="";
