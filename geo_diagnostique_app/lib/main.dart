@@ -12,12 +12,15 @@ Commune derniereCommune;
 Storage storage = new Storage();
 //création d'un répertoire dans lequel on va enregistrer nos fichiers
 Directory myDir;
+Directory picturesDir;
 
 main()async{
   SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft,DeviceOrientation.landscapeRight]);
   String path = await storage.localPath;
   myDir = new Directory(path+"/fiches");
   myDir.create();
+  picturesDir = new Directory(path+"/Pictures");
+  picturesDir.create();
   runApp(App());
 }
 

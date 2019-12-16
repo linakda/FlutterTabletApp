@@ -1,15 +1,17 @@
-import 'dart:convert';
 import 'package:flutter/rendering.dart';
 import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geo_diagnostique_app/Config.dart';
 import 'package:geo_diagnostique_app/Ouvrage.dart';
+import 'package:geo_diagnostique_app/main.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 import 'dart:io';
 import 'dart:math' as Math;
-import 'package:path/path.dart' as p;
+
+import 'package:path_provider/path_provider.dart';
 
 class LandingScreen extends StatefulWidget {
   final Ouvrage selectedOuvrage;
@@ -20,10 +22,8 @@ class LandingScreen extends StatefulWidget {
 }
 
 class _LandingScreenState extends State<LandingScreen> {
-  Image image;
   File imageFile;
   List<int> selectedArrow = List.filled(6, -1);
-  String _imageString = "";
   String dropdownValueReference = "fs";
   int selectedOutput = 0;
   List<String> listOutput = ['fs', 'fe1', 'fe2', 'fe3', 'fe4', 'fe5'];
@@ -55,6 +55,7 @@ class _LandingScreenState extends State<LandingScreen> {
   @override
   void initState() {
     super.initState();
+    loadExistingImage();
     for (int i = 0; i < listController.length; i++) {
       for (int j = 0; j < listController[i].length; j++) {
         for (int k = 0; k < listController[i][j].length; k++) {
@@ -87,10 +88,16 @@ class _LandingScreenState extends State<LandingScreen> {
       String angle = widget.selectedOuvrage.listCanalisation[i].angle;
       int positionArrow = convertAngle.indexOf(angle);
       selectedArrow[i] = positionArrow;
-      if (positionArrow != -1) showArrows[positionArrow] = true;
+      if (positionArrow != -1) {
+        showArrows[positionArrow] = true;
+        nameOutput[positionArrow] = listOutput[i];
+      }
     }
   }
-
+  @override
+  void dispose(){
+    super.dispose();
+  }
   //initialisation des controller avec valeurs csv si existantes
   void setControllerList(
       String caracteristique, int indexCaracteristique, int indexPipe) {
@@ -106,57 +113,53 @@ class _LandingScreenState extends State<LandingScreen> {
     }
   }
 
+  //Ouvre l'image si existante au démarrage
+  void loadExistingImage() async {
+    if (widget.selectedOuvrage.photoOuvrage != "" &&
+        await Directory(picturesDir.path +
+                '/' +
+                widget.selectNumeroAffaire.numeroAffaire)
+            .exists()) {
+      setState(() {
+        imageFile = new File(picturesDir.path +
+            '/' +
+            widget.selectNumeroAffaire.numeroAffaire +
+            '/' +
+            widget.selectedOuvrage.photoOuvrage);
+      });
+    }
+  }
+
   //Ouverture camera
   _openCamera(BuildContext context) async {
-    var picture = await ImagePicker.pickImage(source: ImageSource.camera);
+    var picture = await ImagePicker.pickImage(
+      source: ImageSource.camera,
+    );
     Navigator.of(context).pop();
-    setState(() {
-      _saveImage(picture, true);
-    });
+
+    _saveImage(picture, true);
   }
 
   //Ouverture gallerie
   void _openGallery(BuildContext context) async {
     var picture = await ImagePicker.pickImage(source: ImageSource.gallery);
     Navigator.of(context).pop();
-    setState(() {
-      image = Image.file(imageFile);
-      _saveImage(picture, false);
-    });
+
+    _saveImage(picture, false);
   } //opengallery
 
   //Sauvegarde de l'image
-  void _saveImage(File picture, bool isFromCamera) {
-    String dir = p.dirname(picture.path);
-    Directory newdir =
-        new Directory(dir + '/' + widget.selectNumeroAffaire.numeroAffaire);
-    newdir.createSync();
-    if (isFromCamera) {
-      File picture1 = picture.renameSync(
-          newdir.path + '/' + widget.selectedOuvrage.refOuvrage + '.png');
-      imageFile = picture1;
-    } else {
-      File previous =
-          File(newdir.path + '/' + widget.selectedOuvrage.refOuvrage + '.png');
-      previous.deleteSync();
-      File picture1 = picture.renameSync(
-          newdir.path + '/' + widget.selectedOuvrage.refOuvrage + '.png');
-      imageFile = picture1;
-    }
-  }
+  Future _saveImage(File picture, bool isFromCamera) async {
+    imageCache.clear();
 
-//Afficher l'image
-  Widget showImage(String stringImg) {
-    if (stringImg != "") {
-      return Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: ExactAssetImage(stringImg), fit: BoxFit.cover)),
-          child: Image.file(imageFile));
-    } else {
-      return Container(
-        padding: EdgeInsets.all(Config.screenPadding * 8),
-      );
+    Directory newdir = new Directory(picturesDir.path + '/' + widget.selectNumeroAffaire.numeroAffaire);
+    newdir.createSync();
+
+    if (await picture.exists()) {
+      File tmp = await picture.copy(newdir.path + '/' + widget.selectedOuvrage.refOuvrage + '.png');
+      imageFile = new File(tmp.path);
+      picture.deleteSync();
+      widget.selectedOuvrage.photoOuvrage =widget.selectedOuvrage.refOuvrage + '.png';
     }
   }
 
@@ -168,13 +171,14 @@ class _LandingScreenState extends State<LandingScreen> {
         : Config.screenHeight / 1.5;
     double dotCenter = 1.02 * schemSize / 2 - 30;
     double radius = 1.01 * schemSize / 2 - 60;
+
     clickableSchema.add(
       Positioned(
           child: Container(
         height: schemSize,
         width: schemSize,
         child: imageFile != null
-            ? Image.file(imageFile, fit: BoxFit.cover)
+            ? new Image.file(imageFile, fit: BoxFit.cover)
             : Padding(padding: EdgeInsets.all(1)),
       )),
     );
@@ -318,7 +322,6 @@ class _LandingScreenState extends State<LandingScreen> {
   //Ajoute un tuyau supplémentaire
   Widget addSuperposedPipe(int i) {
     List<Widget> colum = [];
-    print(listController[i].length);
     for (int j = 0; j < listController[i].length; j++) {
       colum.add(showCanalisation(i, j));
     }
@@ -377,9 +380,7 @@ class _LandingScreenState extends State<LandingScreen> {
                 }).toList(),
                 onChanged: (String newValue) {
                   setState(() {
-                    print("i=$i et j=$j");
                     listController[i][j][0].text = newValue;
-                    printController();
                     widget.selectedOuvrage.listCanalisation[i].role =
                         compteur(i, 0);
                   });
@@ -636,18 +637,23 @@ class _LandingScreenState extends State<LandingScreen> {
     }
     listController[index].add(listtmp);
   }
-  void resetController(){
-    for(int i=0;i<isPipeExisting.length;i++){
-      if(i!=0) isPipeExisting[i]=false;
-      listController.removeAt(i);
-      addNewController(i);
-    }
-    
+
+  void resetController() {
+    setState(() {
+      for (int i = 0; i < isPipeExisting.length; i++) {
+        if (i != 0) isPipeExisting[i] = false;
+        listController[i].clear();
+        addNewController(i);
+      }
+      selectedOutput=0;
+      showArrows = new List.filled(12, false);
+      selectedArrow = new List.filled(6, -1);
+      nameOutput = new List.filled(12, "");
+    });
   }
+
   @override
   Widget build(BuildContext context) {
-    //print("build");
-
     return Scaffold(
       body: Builder(
         builder: (context) => Center(
@@ -702,32 +708,36 @@ class _LandingScreenState extends State<LandingScreen> {
                               });
                             },
                           ),
-                          FlatButton(
-                            color: Colors.grey,
-                            onPressed: () {
-                              if(isPipeExisting.contains(false)){
-                                setState(() {
-                                  int i = 0;
-                                  while (isPipeExisting[i]) {
-                                    i++;
-                                  }
-                                  isPipeExisting[i] = true;
-                                });
-                              }
-                            },
-                            child: Text("Ajouter une entrée"),
-                          ),
-                          FlatButton(
-                            color: Colors.red,
-                            onPressed: () {
-                                setState(() {
-                                  resetController();
-                                });
-                            },
-                            child: Text("Tout Supprimer"),
-                          ),
                         ],
                       ),
+                    ),
+                    Row(
+                      children: <Widget>[
+                        FlatButton(
+                          color: Colors.grey,
+                          onPressed: () {
+                            if (isPipeExisting.contains(false)) {
+                              setState(() {
+                                int i = 0;
+                                while (isPipeExisting[i]) {
+                                  i++;
+                                }
+                                isPipeExisting[i] = true;
+                              });
+                            }
+                          },
+                          child: Text("Ajouter une entrée"),
+                        ),
+                        FlatButton(
+                          color: Colors.red,
+                          onPressed: () {
+                            setState(() {
+                              resetController();
+                            });
+                          },
+                          child: Text("Tout Supprimer"),
+                        ),
+                      ],
                     ),
                     Padding(
                       padding: EdgeInsets.all(Config.screenPadding),
