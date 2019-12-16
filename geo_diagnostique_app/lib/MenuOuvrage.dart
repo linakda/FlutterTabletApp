@@ -4,6 +4,7 @@ import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Config.dart';
 import 'package:geo_diagnostique_app/FeuilleOuvrage.dart';
+import 'package:geo_diagnostique_app/MenuAffaire.dart';
 import 'package:geo_diagnostique_app/Ouvrage.dart';
 import 'package:geo_diagnostique_app/main.dart';
 
@@ -65,7 +66,6 @@ class MenuOuvrageState extends State<MenuOuvrage> {
 
   @override
   Widget build(BuildContext context) {
-
     //Method qui permet de trouver l'indice de l'ouvrage
     listOuvrage = widget.selectedCommune.listOuvrage;
 
@@ -201,8 +201,10 @@ class MenuOuvrageState extends State<MenuOuvrage> {
                                               widget.selectedCommune,
                                               listOuvrage[index].refOuvrage,
                                               context);
-                                          Navigator.of(context).pop();
-                                        });
+                                              Navigator.of(context).pop();
+                                        }
+                                        
+                                        );
                                       })
                                 ],
                               );

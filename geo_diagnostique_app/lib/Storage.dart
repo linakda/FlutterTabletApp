@@ -11,6 +11,7 @@ import 'main.dart';
 
 class Storage {
   Future<String> get localPath async {
+    WidgetsFlutterBinding.ensureInitialized();
     await PermissionHandler().requestPermissions([PermissionGroup.storage]);
     final dir = await PathProviderEx.getStorageInfo();
     return dir.last.appFilesDir;
@@ -475,17 +476,25 @@ class Storage {
       if (communeSelected.listOuvrage[i].refOuvrage == refOuvrageSelected)
         break;
     }
+    deletePicture(communeSelected.listOuvrage[i], numeroAffaireSelected);
     deleteSelectedOuvrageLine(numeroAffaireSelected.numeroAffaire,
         communeSelected.listOuvrage[i].refOuvrage);
     communeSelected.listOuvrage.removeAt(i);
     if (communeSelected.listOuvrage.length == 0) {
       numeroAffaireSelected.listCommune
           .removeAt(numeroAffaireSelected.listCommune.indexOf(communeSelected));
-      Navigator.pop(context);
     }
     if (numeroAffaireSelected.listCommune.length == 0) {
       listNumeroAffaire
           .removeAt(listNumeroAffaire.indexOf(numeroAffaireSelected));
     }
+  }
+
+  void deletePicture(Ouvrage ouvrage, NumeroAffaire affaire) async {
+    Directory newdir = new Directory(picturesDir.path + '/' + affaire.numeroAffaire);
+    newdir.createSync();
+    File tmp = new File(newdir.path + '/' + ouvrage.photoOuvrage);
+    if(await tmp.exists()){tmp.deleteSync();}
+    newdir.deleteSync();
   }
 }

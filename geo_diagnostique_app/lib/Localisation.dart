@@ -238,6 +238,7 @@ class LocalisationState extends State<Localisation> {
                       child: Padding(
                         padding: EdgeInsets.all(Config.screenPadding),
                         child: TextField(
+                            keyboardType: TextInputType.number,
                             controller: controllerList[4],
                             decoration: InputDecoration(
                               labelText: 'Latitude',
@@ -264,8 +265,9 @@ class LocalisationState extends State<Localisation> {
                       child: Padding(
                         padding: EdgeInsets.all(Config.screenPadding),
                         child: TextField(
-                            controller: controllerList[5],
-                            decoration: InputDecoration(
+                          keyboardType: TextInputType.number ,
+                          controller: controllerList[5],
+                          decoration: InputDecoration(
                               labelText: 'Longitude',
                               labelStyle: TextStyle(color: Config.textColor),
                               focusColor: Config.color,

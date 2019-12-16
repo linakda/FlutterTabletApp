@@ -10,6 +10,11 @@ class Ouvrage {
       listCanalisation[i]= new CaracteristiqueCanalisation();
     }
   }
+  void resetOuvrage(){
+    for(int i=0;i<6;i++){
+      listCanalisation[i]=new CaracteristiqueCanalisation();
+    }
+  }
   // --- Localisation de l'ouvrage --- \\
   String nomRue = "";
   String implantation="";

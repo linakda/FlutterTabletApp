@@ -5,13 +5,10 @@ import 'package:flutter/widgets.dart';
 import 'package:geo_diagnostique_app/Config.dart';
 import 'package:geo_diagnostique_app/Ouvrage.dart';
 import 'package:geo_diagnostique_app/main.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 import 'dart:io';
 import 'dart:math' as Math;
-
-import 'package:path_provider/path_provider.dart';
 
 class LandingScreen extends StatefulWidget {
   final Ouvrage selectedOuvrage;
@@ -94,10 +91,7 @@ class _LandingScreenState extends State<LandingScreen> {
       }
     }
   }
-  @override
-  void dispose(){
-    super.dispose();
-  }
+
   //initialisation des controller avec valeurs csv si existantes
   void setControllerList(
       String caracteristique, int indexCaracteristique, int indexPipe) {
@@ -151,15 +145,17 @@ class _LandingScreenState extends State<LandingScreen> {
   //Sauvegarde de l'image
   Future _saveImage(File picture, bool isFromCamera) async {
     imageCache.clear();
-
-    Directory newdir = new Directory(picturesDir.path + '/' + widget.selectNumeroAffaire.numeroAffaire);
+    Directory newdir = new Directory(
+        picturesDir.path + '/' + widget.selectNumeroAffaire.numeroAffaire);
     newdir.createSync();
 
     if (await picture.exists()) {
-      File tmp = await picture.copy(newdir.path + '/' + widget.selectedOuvrage.refOuvrage + '.png');
+      File tmp = await picture
+          .copy(newdir.path + '/' + widget.selectedOuvrage.refOuvrage + '.png');
       imageFile = new File(tmp.path);
       picture.deleteSync();
-      widget.selectedOuvrage.photoOuvrage =widget.selectedOuvrage.refOuvrage + '.png';
+      widget.selectedOuvrage.photoOuvrage =
+          widget.selectedOuvrage.refOuvrage + '.png';
     }
   }
 
@@ -178,7 +174,7 @@ class _LandingScreenState extends State<LandingScreen> {
         height: schemSize,
         width: schemSize,
         child: imageFile != null
-            ? new Image.file(imageFile, fit: BoxFit.cover)
+            ? Image.file(imageFile, fit: BoxFit.cover)
             : Padding(padding: EdgeInsets.all(1)),
       )),
     );
@@ -293,12 +289,36 @@ class _LandingScreenState extends State<LandingScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text("Make a choice"),
+            title: Text(
+              "Choisissez",
+              textAlign: TextAlign.center,
+            ),
             content: SingleChildScrollView(
-              child: ListBody(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  GestureDetector(
-                    child: Text("Gallery"),
+                  InkWell(
+                    child: Column(
+                      children: <Widget>[
+                        Stack(children: <Widget>[
+                          Positioned(
+                            left: 2.0,
+                            top: 2.0,
+                            child: Icon(
+                              Icons.photo_library,
+                              color: Colors.black26,
+                              size: Config.fontSize * 3
+                              ),
+                          ),
+                          Icon(
+                            Icons.photo_library,
+                            color: Config.splashColor,
+                            size: Config.fontSize * 3,
+                          ),
+                        ]),
+                        Text("Galerie")
+                      ],
+                    ),
                     onTap: () {
                       _openGallery(context);
                     },
@@ -306,8 +326,28 @@ class _LandingScreenState extends State<LandingScreen> {
                   Padding(
                     padding: EdgeInsets.all(8.0),
                   ),
-                  GestureDetector(
-                    child: Text("Camera"),
+                  InkWell(
+                    child: Column(
+                      children: <Widget>[
+                        Stack(children: <Widget>[
+                          Positioned(
+                            left: 2.0,
+                            top: 3.0,
+                            child: Icon(
+                              Icons.photo_camera,
+                              color: Colors.black26,
+                              size: Config.fontSize * 3
+                              ),
+                          ),
+                          Icon(
+                            Icons.photo_camera,
+                            color: Config.splashColor,
+                            size: Config.fontSize * 3,
+                          ),
+                        ]),
+                        Text("Camera")
+                      ],
+                    ),
                     onTap: () {
                       _openCamera(context);
                     },
@@ -640,12 +680,13 @@ class _LandingScreenState extends State<LandingScreen> {
 
   void resetController() {
     setState(() {
-      for (int i = 0; i < isPipeExisting.length; i++) {
+      widget.selectedOuvrage.resetOuvrage();
+      for (int i = 0; i < listController.length; i++) {
         if (i != 0) isPipeExisting[i] = false;
         listController[i].clear();
         addNewController(i);
       }
-      selectedOutput=0;
+      selectedOutput = 0;
       showArrows = new List.filled(12, false);
       selectedArrow = new List.filled(6, -1);
       nameOutput = new List.filled(12, "");
@@ -671,44 +712,47 @@ class _LandingScreenState extends State<LandingScreen> {
                   child: Column(children: <Widget>[
                     Padding(
                       padding: EdgeInsets.all(Config.screenPadding / 2),
-                      child: Row(
-                        children: <Widget>[
-                          DropdownButton<String>(
-                            hint: SizedBox(
-                              width: Config.screenWidth / 4,
-                              child: Text(
-                                dropdownValueReference,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: Config.fontSize,
-                                    color: Colors.black),
-                              ),
-                            ),
-                            style: TextStyle(
-                                fontSize: Config.fontSize, color: Colors.black),
-                            items: output(isPipeExisting).map((String value) {
-                              return new DropdownMenuItem<String>(
-                                value: value,
-                                child: SizedBox(
-                                  width: 160.0,
-                                  child: Text(
-                                    value,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: Config.fontSize,
-                                        color: Colors.black),
-                                  ),
+                      child: Center(
+                        child: Row(
+                          children: <Widget>[
+                            DropdownButton<String>(
+                              hint: SizedBox(
+                                width: Config.screenWidth / 4,
+                                child: Text(
+                                  dropdownValueReference,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: Config.fontSize,
+                                      color: Colors.black),
                                 ),
-                              );
-                            }).toList(),
-                            onChanged: (String newValue) {
-                              setState(() {
-                                dropdownValueReference = newValue;
-                                selectedOutput = listOutput.indexOf(newValue);
-                              });
-                            },
-                          ),
-                        ],
+                              ),
+                              style: TextStyle(
+                                  fontSize: Config.fontSize,
+                                  color: Colors.black),
+                              items: output(isPipeExisting).map((String value) {
+                                return new DropdownMenuItem<String>(
+                                  value: value,
+                                  child: SizedBox(
+                                    width: 160.0,
+                                    child: Text(
+                                      value,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: Config.fontSize,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  dropdownValueReference = newValue;
+                                  selectedOutput = listOutput.indexOf(newValue);
+                                });
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Row(

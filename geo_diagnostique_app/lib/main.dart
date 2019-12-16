@@ -4,7 +4,6 @@ import 'package:geo_diagnostique_app/Affaire.dart';
 import 'package:geo_diagnostique_app/Commune.dart';
 import 'package:geo_diagnostique_app/Storage.dart';
 import 'package:geo_diagnostique_app/Home.dart';
-import 'package:flutter/services.dart';
 
 List<NumeroAffaire> listNumeroAffaire = new List<NumeroAffaire>();
 String dernierNumeroAffaire;
@@ -15,7 +14,6 @@ Directory myDir;
 Directory picturesDir;
 
 main()async{
-  SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft,DeviceOrientation.landscapeRight]);
   String path = await storage.localPath;
   myDir = new Directory(path+"/fiches");
   myDir.create();
