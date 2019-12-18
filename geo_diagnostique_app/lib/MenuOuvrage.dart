@@ -19,6 +19,7 @@ class MenuOuvrage extends StatefulWidget {
 class MenuOuvrageState extends State<MenuOuvrage> {
   List<Ouvrage> listOuvrage = new List<Ouvrage>();
   List<String> listTypeOuvrage;
+  int exitCode=0;
   List colors;
   List<Ouvrage> _searchOuvragelist = new List<Ouvrage>();
   bool _searchMode = false;
@@ -66,6 +67,9 @@ class MenuOuvrageState extends State<MenuOuvrage> {
 
   @override
   Widget build(BuildContext context) {
+    if(exitCode==1){
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    }
     //Method qui permet de trouver l'indice de l'ouvrage
     listOuvrage = widget.selectedCommune.listOuvrage;
 
@@ -196,15 +200,14 @@ class MenuOuvrageState extends State<MenuOuvrage> {
                                       ),
                                       onPressed: () {
                                         setState(() {
-                                          storage.deleteOuvrage(
+                                          exitCode = storage.deleteOuvrage(
                                               widget.selectedNumeroAffaire,
                                               widget.selectedCommune,
                                               listOuvrage[index].refOuvrage,
                                               context);
-                                              Navigator.of(context).pop();
-                                        }
-                                        
-                                        );
+                                          Navigator.of(context).pop();
+                                        });
+
                                       })
                                 ],
                               );

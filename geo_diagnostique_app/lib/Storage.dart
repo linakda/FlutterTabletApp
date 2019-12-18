@@ -466,11 +466,12 @@ class Storage {
   }
 
   //Méthode pour supprimer un Ouvrage dans l'appli et dans le fichier .csv
-  void deleteOuvrage(
+  int deleteOuvrage(
       NumeroAffaire numeroAffaireSelected,
       Commune communeSelected,
       String refOuvrageSelected,
       BuildContext context) {
+    int exitCode=0;
     int i;
     for (i = 0; i < communeSelected.listOuvrage.length; i++) {
       if (communeSelected.listOuvrage[i].refOuvrage == refOuvrageSelected)
@@ -483,11 +484,13 @@ class Storage {
     if (communeSelected.listOuvrage.length == 0) {
       numeroAffaireSelected.listCommune
           .removeAt(numeroAffaireSelected.listCommune.indexOf(communeSelected));
+      exitCode=1;
     }
     if (numeroAffaireSelected.listCommune.length == 0) {
       listNumeroAffaire
           .removeAt(listNumeroAffaire.indexOf(numeroAffaireSelected));
     }
+    return exitCode;
   }
 
   void deletePicture(Ouvrage ouvrage, NumeroAffaire affaire) async {
