@@ -170,6 +170,7 @@ class CreationREFState extends State<CreationREF> {
   //Méthode pour vérifier que l'utilisateur a entré 5 chiffres à la fin de la refOuvrage
   bool _isREFOuvrageValid(String refOuvrage,String refCommune){
       int refCommuneLength = refCommune.length;
+      print(refCommune);
       if(refOuvrage.substring(refCommuneLength).length<=5 && refOuvrage.substring(refCommuneLength).isNotEmpty && int.tryParse(refOuvrage.substring(refCommuneLength)) is int){
         return false;
       }
@@ -180,7 +181,7 @@ class CreationREFState extends State<CreationREF> {
   String getREFCommune(String refOuvrage){
     int indexWhereToSub=refOuvrage.length;
     for(var i=refOuvrage.length-1;i>=0;i--){
-      if(!(int.tryParse(refOuvrage[i]) is int)){
+      if(int.tryParse(refOuvrage[i]) is int){
         indexWhereToSub--;
       }
     }
