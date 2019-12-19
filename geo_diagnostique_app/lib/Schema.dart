@@ -98,6 +98,11 @@ class _LandingScreenState extends State<LandingScreen> {
     //Retourne le nombre de pipe par entrée/sorties
     List<String> listCaracteristique = caracteristique.split("£");
     //length représente le nombre de sous tuyaux
+    if(listController[indexPipe].length < listCaracteristique.length){
+      for(int j=1;j<listCaracteristique.length;j++){
+        addNewController(indexPipe);
+        }
+    }
     for (var i = 0; i < listCaracteristique.length; i++) {
       if (caracteristique != "") {
         isPipeExisting[indexPipe] = true;
@@ -640,7 +645,8 @@ class _LandingScreenState extends State<LandingScreen> {
   String compteur(int i, int k) {
     String tmp = listController[i][0][k].text;
     for (int j = 1; j < listController[i].length; j++) {
-      tmp += '£' + listController[i][j][k].text;
+      if(listController[i][j][k].text!="Sélectionner")
+        tmp += '£' + listController[i][j][k].text;
     }
     return tmp;
   }
@@ -654,16 +660,6 @@ class _LandingScreenState extends State<LandingScreen> {
       }
     }
     return ret;
-  }
-
-  void printController() {
-    for (int i = 0; i < listController.length; i++) {
-      for (int j = 0; j < listController[i].length; j++) {
-        for (int k = 0; k < listController[i][j].length; k++) {
-          //print(listController[i][j][k]);
-        }
-      }
-    }
   }
 
   void addNewController(int index) {
@@ -793,30 +789,6 @@ class _LandingScreenState extends State<LandingScreen> {
                         onPressed: () {
                           setState(() {
                             addNewController(selectedOutput);
-                            widget
-                                .selectedOuvrage
-                                .listCanalisation[selectedOutput]
-                                .role = compteur(selectedOutput, 0);
-                            widget
-                                .selectedOuvrage
-                                .listCanalisation[selectedOutput]
-                                .geometrie = compteur(selectedOutput, 1);
-                            widget
-                                .selectedOuvrage
-                                .listCanalisation[selectedOutput]
-                                .dimension = compteur(selectedOutput, 2);
-                            widget
-                                .selectedOuvrage
-                                .listCanalisation[selectedOutput]
-                                .nature = compteur(selectedOutput, 3);
-                            widget
-                                .selectedOuvrage
-                                .listCanalisation[selectedOutput]
-                                .profondeur = compteur(selectedOutput, 4);
-                            widget
-                                .selectedOuvrage
-                                .listCanalisation[selectedOutput]
-                                .observations = compteur(selectedOutput, 5);
                           });
                         },
                         child: Text("ajouter tuyau superposé"),

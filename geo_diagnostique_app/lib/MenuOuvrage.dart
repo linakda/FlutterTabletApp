@@ -28,10 +28,10 @@ class MenuOuvrageState extends State<MenuOuvrage> {
     super.initState();
     listOuvrage = widget.selectedCommune.listOuvrage;
     colors = [
-      Colors.brown,
-      Colors.blue,
-      Colors.green,
-      Config.textColor,
+      Color.fromRGBO(254, 0, 0, 1),
+      Color.fromRGBO(199, 208, 53, 1),
+      Color.fromRGBO(0,154, 214, 1),
+      Color.fromRGBO(159, 75, 17, 1),
       Colors.redAccent,
       Colors.redAccent
     ];
@@ -59,10 +59,8 @@ class MenuOuvrageState extends State<MenuOuvrage> {
     for (int i = 0; i < listOuvrage.length; i++) {
       if (listOuvrage[i].refOuvrage.contains(searchElement)) {
         _searchOuvragelist.add(listOuvrage[i]);
-        print(listOuvrage[i].refOuvrage);
       }
     }
-    print("taille de ma list de recherche = ${_searchOuvragelist.length}");
   }
 
   @override

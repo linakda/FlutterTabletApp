@@ -101,6 +101,8 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
                       widget.selectedOuvrage.listCanalisation[0].profondeur
                           .toString() +
                       ',' +
+                      widget.selectedOuvrage.listCanalisation[0].angle +
+                      ','+
                       widget.selectedOuvrage.listCanalisation[0].observations +
                       ',' +
                       widget.selectedOuvrage.listCanalisation[1].role +
