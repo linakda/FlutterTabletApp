@@ -18,6 +18,7 @@ class MenuOuvrage extends StatefulWidget {
 class MenuOuvrageState extends State<MenuOuvrage> {
   List<Ouvrage> listOuvrage = new List<Ouvrage>();
   List<String> listTypeOuvrage;
+  List<String> anomalies;
   int exitCode=0;
   List colors;
   List<Ouvrage> _searchOuvragelist = new List<Ouvrage>();
@@ -27,21 +28,18 @@ class MenuOuvrageState extends State<MenuOuvrage> {
     super.initState();
     listOuvrage = widget.selectedCommune.listOuvrage;
     colors = [
-      Color.fromRGBO(165, 82, 0, 1),
-      Color.fromRGBO(0, 0, 255, 1),
-      Color.fromRGBO(38,76, 0, 1),
+      Color.fromRGBO(254, 0, 0, 1),
+      Color.fromRGBO(199, 208, 53, 1),
+      Color.fromRGBO(0,154, 214, 1),
       Color.fromRGBO(159, 75, 17, 1),
-      Colors.redAccent,
-      Colors.redAccent
     ];
     listTypeOuvrage = <String>[
       'séparatif EU',
       'séparatif EP',
       'unitaire',
       'autre :',
-      'sous enrobé',
-      'sous véhicule'
     ];
+    anomalies = <String>['sous enrobé','sous véhicule'];
   }
 
   Color switchColor(String typeOuvrage) {
@@ -215,8 +213,8 @@ class MenuOuvrageState extends State<MenuOuvrage> {
                     },
                     child: new Card(
                       elevation: 10,
-                      color: listOuvrage[index].defautFermeture != ""
-                          ? Colors.red
+                      color: listOuvrage[index].typeReseau == ""
+                          ? Colors.grey
                           : switchColor(listOuvrage[index].typeReseau),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
@@ -226,8 +224,14 @@ class MenuOuvrageState extends State<MenuOuvrage> {
                       child: new ListTile(
                         leading: Container(
                           padding: EdgeInsets.only(right: 12.0),
-                          child: Icon(
-                            Icons.account_circle,
+                          child: anomalies.indexOf(listOuvrage[index].defautFermeture)==-1 && listOuvrage[index].tamponDeteriore==""
+                          ?Icon(
+                            Icons.group_work,
+                            color: Colors.white,
+                            size: Config.fontSize * 1.5,
+                          )
+                          :Icon(
+                            Icons.warning,
                             color: Colors.white,
                             size: Config.fontSize * 1.5,
                           ),
