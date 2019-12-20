@@ -27,9 +27,9 @@ class MenuOuvrageState extends State<MenuOuvrage> {
     super.initState();
     listOuvrage = widget.selectedCommune.listOuvrage;
     colors = [
-      Color.fromRGBO(254, 0, 0, 1),
-      Color.fromRGBO(199, 208, 53, 1),
-      Color.fromRGBO(0,154, 214, 1),
+      Color.fromRGBO(165, 82, 0, 1),
+      Color.fromRGBO(0, 0, 255, 1),
+      Color.fromRGBO(38,76, 0, 1),
       Color.fromRGBO(159, 75, 17, 1),
       Colors.redAccent,
       Colors.redAccent
@@ -78,7 +78,7 @@ class MenuOuvrageState extends State<MenuOuvrage> {
             onPressed: () {
               Navigator.of(context).popUntil((route) => route.isFirst);
             }),
-        backgroundColor: Config.color,
+        backgroundColor: Config.appBarColor,
         title: Text(
           widget.selectedCommune.nomCommune,
           style: TextStyle(fontSize: Config.fontSize),
@@ -106,17 +106,17 @@ class MenuOuvrageState extends State<MenuOuvrage> {
           Padding(
               padding: EdgeInsets.all(Config.screenPadding),
               child: TextField(
-                cursorColor: Config.color,
+                cursorColor: Config.appBarColor,
                 style: TextStyle(fontSize: Config.fontSize),
                 decoration: InputDecoration(
                   labelText: "Rechercher un ouvrage",
                   labelStyle: TextStyle(
                       color: Config.textColor, fontSize: Config.fontSize / 1.5),
-                  focusColor: Config.color,
+                  focusColor: Config.appBarColor,
                   fillColor: Colors.white,
                   focusedBorder: new OutlineInputBorder(
                     borderRadius: new BorderRadius.circular(25.0),
-                    borderSide: new BorderSide(color: Config.color),
+                    borderSide: new BorderSide(color: Config.appBarColor),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25.0),

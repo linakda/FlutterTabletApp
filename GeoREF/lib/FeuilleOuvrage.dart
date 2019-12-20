@@ -228,7 +228,7 @@ class FeuilleOuvrageState extends State<FeuilleOuvrage> {
       key: _scaffoldKey,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.green,
+        backgroundColor: Config.appBarColor,
         title: Text(widget.selectedOuvrage.refOuvrage),
         centerTitle: true,
       ),

@@ -21,7 +21,6 @@ class MenuAffaireState extends State<MenuAffaire> {
   @override
   initState() {
     super.initState();
-    setState(() {});
   }
 
   @override
@@ -114,7 +113,7 @@ class MenuAffaireState extends State<MenuAffaire> {
     Config().init(context);
     return new Scaffold(
       appBar: AppBar(
-        backgroundColor: Config.color,
+        backgroundColor: Config.appBarColor,
         title: Text(
           "Menu d'affaire",
           style: TextStyle(fontSize: Config.fontSize),
@@ -143,7 +142,7 @@ class MenuAffaireState extends State<MenuAffaire> {
               ? Padding(
                   padding: EdgeInsets.all(Config.screenPadding),
                   child: TextField(
-                    cursorColor: Config.color,
+                    cursorColor: Config.appBarColor,
                     style: TextStyle(fontSize: Config.fontSize),
                     decoration: InputDecoration(
                       labelText:
@@ -151,11 +150,11 @@ class MenuAffaireState extends State<MenuAffaire> {
                       labelStyle: TextStyle(
                           color: Config.textColor,
                           fontSize: Config.fontSize / 1.5),
-                      focusColor: Config.color,
+                      focusColor: Config.appBarColor,
                       fillColor: Colors.white,
                       focusedBorder: new OutlineInputBorder(
                         borderRadius: new BorderRadius.circular(25.0),
-                        borderSide: new BorderSide(color: Config.color),
+                        borderSide: new BorderSide(color: Config.appBarColor),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25.0),

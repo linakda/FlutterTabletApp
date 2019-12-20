@@ -98,10 +98,10 @@ class _LandingScreenState extends State<LandingScreen> {
     //Retourne le nombre de pipe par entrée/sorties
     List<String> listCaracteristique = caracteristique.split("£");
     //length représente le nombre de sous tuyaux
-    if(listController[indexPipe].length < listCaracteristique.length){
-      for(int j=1;j<listCaracteristique.length;j++){
+    if (listController[indexPipe].length < listCaracteristique.length) {
+      for (int j = 1; j < listCaracteristique.length; j++) {
         addNewController(indexPipe);
-        }
+      }
     }
     for (var i = 0; i < listCaracteristique.length; i++) {
       if (caracteristique != "") {
@@ -277,10 +277,11 @@ class _LandingScreenState extends State<LandingScreen> {
                     nameOutput[i],
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        color: Config.color, fontSize: Config.fontSize / 1.5),
+                        color: Config.appBarColor,
+                        fontSize: Config.fontSize / 1.5),
                   ),
                   decoration: BoxDecoration(
-                      border: Border.all(width: 2.0, color: Config.color),
+                      border: Border.all(width: 2.0, color: Config.appBarColor),
                       shape: BoxShape.circle,
                       color: Colors.white))
               : Container()));
@@ -309,11 +310,9 @@ class _LandingScreenState extends State<LandingScreen> {
                           Positioned(
                             left: 2.0,
                             top: 2.0,
-                            child: Icon(
-                              Icons.photo_library,
-                              color: Colors.black26,
-                              size: Config.fontSize * 3
-                              ),
+                            child: Icon(Icons.photo_library,
+                                color: Colors.black26,
+                                size: Config.fontSize * 3),
                           ),
                           Icon(
                             Icons.photo_library,
@@ -338,11 +337,9 @@ class _LandingScreenState extends State<LandingScreen> {
                           Positioned(
                             left: 2.0,
                             top: 3.0,
-                            child: Icon(
-                              Icons.photo_camera,
-                              color: Colors.black26,
-                              size: Config.fontSize * 3
-                              ),
+                            child: Icon(Icons.photo_camera,
+                                color: Colors.black26,
+                                size: Config.fontSize * 3),
                           ),
                           Icon(
                             Icons.photo_camera,
@@ -498,11 +495,11 @@ class _LandingScreenState extends State<LandingScreen> {
                 decoration: InputDecoration(
                   labelText: 'Dimensions',
                   labelStyle: TextStyle(color: Config.textColor),
-                  focusColor: Config.color,
+                  focusColor: Config.appBarColor,
                   fillColor: Colors.white,
                   focusedBorder: new OutlineInputBorder(
                     borderRadius: new BorderRadius.circular(25.0),
-                    borderSide: new BorderSide(color: Config.color),
+                    borderSide: new BorderSide(color: Config.appBarColor),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25.0),
@@ -580,11 +577,11 @@ class _LandingScreenState extends State<LandingScreen> {
                 decoration: InputDecoration(
                   labelText: 'Profondeur',
                   labelStyle: TextStyle(color: Config.textColor),
-                  focusColor: Config.color,
+                  focusColor: Config.appBarColor,
                   fillColor: Colors.white,
                   focusedBorder: new OutlineInputBorder(
                     borderRadius: new BorderRadius.circular(25.0),
-                    borderSide: new BorderSide(color: Config.color),
+                    borderSide: new BorderSide(color: Config.appBarColor),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25.0),
@@ -614,11 +611,11 @@ class _LandingScreenState extends State<LandingScreen> {
                 decoration: InputDecoration(
                   labelText: 'Observation',
                   labelStyle: TextStyle(color: Config.textColor),
-                  focusColor: Config.color,
+                  focusColor: Config.appBarColor,
                   fillColor: Colors.white,
                   focusedBorder: new OutlineInputBorder(
                     borderRadius: new BorderRadius.circular(25.0),
-                    borderSide: new BorderSide(color: Config.color),
+                    borderSide: new BorderSide(color: Config.appBarColor),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25.0),
@@ -645,7 +642,7 @@ class _LandingScreenState extends State<LandingScreen> {
   String compteur(int i, int k) {
     String tmp = listController[i][0][k].text;
     for (int j = 1; j < listController[i].length; j++) {
-      if(listController[i][j][k].text!="Sélectionner")
+      if (listController[i][j][k].text != "Sélectionner")
         tmp += '£' + listController[i][j][k].text;
     }
     return tmp;
@@ -699,8 +696,10 @@ class _LandingScreenState extends State<LandingScreen> {
               Container(
                 height: Config.screenHeight - 150,
                 width: Config.screenWidth / 2,
-                child: Stack(
-                  children: _cliclableArrayGenerator(),
+                child: SingleChildScrollView(
+                  child: Stack(
+                    children: _cliclableArrayGenerator(),
+                  ),
                 ),
               ),
               Expanded(

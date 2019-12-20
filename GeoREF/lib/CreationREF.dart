@@ -82,16 +82,16 @@ class CreationREFState extends State<CreationREF> {
                 });        
               },
               controller: controllerList[index],
-              cursorColor: Config.color,
+              cursorColor: Config.appBarColor,
               style: textSize,
               decoration: InputDecoration(
                 labelText: label,
                 labelStyle: TextStyle(color: Config.textColor),
-                focusColor: Config.color,
+                focusColor: Config.appBarColor,
                 fillColor: Colors.white,
                 focusedBorder: new OutlineInputBorder(
                   borderRadius: new BorderRadius.circular(25.0),
-                  borderSide: new BorderSide(color: Config.color),
+                  borderSide: new BorderSide(color: Config.appBarColor),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25.0),
@@ -238,10 +238,11 @@ class CreationREFState extends State<CreationREF> {
 
   @override
   Widget build(BuildContext context) {
+    Config().init(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Création d\'une référence', style: textSize),
-        backgroundColor: Config.color,
+        backgroundColor: Config.appBarColor,
       ),
       body: Builder(
         builder: (context) => SingleChildScrollView(

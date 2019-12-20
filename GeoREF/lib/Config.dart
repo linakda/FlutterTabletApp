@@ -8,7 +8,7 @@ class Config {
  static double screenPadding;
  static double blockSizeVertical;
  static double fontSize;
- static Color color;
+ static Color appBarColor;
  static Color textColor;
  static Color buttonColor;
  static Color splashColor;
@@ -21,10 +21,10 @@ class Config {
   screenPadding = screenWidth / 50;
   blockSizeVertical = screenHeight / 50;
   fontSize=screenHeight/25;
-  color = Colors.green;
   textColor = Colors.grey[600];
   buttonColor = Colors.orangeAccent;
   splashColor = Colors.orange;
   bottomBarColor = Colors.white;//Colors.lime[300];
+  appBarColor= Color.fromRGBO(0, 154, 214, 1);
  }
 }

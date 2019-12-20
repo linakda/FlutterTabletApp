@@ -35,6 +35,7 @@ class SplashScreenState extends State<SplashScreen>
   }
 
   Widget build(BuildContext context) {
+    Config().init(context);
     return Scaffold(
       backgroundColor: Colors.black,
 
@@ -44,50 +45,24 @@ class SplashScreenState extends State<SplashScreen>
         width: Config.screenWidth,
         decoration: new BoxDecoration(
           image: new DecorationImage(
-              image: new AssetImage("assets/couv.png"),
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.8), BlendMode.dstATop)),
+              image: new AssetImage("assets/couv.png"), fit: BoxFit.cover),
         ),
 
         //L'affichage du logo
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            //L'affichage du texte en ombré
-            Center(
-              child: new Container(
-                padding: new EdgeInsets.all(70.0),
-                child: DelayedDisplay(
-                  delay: Duration(seconds: 2),
-                  fadingDuration: Duration(seconds: 3),
-                  child: Text(
-                    "Bienvenue",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w200,
-                      fontSize: 50.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
+        child:
             //Le bouton de commencement en ombré
             Center(
-              child: new Container(
-                padding: new EdgeInsets.all(30.0),
-                child: DelayedDisplay(
-                  delay: Duration(seconds: 1),
-                  fadingDuration: Duration(seconds: 2),
-                  child: new CircularProgressIndicator(
-                    valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-                ),
+          child: new Container(
+            padding: new EdgeInsets.all(30.0),
+            child: DelayedDisplay(
+              delay: Duration(seconds: 1),
+              fadingDuration: Duration(seconds: 2),
+              child: new CircularProgressIndicator(
+                valueColor:
+                    new AlwaysStoppedAnimation<Color>(Config.appBarColor),
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

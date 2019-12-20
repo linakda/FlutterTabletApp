@@ -81,11 +81,11 @@ class LocalisationState extends State<Localisation> {
                             decoration: InputDecoration(
                               labelText: 'Nom de la rue',
                               labelStyle: TextStyle(color: Config.textColor),
-                              focusColor: Config.color,
+                              focusColor: Config.appBarColor,
                               fillColor: Colors.white,
                               focusedBorder: new OutlineInputBorder(
                                 borderRadius: new BorderRadius.circular(25.0),
-                                borderSide: new BorderSide(color: Config.color),
+                                borderSide: new BorderSide(color: Config.appBarColor),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(25.0),
@@ -210,11 +210,11 @@ class LocalisationState extends State<Localisation> {
                             decoration: InputDecoration(
                               labelText: 'Type de Reseau',
                               labelStyle: TextStyle(color: Config.textColor),
-                              focusColor: Config.color,
+                              focusColor: Config.appBarColor,
                               fillColor: Colors.white,
                               focusedBorder: new OutlineInputBorder(
                                 borderRadius: new BorderRadius.circular(25.0),
-                                borderSide: new BorderSide(color: Config.color),
+                                borderSide: new BorderSide(color: Config.appBarColor),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(25.0),
@@ -243,11 +243,11 @@ class LocalisationState extends State<Localisation> {
                             decoration: InputDecoration(
                               labelText: 'Latitude',
                               labelStyle: TextStyle(color: Config.textColor),
-                              focusColor: Config.color,
+                              focusColor: Config.appBarColor,
                               fillColor: Colors.white,
                               focusedBorder: new OutlineInputBorder(
                                 borderRadius: new BorderRadius.circular(25.0),
-                                borderSide: new BorderSide(color: Config.color),
+                                borderSide: new BorderSide(color: Config.appBarColor),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(25.0),
@@ -270,11 +270,11 @@ class LocalisationState extends State<Localisation> {
                           decoration: InputDecoration(
                               labelText: 'Longitude',
                               labelStyle: TextStyle(color: Config.textColor),
-                              focusColor: Config.color,
+                              focusColor: Config.appBarColor,
                               fillColor: Colors.white,
                               focusedBorder: new OutlineInputBorder(
                                 borderRadius: new BorderRadius.circular(25.0),
-                                borderSide: new BorderSide(color: Config.color),
+                                borderSide: new BorderSide(color: Config.appBarColor),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(25.0),

@@ -211,11 +211,11 @@ class CaractereState extends State<Caractere> {
           decoration: InputDecoration(
             labelText: labelText,
             labelStyle: TextStyle(color: Config.textColor),
-            focusColor: Config.color,
+            focusColor: Config.appBarColor,
             fillColor: Colors.white,
             focusedBorder: new OutlineInputBorder(
               borderRadius: new BorderRadius.circular(25.0),
-              borderSide: new BorderSide(color: Config.color),
+              borderSide: new BorderSide(color: Config.appBarColor),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(25.0),
